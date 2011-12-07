@@ -9,5 +9,15 @@
 
   onManageTasks: function() {
 		Netzke.page.manageTasksWindow.show();
+  },
+
+  onShowHelp: function() {
+		Ext.MessageBox.show({
+			title: 'Help',
+			msg: 'vyBuddy pre-alpha! Be careful! :)',
+			modal: true,
+			icon: Ext.Msg.INFO,
+			buttons: Ext.Msg.OK
+		});
   }
 }

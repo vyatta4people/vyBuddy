@@ -15,7 +15,8 @@ class ManageTasksWindow < Netzke::Basepack::Window
         :tasks_grid.component(
           :name       => :tasks_grid,
           :region     => :west,
-          :class_name => "TasksGrid"
+          :class_name => "TasksGrid",
+          :split      => true
         ),
         :task_remote_commands_grid.component(
           :name       => :task_remote_commands_grid,
@@ -25,7 +26,8 @@ class ManageTasksWindow < Netzke::Basepack::Window
         :tasks_side_tab_panel.component(
           :name       => :tasks_side_tab_panel,
           :region     => :east,
-          :class_name => "TasksSideTabPanel"
+          :class_name => "TasksSideTabPanel",
+          :split      => true
         )
       ]
     )

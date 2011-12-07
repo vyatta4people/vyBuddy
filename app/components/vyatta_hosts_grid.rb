@@ -21,8 +21,6 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
       :model        => "VyattaHost",
       :width        => 600,
       :border       => true,
-      :margin       => "0 0 0 5",
-      :split        => false,
       :context_menu => [:edit_in_form.action, :del.action],
       :tbar         => [:add_in_form.action],
       :bbar         => [],

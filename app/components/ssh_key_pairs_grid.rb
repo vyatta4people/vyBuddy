@@ -1,8 +1,5 @@
 class SshKeyPairsGrid < Netzke::Basepack::GridPanel
 
-  #js_mixin :properties
-  #js_mixin :init_component
-
   action :add_in_form,  :text => "Add",  :tooltip => "Add SSH public/private key pair"
   action :edit_in_form, :text => "Edit", :tooltip => "Edit SSH public/private key pair"
 
@@ -20,9 +17,7 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
       :title            => "SSH public/private key pairs",
       :prevent_header   => true,
       :model            => "SshKeyPair",
-      #:width            => 400,
       :border           => true,
-      #:margin           => "0 0 0 0",
       :context_menu     => [:edit_in_form.action, :del.action],
       :tbar             => [:add_in_form.action],
       :bbar             => [],

@@ -1,8 +1,5 @@
 class UsersGrid < Netzke::Basepack::GridPanel
 
-  #js_mixin :properties
-  #js_mixin :init_component
-
   action :add_in_form,  :text => "Add",  :tooltip => "Add user"
   action :edit_in_form, :text => "Edit", :tooltip => "Edit user"
 
@@ -20,9 +17,7 @@ class UsersGrid < Netzke::Basepack::GridPanel
       :title            => "Users",
       :prevent_header   => true,
       :model            => "User",
-      #:width            => 400,
       :border           => true,
-      #:margin           => "0 0 0 0",
       :context_menu     => [:edit_in_form.action, :del.action],
       :tbar             => [:add_in_form.action],
       :bbar             => [],

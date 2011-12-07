@@ -1,7 +1,5 @@
 class TasksSideTabPanel < Netzke::Basepack::TabPanel
 
-  #js_mixin :init_component
-
   def configuration
     super.merge(
       :name             => :tasks_side_tab_panel,
@@ -9,7 +7,6 @@ class TasksSideTabPanel < Netzke::Basepack::TabPanel
       :prevent_header   => true,
       :width            => 400,
       :border           => true,
-      #:margin           => "0 0 0 0",
       :frame            => false,
       :active_tab       => 1,
       :items            => [

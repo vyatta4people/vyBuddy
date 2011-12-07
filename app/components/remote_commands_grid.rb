@@ -1,8 +1,5 @@
 class RemoteCommandsGrid < Netzke::Basepack::GridPanel
 
-  #js_mixin :properties
-  #js_mixin :init_component
-
   action :add_in_form,  :text => "Add",  :tooltip => "Add remote command"
   action :edit_in_form, :text => "Edit", :tooltip => "Edit remote command"
 
@@ -19,9 +16,7 @@ class RemoteCommandsGrid < Netzke::Basepack::GridPanel
       :name             => :remote_commands_grid,
       :title            => "Remote commands",
       :model            => "RemoteCommand",
-      #:width            => 400,
       :border           => true,
-      #:margin           => "0 0 0 0",
       :context_menu     => [:edit_in_form.action, :del.action],
       :tbar             => [:add_in_form.action],
       :bbar             => [],

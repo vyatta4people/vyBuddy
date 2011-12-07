@@ -14,7 +14,6 @@ class TopPanel < Netzke::Basepack::Panel
       :prevent_header => true,
       :height         => 38,
       :border         => true,
-      :margin         => 5,
       :frame          => true,
       :bbar           => [:manage_users.action, :manage_ssh_key_pairs.action, "-", :manage_tasks.action, '->', :show_help.action, '-', :logout.action]
     )

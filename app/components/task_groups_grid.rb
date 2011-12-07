@@ -1,8 +1,5 @@
 class TaskGroupsGrid < Netzke::Basepack::GridPanel
 
-  #js_mixin :properties
-  #js_mixin :init_component
-
   action :add_in_form,  :text => "Add",  :tooltip => "Add task group"
   action :edit_in_form, :text => "Edit", :tooltip => "Edit task group"
 
@@ -19,9 +16,7 @@ class TaskGroupsGrid < Netzke::Basepack::GridPanel
       :name             => :task_groups_grid,
       :title            => "Task groups",
       :model            => "TaskGroup",
-      #:width            => 400,
       :border           => true,
-      #:margin           => "0 0 0 0",
       :context_menu     => [:edit_in_form.action, :del.action],
       :tbar             => [:add_in_form.action],
       :bbar             => [],
