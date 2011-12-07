@@ -19,7 +19,7 @@ class TaskGroupsGrid < Netzke::Basepack::GridPanel
       :name             => :task_groups_grid,
       :title            => "Task groups",
       :model            => "TaskGroup",
-      #:width            => 300,
+      #:width            => 400,
       :border           => true,
       #:margin           => "0 0 0 0",
       :context_menu     => [:edit_in_form.action, :del.action],

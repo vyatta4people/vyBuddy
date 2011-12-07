@@ -18,8 +18,9 @@ class UsersGrid < Netzke::Basepack::GridPanel
     super.merge(
       :name             => :users_grid,
       :title            => "Users",
+      :prevent_header   => true,
       :model            => "User",
-      #:width            => 300,
+      #:width            => 400,
       :border           => true,
       #:margin           => "0 0 0 0",
       :context_menu     => [:edit_in_form.action, :del.action],
@@ -28,11 +29,11 @@ class UsersGrid < Netzke::Basepack::GridPanel
       :tools            => false,
       :multi_select     => false,
       :columns          => [
-        column_defaults.merge(:name => :username,           :text => "Username",          :flex => true),
-        column_defaults.merge(:name => :email,              :text => "Email"),
-        column_defaults.merge(:name => :is_enabled,         :text => "Enabled?"),
-        column_defaults.merge(:name => :is_admin,           :text => "Admin?")
-
+        column_defaults.merge(:name => :username,           :text => "Username",  :width => 120),
+        column_defaults.merge(:name => :email,              :text => "Email",     :flex => true),
+        column_defaults.merge(:name => :password,           :text => "Password",  :hidden => true,  :editor => {:input_type => :password}),
+        column_defaults.merge(:name => :is_enabled,         :text => "Enabled?",  :width => 80,     :align => :center),
+        column_defaults.merge(:name => :is_admin,           :text => "Admin?",    :width => 80,     :align => :center)
       ]
     )
   end

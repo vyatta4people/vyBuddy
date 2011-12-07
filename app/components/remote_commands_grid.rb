@@ -19,7 +19,7 @@ class RemoteCommandsGrid < Netzke::Basepack::GridPanel
       :name             => :remote_commands_grid,
       :title            => "Remote commands",
       :model            => "RemoteCommand",
-      #:width            => 300,
+      #:width            => 400,
       :border           => true,
       #:margin           => "0 0 0 0",
       :context_menu     => [:edit_in_form.action, :del.action],
@@ -28,7 +28,7 @@ class RemoteCommandsGrid < Netzke::Basepack::GridPanel
       :tools            => false,
       :multi_select     => false,
       :columns          => [
-        column_defaults.merge(:name => :mode,       :text => "Mode",    :editor=>{:xtype=>:netzkeremotecombo}),
+        column_defaults.merge(:name => :mode,       :text => "Mode",    :editor => {:xtype => :netzkeremotecombo}),
         column_defaults.merge(:name => :command,    :text => "Command", :flex => true)
       ]
     )
@@ -38,6 +38,17 @@ class RemoteCommandsGrid < Netzke::Basepack::GridPanel
     case params[:column]
     when "mode"
       { :data => REMOTE_COMMAND_MODES.collect {|m| [m, m]} }
+    else
+      super
+    end
+  end
+
+  endpoint :edit_form__form_panel0__get_combobox_options do |params|
+    case params[:column]
+    when "mode"
+      { :data => REMOTE_COMMAND_MODES.collect {|m| [m, m]} }
+    else
+      super
     end
   end
 

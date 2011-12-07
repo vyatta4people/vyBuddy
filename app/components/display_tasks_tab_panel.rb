@@ -29,11 +29,12 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
 
   def configuration
     super.merge(
-      :name   => :display_tasks_tab_panel,
-      :title  => "Tasks to display",
-      :border => true,
-      :margin => "0 5 0 5",
-      :frame  => false
+      :name     => :display_tasks_tab_panel,
+      :title    => "Tasks to display",
+      #:width   => 400,
+      :border   => true,
+      :margin   => "0 5 0 5",
+      :frame    => false
     )
   end
 

@@ -19,6 +19,7 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
       :name               => :tasks_grid,
       :title              => "Remote commands for task",
       :model              => "TaskRemoteCommand",
+      #:width            => 400,
       :border             => true,
       :margin             => "0 0 0 0",
       :split              => false,

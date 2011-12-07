@@ -19,7 +19,7 @@ class FiltersGrid < Netzke::Basepack::GridPanel
       :name             => :filters_grid,
       :title            => "Filters",
       :model            => "Filter",
-      #:width            => 300,
+      #:width            => 400,
       :border           => true,
       #:margin           => "0 0 0 0",
       :context_menu     => [:edit_in_form.action, :del.action],
