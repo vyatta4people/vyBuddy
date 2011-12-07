@@ -34,7 +34,7 @@ class RemoteCommandsGrid < Netzke::Basepack::GridPanel
     )
   end
 
-  endpoint :add_form__form_panel0__get_combobox_options do |params|
+  def get_combobox_options(params)
     case params[:column]
     when "mode"
       { :data => REMOTE_COMMAND_MODES.collect {|m| [m, m]} }
@@ -43,13 +43,12 @@ class RemoteCommandsGrid < Netzke::Basepack::GridPanel
     end
   end
 
+  endpoint :add_form__form_panel0__get_combobox_options do |params|
+    get_combobox_options(params)
+  end
+
   endpoint :edit_form__form_panel0__get_combobox_options do |params|
-    case params[:column]
-    when "mode"
-      { :data => REMOTE_COMMAND_MODES.collect {|m| [m, m]} }
-    else
-      super
-    end
+    get_combobox_options(params)
   end
 
 end
