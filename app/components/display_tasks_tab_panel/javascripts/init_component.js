@@ -4,7 +4,7 @@
 
   	this.on('selectvyattahost', function(vyattaHostId) {
 			Ext.Ajax.request({
-		    url: '/data/get_displays_for_vyatta_host/' + vyattaHostId.toString(),
+		    url: '/data/get_displays/' + vyattaHostId.toString(),
 		    success: function(response) {
 		    	var displays =  Ext.decode(response.responseText);
 		      for (var d in displays) {

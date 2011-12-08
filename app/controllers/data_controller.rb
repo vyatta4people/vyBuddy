@@ -1,5 +1,7 @@
 class DataController < ApplicationController
-  
+
+  before_filter :user_authenticated?
+
   def get_global_summary
     global_summary = Hash.new
     global_summary[:total_vyatta_hosts]        = VyattaHost.count
