@@ -11,7 +11,7 @@ class DataController < ApplicationController
   end
 
   def get_displays_for_vyatta_host
-    vyatta_host = VyattaHost.find(params[:vyatta_host_id].to_i)
+    vyatta_host = VyattaHost.find(params[:id].to_i)
     data        = Array.new
     vyatta_host.displays.each do |display|
       item = Hash.new

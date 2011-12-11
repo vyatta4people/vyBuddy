@@ -58,10 +58,9 @@ VyBuddy::Application.routes.draw do
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id(.:format)))'
 
-  match 'auth/index'  => 'auth#index'
   match 'auth/login'  => 'auth#login'
   match 'auth/logout' => 'auth#logout'
 
-  match 'data/get_global_summary'           => 'data#get_global_summary'
-  match 'data/get_displays/:vyatta_host_id' => 'data#get_displays_for_vyatta_host'
+  match 'data/get_global_summary' => 'data#get_global_summary'
+  match 'data/get_displays/:id'   => 'data#get_displays_for_vyatta_host'
 end

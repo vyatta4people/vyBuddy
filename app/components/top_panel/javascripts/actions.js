@@ -12,12 +12,10 @@
   },
 
   onShowHelp: function() {
-		Ext.MessageBox.show({
-			title: 'Help',
-			msg: 'vyBuddy pre-alpha! Be careful! :)',
-			modal: true,
-			icon: Ext.Msg.INFO,
-			buttons: Ext.Msg.OK
-		});
+		Ext.Msg.show({ title: 'Help', msg: 'vyBuddy pre-alpha! Be careful! :)', buttons: Ext.Msg.OK, icon: Ext.Msg.INFO });
+  },
+
+  onLogout: function() {
+		window.location = '/auth/login';
   }
 }

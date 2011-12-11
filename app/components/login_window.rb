@@ -1,6 +1,6 @@
 class LoginWindow < Netzke::Basepack::Window
 
-  #js_mixin :actions
+  js_mixin :actions
 
   action :login, :icon => :tick, :text => "Login"
 
@@ -17,11 +17,12 @@ class LoginWindow < Netzke::Basepack::Window
       :draggable        => false,
       :hidden           => false,
       :items            => [ {
+        :id               => :login_form,
         :xtype            => :form,
         :prevent_header   => true,
         :border           => false,
         :frame            => true,
-        :buttons          => [ { :action => :login, :form_bind => true } ],
+        :buttons          => [ :login.action ],
         :default_type     => :textfield,
         :defaults         => { :anchor => "100%", :label_pad => 0, :allow_blank => false },
         :items            => [ {
@@ -29,10 +30,25 @@ class LoginWindow < Netzke::Basepack::Window
           :field_label  => "Username"
         }, {
           :name         => :password,
-          :field_label  => "Password"          
+          :field_label  => "Password",
+          :input_type   => :password
         } ]
       } ]
     )
+  end
+
+  endpoint :login do |params|
+    success = false
+    user = User.find_by_username(params[:username])
+    if user
+      if user.password == params[:password]
+        if user.is_enabled
+          session[:user_id] = user.id
+          success           = true
+        end
+      end
+    end
+    { :set_result => success }
   end
 
 end

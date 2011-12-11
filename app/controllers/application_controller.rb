@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
 
   def user_authenticated?
     if !session[:user_id]
-      redirect_to(:controller => :auth, :action => :index)
+      redirect_to(:controller => :auth, :action => :login)
       return false
     end
   end

@@ -7,12 +7,12 @@ class VyattaHost < ActiveRecord::Base
 
   has_one :vyatta_host_state, :foreign_key => :id, :dependent => :destroy
 
-  has_many :displays
+  has_many :displays, :dependent => :destroy
 
   default_scope joins(:vyatta_host_state).select(["`vyatta_hosts`.*, `vyatta_host_states`.`is_daemon_running`, `vyatta_host_states`.`daemon_pid`, `vyatta_host_states`.`is_reachable`, `vyatta_host_states`.`vyatta_version`, `vyatta_host_states`.`load_average`"])
 
   after_create   { |vyatta_host| VyattaHostState.create(:vyatta_host => vyatta_host) }
-  before_destroy { |vyatta_host| vyatta_host.kill_all_daemons }
+  before_destroy { |vyatta_host| vyatta_host.kill_all_daemons; return true }
 
   def execute_remote_commands(remote_commands)
     remote_command_results = Array.new
