@@ -4,7 +4,7 @@
 
   	this.on('afterrender', function(self, eOpts) {
   		var updateVyattaHostsGrid = function() { self.store.load(); }
-			Ext.TaskManager.start({ run: updateVyattaHostsGrid, interval: 5000 });
+			Ext.TaskManager.start({ run: updateVyattaHostsGrid, interval: 500000 });
   	}, this);
 
   	this.store.on('load', function(self, records, successful, operation, eOpts) {

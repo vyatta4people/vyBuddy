@@ -8,7 +8,11 @@
       }
   	}, this);
 
-  	this.on('selecttask', function(taskName) {
+  	this.on('selecttask', function(taskId, taskName) {
+  		var store = this.getStore();
+  		var proxy = store.getProxy();
+  		proxy.extraParams.query = Ext.encode([ [ { attr: "task_id", value: taskId, operator: "eq" } ] ]);
+  	  store.load();
 			this.setTitle('Remote commands for \"' + taskName + '\"');
   	}, this);
   }

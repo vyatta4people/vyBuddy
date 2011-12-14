@@ -17,7 +17,7 @@
 			    }
 			  });
   		}
-			Ext.TaskManager.start({ run: updateBottomPanel, interval: 5000 });
+			Ext.TaskManager.start({ run: updateBottomPanel, interval: 500000 });
   	}, this);
   }
 }

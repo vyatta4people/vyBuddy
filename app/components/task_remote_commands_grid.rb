@@ -17,7 +17,7 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
 
     super.merge(
       :name               => :tasks_grid,
-      :title              => "Remote commands for task",
+      :title              => "Remote commands for tasks",
       :model              => "TaskRemoteCommand",
       :border             => true,
       :context_menu       => [:edit_in_form.action, :del.action],
@@ -28,7 +28,7 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
       :multi_select       => false,
       :columns            => [
         column_defaults.merge(:name => :task__name,                :text => "Task",     :hidden => true),
-        column_defaults.merge(:name => :remote_command__mode,      :text => "Mode",     :width => 100),
+        column_defaults.merge(:name => :remote_command__mode,      :text => "Mode",     :width => 100, :editor => { :hidden => true }),
         column_defaults.merge(:name => :remote_command__command,   :text => "Command",  :flex => true),
         column_defaults.merge(:name => :filter__name,              :text => "Filter",   :width => 100)
       ]

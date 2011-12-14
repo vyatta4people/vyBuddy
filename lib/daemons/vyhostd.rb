@@ -48,7 +48,10 @@ while true do
     task.task_remote_commands.each do |trc|
       remote_command  = trc.remote_command
       filter          = trc.filter
-      display         = Display.find_or_create_by_vyatta_host_id(vyatta_host.id, :task_remote_command_id => trc.id)
+      display         = Display.find(:first, :conditions => { :vyatta_host_id => vyatta_host.id, :task_remote_command_id => trc.id })
+      if !display
+        display       = Display.create(:vyatta_host_id => vyatta_host.id, :task_remote_command_id => trc.id)
+      end
       begin
         remote_command_result = vyatta_host.execute_remote_command(remote_command)
       rescue => e
