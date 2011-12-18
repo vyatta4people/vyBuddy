@@ -6,10 +6,11 @@
 			Ext.Ajax.request({
 		    url: '/data/get_displays/' + vyattaHostId.toString(),
 		    success: function(response) {
-		    	var displays =  Ext.decode(response.responseText);
+		    	var displays = Ext.decode(response.responseText);
 		      for (var d in displays) {
-		      	var display = displays[d];
-		      	Ext.fly(display.html_display_id).update(display.information);
+		      	var display 		= displays[d];
+		      	var displayDiv 	= Ext.get(display.html_display_id);
+		      	displayDiv.update(display.information);
 		      }
 		    }
 		  });
