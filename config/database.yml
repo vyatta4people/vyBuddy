@@ -16,14 +16,5 @@ test:
   database: vybuddy_test
   pool: 5
   username: vybuddy
-  password: G0tch@!
-  host: 127.0.0.1
-
-production:
-  adapter: mysql2
-  encoding: utf8
-  database: vybuddy
-  pool: 5
-  username: vybuddy
-  password: G0tch@!
+  password: T_sQ0m6
   host: 127.0.0.1
