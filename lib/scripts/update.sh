@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Custom vyBuddy update script
+# Custom update script
 #
 
 echo "Hi All! :)"
