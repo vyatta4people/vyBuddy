@@ -6,7 +6,7 @@ class RemoteCommand < ActiveRecord::Base
 
   def executor
     return case self.mode
-      when "operational"    then "_vyatta_op_run"
+      when "operational"    then "/opt/vyatta/bin/vyatta-op-cmd-wrapper"
       when "configuration"  then "/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper"
       when "system"         then ""
       else nil

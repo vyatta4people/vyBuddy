@@ -3,4 +3,4 @@
 # Custom update script
 #
 
-echo "Hi All! :)"
+echo "   +100500 Ololo!"
