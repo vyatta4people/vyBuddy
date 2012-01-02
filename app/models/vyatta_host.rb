@@ -86,7 +86,7 @@ class VyattaHost < ActiveRecord::Base
 
   def start_daemon
     begin
-      pid = Process.spawn("ruby #{HOST_DAEMON_PATH} #{self.id.to_s}", STDOUT => self.daemon_stdout, STDERR => self.daemon_stderr)
+      pid = Process.spawn("#{HOST_DAEMON_PATH} #{self.id.to_s}", STDOUT => self.daemon_stdout, STDERR => self.daemon_stderr)
       Process.detach(pid)
     rescue => e
       warn "Could not start daemon (Vyatta host ID #{self.id.to_s}): #{e.message}"

@@ -1,3 +1,4 @@
+#!/usr/bin/ruby
 #
 # vyBuddy master daemon - starts and stops vyhostd processes
 #

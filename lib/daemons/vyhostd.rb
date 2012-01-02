@@ -1,3 +1,4 @@
+#!/usr/bin/ruby
 #
 # vyBuddy host daemon - monitors and queries host with specified <id>
 #
