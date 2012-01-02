@@ -7,7 +7,7 @@
   	}, this);
 
   	this.store.on('load', function(self, records, successful, operation, eOpts) {
-  		if (selectedFirstTime) {
+  		if (this.selectedFirstTime) {
   			this.selectedFirstTime = false;
   			this.getSelectionModel().select(this.selectedTasksGridRow);
   		}
