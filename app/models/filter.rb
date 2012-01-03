@@ -1,5 +1,5 @@
 class Filter < ActiveRecord::Base
-  has_many :task_remote_commands
+  has_many :task_remote_commands, :dependent => :destroy
 
   def apply(outputs)
     filter_script = Tempfile.new("vybuddy_filter")

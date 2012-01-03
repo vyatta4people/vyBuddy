@@ -12,7 +12,7 @@
   },
 
   onShowHelp: function() {
-		Ext.Msg.show({ title: 'Help', msg: 'vyBuddy pre-alpha! Be careful! :)', buttons: Ext.Msg.OK, icon: Ext.Msg.INFO });
+		Ext.Msg.show({ title: 'Help', msg: 'OH SHI-! vyBuddy early alpha! Be careful! :)', buttons: Ext.Msg.OK, icon: Ext.Msg.INFO });
   },
 
   onLogout: function() {

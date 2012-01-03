@@ -1,7 +1,7 @@
 class RemoteCommand < ActiveRecord::Base
   belongs_to :user
 
-  has_many :task_remote_commands
+  has_many :task_remote_commands, :dependent => :destroy
   has_many :tasks, :through => :task_remote_commands
 
   def executor
