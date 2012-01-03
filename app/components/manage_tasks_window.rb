@@ -1,5 +1,7 @@
 class ManageTasksWindow < Netzke::Basepack::Window
 
+  js_mixin :init_component
+
   def configuration
     super.merge(
       :name             => :manage_tasks_window,
