@@ -1,5 +1,6 @@
 class LoginWindow < Netzke::Basepack::Window
 
+  js_mixin :init_component
   js_mixin :actions
 
   action :login, :icon => :tick, :text => "Login"
