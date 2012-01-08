@@ -37,10 +37,9 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
   def get_combobox_options(params)
     case params[:column]
     when "key_type"
-      { :data => SSH_KEY_TYPES.collect {|t| [t, t]} }
-    else
-      super
+      return { :data => SSH_KEY_TYPES.collect {|t| [t, t]} }
     end
+    super
   end
 
   endpoint :add_form__form_panel0__get_combobox_options do |params|

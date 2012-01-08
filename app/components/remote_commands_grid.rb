@@ -32,10 +32,9 @@ class RemoteCommandsGrid < Netzke::Basepack::GridPanel
   def get_combobox_options(params)
     case params[:column]
     when "mode"
-      { :data => REMOTE_COMMAND_MODES.collect {|m| [m, m]} }
-    else
-      super
+      return { :data => REMOTE_COMMAND_MODES.collect {|m| [m, m]} }
     end
+    super
   end
 
   endpoint :add_form__netzke_0__get_combobox_options do |params|

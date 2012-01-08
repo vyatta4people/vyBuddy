@@ -16,5 +16,15 @@
   		this.selectedVyattaHostsGridRow 	= index;
   		Netzke.page.vybuddyApp.getChildNetzkeComponent('display_tasks_tab_panel').fireEvent('selectvyattahost', this.selectedVyattaHostId);
   	}, this);
+
+  	this.getView().on('itemdblclick', function(self, record, item, index, e, eOpts) {
+    	this.getUserRights({ action: 'edit_in_form' }, function(userIsAdmin) {
+				if (userIsAdmin) {
+					this.onEditInForm();
+				} else {
+					Ext.Msg.show({ title: 'Access denied', msg: 'You have no rights to perform edit action!', buttons: Ext.Msg.OK, icon: Ext.Msg.ERROR });
+				}
+			});
+  	}, this);
   }
 }
