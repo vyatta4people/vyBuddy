@@ -7,6 +7,14 @@ class TopPanel < Netzke::Basepack::Panel
 
   js_mixin :actions
 
+  def get_bbar
+    if session[:user_is_admin]
+      return [:manage_users.action, :manage_ssh_key_pairs.action, "-", :manage_tasks.action, '->', :show_help.action, '-', :logout.action]
+    else
+      return ['->', :show_help.action, '-', :logout.action]
+    end
+  end
+
   def configuration
     super.merge(
       :name           => :top_panel,
@@ -14,8 +22,8 @@ class TopPanel < Netzke::Basepack::Panel
       :prevent_header => true,
       :height         => 38,
       :border         => true,
-      :frame          => true,
-      :bbar           => [:manage_users.action, :manage_ssh_key_pairs.action, "-", :manage_tasks.action, '->', :show_help.action, '-', :logout.action]
+      :frame          => true, 
+      :bbar           => get_bbar
     )
   end
 
