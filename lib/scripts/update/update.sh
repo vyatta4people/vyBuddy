@@ -7,6 +7,7 @@ UPDATE_SCRIPT_DIR="${UPDATE_DIR}/script.d"
 
 CACHE_DIR="${VYBUDDY_ROOT}/cache"
 CACHE_SCRIPT_DIR="${CACHE_DIR}/script.d"
+CACHE_SQL_BCKP_DIR="${CACHE_DIR}/sql-backups"
 
 BASH_EXEC="/bin/bash"
 
@@ -15,10 +16,23 @@ SQL_HOST="$(grep host: "${DATABASE_YML}" | awk '{print $NF}')"
 SQL_USER="$(grep username: "${DATABASE_YML}" | awk '{print $NF}')"
 SQL_PASS="$(grep password: "${DATABASE_YML}" | awk '{print $NF}')"
 SQL_DB="$(grep database: "${DATABASE_YML}" | awk '{print $NF}')"
-SQL_EXEC="/usr/bin/mysql -h${SQL_HOST} -u${SQL_USER} -p${SQL_PASS} ${SQL_DB}"
+SQL_OPTS="-h${SQL_HOST} -u${SQL_USER} -p${SQL_PASS} ${SQL_DB}"
+SQL_EXEC="/usr/bin/mysql ${SQL_OPTS}"
+SQL_BCKP="/usr/bin/mysqldump ${SQL_OPTS}"
+SQL_BCKP_FILE="${CACHE_SQL_BCKP_DIR}/$(date +%Y%m%d%H%M%S)-${RANDOM}.sql.gz"
 
 if [ ! -d "${CACHE_SCRIPT_DIR}" ]; then
   mkdir "${CACHE_SCRIPT_DIR}"
+fi
+
+if [ ! -d "${CACHE_SQL_BCKP_DIR}" ]; then
+  mkdir "${CACHE_SQL_BCKP_DIR}"
+fi
+
+${SQL_BCKP} | gzip > "${SQL_BCKP_FILE}"
+if [ ${?} -ne 0 ]; then
+  echo "*** FATAL: Can not backup DB to ${SQL_BCKP_FILE}"
+  exit 1
 fi
 
 UPDATE_SCRIPTS=$(ls -1 "${UPDATE_SCRIPT_DIR}")
