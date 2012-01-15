@@ -1,6 +1,5 @@
 class TasksGrid < Netzke::Basepack::GridPanel
 
-  js_mixin :properties
   js_mixin :init_component
 
   action :add_in_form,  :text => "Add",  :tooltip => "Add Vyatta host"
@@ -9,7 +8,7 @@ class TasksGrid < Netzke::Basepack::GridPanel
   def configuration
     column_defaults                 = Hash.new
     column_defaults[:editable]      = false
-    column_defaults[:sortable]      = true
+    column_defaults[:sortable]      = false
     column_defaults[:menu_disabled] = true
     column_defaults[:resizable]     = false
     column_defaults[:draggable]     = false
@@ -20,7 +19,8 @@ class TasksGrid < Netzke::Basepack::GridPanel
       :title            => "Tasks",
       :prevent_header   => true,
       :model            => "Task",
-      :width            => 400,
+      :scope            => lambda { |s| s.sorted },
+      :width            => 300,
       :border           => true,
       :context_menu     => [:edit_in_form.action, :del.action],
       :tbar             => [:add_in_form.action],
@@ -30,6 +30,7 @@ class TasksGrid < Netzke::Basepack::GridPanel
       :columns          => [
         column_defaults.merge(:name => :task_group__name,         :text => "Task group",      :hidden => true, :default_value => TaskGroup.first ? TaskGroup.first.id : nil),
         column_defaults.merge(:name => :name,                     :text => "Name",            :flex => true),
+        column_defaults.merge(:name => :sort_order,               :text => "Order"),
         column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",        :hidden => true)
       ]
     )

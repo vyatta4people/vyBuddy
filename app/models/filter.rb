@@ -1,6 +1,8 @@
 class Filter < ActiveRecord::Base
   has_many :task_remote_commands, :dependent => :destroy
 
+  scope :sorted, order(["`name` ASC"])
+
   def apply(outputs)
     filter_script = Tempfile.new("vybuddy_filter")
     filter_script.chmod(0700)

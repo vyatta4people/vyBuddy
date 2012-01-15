@@ -2,10 +2,8 @@
   initComponent: function(params) {
   	this.superclass.initComponent.call(this);
 
-  	this.on('afterrender', function(self, eOpts) {
-      if (this.getStore().getCount() > 0) {
-      	this.getSelectionModel().select(0);
-      }
+ 	  this.store.on('load', function(self, records, successful, operation, eOpts) {
+  		this.getSelectionModel().select(0);
   	}, this);
 
   	this.on('selecttask', function(taskId, taskName) {

@@ -5,6 +5,8 @@ class TaskRemoteCommand < ActiveRecord::Base
 
   has_many :displays, :dependent => :destroy
 
+  scope :sorted, joins(:remote_command).order(["`task_remote_commands`.`sort_order` ASC", "`remote_commands`.`command` ASC"])
+
   def html_id
     "task_remote_command_#{self.id.to_s}"
   end

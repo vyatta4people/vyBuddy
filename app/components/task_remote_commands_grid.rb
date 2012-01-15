@@ -1,6 +1,5 @@
 class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
 
-  js_mixin :properties
   js_mixin :init_component
 
   action :add_in_form,  :text => "Add",  :tooltip => "Add remote command to selected task"
@@ -19,6 +18,7 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
       :name               => :tasks_grid,
       :title              => "Remote commands for tasks",
       :model              => "TaskRemoteCommand",
+      :scope              => lambda { |s| s.sorted },
       :border             => true,
       :context_menu       => [:edit_in_form.action, :del.action],
       :tbar               => [:add_in_form.action],
@@ -30,7 +30,8 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :task__name,                :text => "Task",     :hidden => true),
         column_defaults.merge(:name => :remote_command__mode,      :text => "Mode",     :width => 100, :editor => { :hidden => true }),
         column_defaults.merge(:name => :remote_command__command,   :text => "Command",  :flex => true),
-        column_defaults.merge(:name => :filter__name,              :text => "Filter",   :width => 100)
+        column_defaults.merge(:name => :filter__name,              :text => "Filter",   :width => 150),
+        column_defaults.merge(:name => :sort_order,                :text => "Order")
       ]
     )
   end

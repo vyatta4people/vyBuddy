@@ -13,6 +13,11 @@ class DataController < ApplicationController
   def get_displays_for_vyatta_host
     vyatta_host = VyattaHost.find(params[:id].to_i)
     data        = Array.new
+    TaskRemoteCommand.find(:all).each do |trc|
+      if !Display.find(:first, :conditions => { :vyatta_host_id => vyatta_host.id, :task_remote_command_id => trc.id })
+        Display.create(:vyatta_host_id => vyatta_host.id, :task_remote_command_id => trc.id, :information => "OH SHI-")
+      end
+    end
     vyatta_host.displays.each do |display|
       item = Hash.new
       item[:html_display_id] = display.html_display_id

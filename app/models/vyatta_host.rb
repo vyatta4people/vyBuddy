@@ -9,7 +9,15 @@ class VyattaHost < ActiveRecord::Base
 
   has_many :displays, :dependent => :destroy
 
-  default_scope joins(:vyatta_host_state).select(["`vyatta_hosts`.*, `vyatta_host_states`.`is_daemon_running`, `vyatta_host_states`.`daemon_pid`, `vyatta_host_states`.`is_reachable`, `vyatta_host_states`.`vyatta_version`, `vyatta_host_states`.`load_average`"])
+  default_scope joins(:vyatta_host_state).select([
+    "`vyatta_hosts`.*", 
+    "`vyatta_host_states`.`is_daemon_running`", 
+    "`vyatta_host_states`.`daemon_pid`", 
+    "`vyatta_host_states`.`is_reachable`", 
+    "`vyatta_host_states`.`vyatta_version`", 
+    "`vyatta_host_states`.`load_average`"])
+
+  scope :sorted, order(["`hostname` ASC"])
 
   after_create   { |vyatta_host| VyattaHostState.create(:vyatta_host => vyatta_host) }
   before_destroy { |vyatta_host| vyatta_host.kill_all_daemons; return true }

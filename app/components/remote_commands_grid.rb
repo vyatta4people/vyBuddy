@@ -6,7 +6,7 @@ class RemoteCommandsGrid < Netzke::Basepack::GridPanel
   def configuration
     column_defaults                 = Hash.new
     column_defaults[:editable]      = false
-    column_defaults[:sortable]      = true
+    column_defaults[:sortable]      = false
     column_defaults[:menu_disabled] = true
     column_defaults[:resizable]     = false
     column_defaults[:draggable]     = false
@@ -16,6 +16,7 @@ class RemoteCommandsGrid < Netzke::Basepack::GridPanel
       :name             => :remote_commands_grid,
       :title            => "Remote commands",
       :model            => "RemoteCommand",
+      :scope            => lambda { |s| s.sorted },
       :border           => true,
       :context_menu     => [:edit_in_form.action, :del.action],
       :tbar             => [:add_in_form.action],

@@ -1,6 +1,5 @@
 class BottomPanel < Netzke::Basepack::Panel
 
-  js_mixin :properties
   js_mixin :init_component
 
   def configuration
