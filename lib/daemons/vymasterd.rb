@@ -21,21 +21,34 @@ end
 Signal.trap("TERM") { graceful_shutdown }
 Signal.trap("INT")  { graceful_shutdown }
 
-while true do
-  enabled_vyatta_hosts = VyattaHost.where(:is_enabled => true)
-  enabled_vyatta_hosts.each do |vyatta_host|
-    if !vyatta_host.vyatta_host_state.is_daemon_running or !vyatta_host.daemon_running?
-      vyatta_host.start_daemon
+rescue_chance_used = false
+begin
+  while true do
+    enabled_vyatta_hosts = VyattaHost.where(:is_enabled => true)
+    enabled_vyatta_hosts.each do |vyatta_host|
+      if !vyatta_host.vyatta_host_state.is_daemon_running or !vyatta_host.daemon_running?
+        vyatta_host.start_daemon
+      end
     end
+    disabled_vyatta_hosts = VyattaHost.where(:is_enabled => false)
+    disabled_vyatta_hosts.each do |vyatta_host|
+      if vyatta_host.vyatta_host_state.is_daemon_running
+        vyatta_host.stop_daemon
+      end
+      if vyatta_host.daemon_running?
+        vyatta_host.kill_all_daemons
+      end
+    end
+    sleep(1)
   end
-  disabled_vyatta_hosts = VyattaHost.where(:is_enabled => false)
-  disabled_vyatta_hosts.each do |vyatta_host|
-    if vyatta_host.vyatta_host_state.is_daemon_running
-      vyatta_host.stop_daemon
-    end
-    if vyatta_host.daemon_running?
-      vyatta_host.kill_all_daemons
-    end
+rescue => e
+  if !rescue_chance_used
+    rescue_chance_used = true
+    warn "Error spotted(will retry): #{e.message}"
+    sleep 5
+    retry
+  else
+    warn "Error spotted(will exit): #{e.message}"
+    exit(1)
   end
-  sleep(1)
 end
