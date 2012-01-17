@@ -46,7 +46,7 @@ while true do
 
   tasks = Task.where(:is_enabled => true)
   tasks.each do |task|
-    task.task_remote_commands.each do |trc|
+    task.task_remote_commands(true).each do |trc|
       remote_command  = trc.remote_command
       filter          = trc.filter
       display         = Display.find(:first, :conditions => { :vyatta_host_id => vyatta_host.id, :task_remote_command_id => trc.id })
