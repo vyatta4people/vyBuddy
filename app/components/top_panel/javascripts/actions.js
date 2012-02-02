@@ -11,6 +11,10 @@
 		Netzke.page.manageTasksWindow.show();
   },
 
+  onViewLogs: function() {
+  	Netzke.page.logsWindow.show();
+  },
+
   onShowHelp: function() {
 		Ext.Msg.show({ title: 'Help', msg: 'OH SHI-! vyBuddy early alpha! Be careful! :)', buttons: Ext.Msg.OK, icon: Ext.Msg.INFO });
   },

@@ -21,7 +21,7 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
       :scope        => lambda { |s| s.sorted },
       :width        => 600,
       :border       => true,
-      :context_menu => session[:user_is_admin] ? [:edit_in_form.action, :del.action] : nil,
+      :context_menu => session[:user_is_admin] ? [:edit_in_form.action, :del.action] : false,
       :tbar         => session[:user_is_admin] ? [:add_in_form.action] : [],
       :bbar         => [],
       :tools        => false,

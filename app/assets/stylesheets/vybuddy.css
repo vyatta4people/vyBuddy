@@ -12,6 +12,10 @@
   background-position: 	center;
 }
 
+.text-steel-blue {
+	color:								#4682b4;
+}
+
 .bottom-panel {
 	text-align: 					center;
 	margin-top: 					10px;
@@ -21,11 +25,6 @@
 
 .global-summary-blue-item {
 	color: 								#416da3;
-	display: 							inline;
-}
-
-.global-summary-green-item {
-	color: 								#277523;
 	display: 							inline;
 }
 

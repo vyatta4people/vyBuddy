@@ -1,1 +1,0 @@
-rm -Rf /opt/vybuddy/cache/sql.d/

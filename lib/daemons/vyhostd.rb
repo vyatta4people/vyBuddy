@@ -19,10 +19,14 @@ rescue => e
   exit 2
 end
 
+Log.info("Daemon started")
 while true do
   # Yes, we need to "refresh" vyatta_host each loop step
   vyatta_host           = VyattaHost.find(vyatta_host_id)
   vyatta_host_state     = vyatta_host.vyatta_host_state
+
+  Log.application       = :vyhostd
+  Log.event_source      = "#{vyatta_host.hostname}(#{vyatta_host.id.to_s})"
 
   # Try to establish SSH connection to Vyatta host and check Vyatta software version and load average
   version_check         = RemoteCommand.find_or_create_by_command("show version | grep 'Version' | sed 's/.*: *//'", :mode => "operational")
@@ -31,7 +35,7 @@ while true do
     version_check_result = vyatta_host.execute_remote_command(version_check)
     load_average_result  = vyatta_host.execute_remote_command(load_average)
   rescue => e
-    warn "Could not reach Vyatta host (ID #{vyatta_host.id.to_s}): #{e.message}"
+    Log.error("Could not reach Vyatta host (ID #{vyatta_host.id.to_s}): #{e.message}")
     vyatta_host_state.is_reachable    = false
   else
     vyatta_host_state.is_reachable    = true
@@ -40,6 +44,7 @@ while true do
   ensure
     vyatta_host_state.save
     if !vyatta_host_state.is_reachable
+      sleep 60
       next
     end
   end

@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/skozlov/netzke-basepack.git
-  revision: 7acdfbbe43b773d2090892d9a5b5baef1789bed9
+  revision: c88579c338b50696afbbf201cb1fc2664a5fdc12
   specs:
     netzke-basepack (0.7.3)
       acts_as_list (~> 0.1.4)
@@ -56,7 +56,7 @@ GEM
       execjs
     coffee-script-source (1.2.0)
     erubis (2.7.0)
-    execjs (1.2.13)
+    execjs (1.3.0)
       multi_json (~> 1.0)
     hike (1.2.1)
     i18n (0.6.0)
