@@ -63,7 +63,7 @@ class Log < ActiveRecord::Base
     end
 
     def info(message)
-      write_log('INFO', message, true)
+      write_log('INFO', message)
     end
 
     def warn(message)

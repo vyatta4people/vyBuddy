@@ -93,11 +93,13 @@ class VyattaHost < ActiveRecord::Base
   end
 
   def start_daemon
+    Log.application   = :vyhostd
+    Log.event_source  = "#{self.hostname}(#{self.id.to_s})"
     begin
       pid = Process.spawn("#{HOST_DAEMON_PATH} #{self.id.to_s}", STDOUT => self.daemon_stdout, STDERR => self.daemon_stderr)
       Process.detach(pid)
     rescue => e
-      warn "Could not start daemon (Vyatta host ID #{self.id.to_s}): #{e.message}"
+      Log.error("Could not start daemon: #{e.message}")
       return nil
     else
       self.vyatta_host_state.is_daemon_running  = true
@@ -107,12 +109,15 @@ class VyattaHost < ActiveRecord::Base
   end
 
   def stop_daemon
+    Log.application   = :vyhostd
+    Log.event_source  = "#{self.hostname}(#{self.id.to_s})"
     begin
       Process.kill("TERM", self.vyatta_host_state.daemon_pid) if self.vyatta_host_state.daemon_pid != 0
     rescue => e
-      warn "Could not stop daemon (Vyatta host ID #{self.id.to_s} / PID #{self.vyatta_host_state.daemon_pid.to_s}): #{e.message}" 
+      Log.error("Could not stop daemon (PID #{self.vyatta_host_state.daemon_pid.to_s}): #{e.message}")
       return nil
     else
+      Log.info("Daemon stopped")
       self.vyatta_host_state.is_daemon_running  = false
       self.vyatta_host_state.daemon_pid         = 0
       return self.vyatta_host_state.save

@@ -26,7 +26,7 @@ class LogsGrid < Netzke::Basepack::GridPanel
           { :item_id => :from_date,      :xtype => :datefield,     :value => Date.today, :format => "Y-m-d", :width => 100 },
           "  ", { :xtype => :displayfield, :field_label => "To", :label_width => :auto },
           { :item_id => :to_date,        :xtype => :datefield,     :value => Date.today, :format => "Y-m-d", :width => 100 }, 
-          "  ", { :xtype => :displayfield, :field_label => "#{Log.html_severity('WARN')} #{Log.html_severity('ERROR')} #{Log.html_severity('FATAL')}", :label_width => :auto, :label_separator => "" },
+          "  ", { :xtype => :displayfield, :field_label => "#{Log.html_severity('INFO')} #{Log.html_severity('WARN')} #{Log.html_severity('ERROR')} #{Log.html_severity('FATAL')}", :label_width => :auto, :label_separator => "" },
           { :item_id => :silent_log,     :xtype => :checkboxfield },
           "->", { :xtype => :displayfield, :field_label => "Search", :label_width => :auto },
           { :item_id => :search_message, :xtype => :textfield,     :width => 300, :empty_text => "Search log message..." },

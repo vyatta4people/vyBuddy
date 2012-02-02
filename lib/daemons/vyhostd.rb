@@ -5,6 +5,8 @@
 
 require File.expand_path('../../../config/environment', __FILE__)
 
+Log.application = :vyhostd
+
 if ARGV.length != 1 or !ARGV[0].match(/^[0-9]+$/) or ARGV[0].to_i <= 0
   warn "Usage: #{File.basename(__FILE__, '.rb')} <id>"
   warn "       <id> = 1..N"
@@ -20,12 +22,11 @@ rescue => e
 end
 
 Log.info("Daemon started")
+
 while true do
   # Yes, we need to "refresh" vyatta_host each loop step
   vyatta_host           = VyattaHost.find(vyatta_host_id)
   vyatta_host_state     = vyatta_host.vyatta_host_state
-
-  Log.application       = :vyhostd
   Log.event_source      = "#{vyatta_host.hostname}(#{vyatta_host.id.to_s})"
 
   # Try to establish SSH connection to Vyatta host and check Vyatta software version and load average
@@ -35,9 +36,10 @@ while true do
     version_check_result = vyatta_host.execute_remote_command(version_check)
     load_average_result  = vyatta_host.execute_remote_command(load_average)
   rescue => e
-    Log.error("Could not reach Vyatta host (ID #{vyatta_host.id.to_s}): #{e.message}")
+    Log.error("Could not reach Vyatta host: #{e.message}")
     vyatta_host_state.is_reachable    = false
   else
+    Log.info("Vyatta host become reachable") if !vyatta_host_state.is_reachable
     vyatta_host_state.is_reachable    = true
     vyatta_host_state.vyatta_version  = version_check_result[:data]
     vyatta_host_state.load_average    = load_average_result[:data].to_f
@@ -61,7 +63,7 @@ while true do
       begin
         remote_command_result = vyatta_host.execute_remote_command(remote_command)
       rescue => e
-        warn "Could not execute task \"#{remote_command.command}\" (Vyatta host ID #{vyatta_host.id.to_s}): #{e.message}"
+        Log.error("Could not execute task \"#{remote_command.command}\": #{e.message}")
         display.information = "Failed to retrieve information... (#{e.message})"
       else
         display.information = filter.apply([remote_command_result])

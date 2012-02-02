@@ -5,6 +5,9 @@
 
 require File.expand_path('../../../config/environment', __FILE__)
 
+Log.application  = :vymasterd
+Log.event_source = "localhost"
+
 def graceful_shutdown
   vyatta_hosts = VyattaHost.all
   vyatta_hosts.each do |vyatta_host|
@@ -20,6 +23,8 @@ end
 
 Signal.trap("TERM") { graceful_shutdown }
 Signal.trap("INT")  { graceful_shutdown }
+
+Log.info("Daemon started")
 
 rescue_chance_used = false
 begin
@@ -44,11 +49,11 @@ begin
 rescue => e
   if !rescue_chance_used
     rescue_chance_used = true
-    warn "Error spotted(will retry): #{e.message}"
+    Log.error("Error spotted(will retry): #{e.message}")
     sleep 5
     retry
   else
-    warn "Error spotted(will exit): #{e.message}"
+    Log.fatal("Error spotted(will exit): #{e.message}")
     exit(1)
   end
 end

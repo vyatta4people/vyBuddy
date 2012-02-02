@@ -33,6 +33,11 @@ class LoginWindow < Netzke::Basepack::Window
           :name         => :password,
           :field_label  => "Password",
           :input_type   => :password
+        }, {
+          :name         => :remote_ip,
+          :field_label  => "Remote IP",
+          :value        => super[:remote_ip],
+          :hidden       => true
         } ]
       } ]
     )
@@ -44,11 +49,21 @@ class LoginWindow < Netzke::Basepack::Window
     if user
       if user.password == params[:password]
         if user.is_enabled
-          session[:user_id] = user.id
-          success           = true
+          session[:user_id]         = user.id
+          session[:user_username]   = user.username
+          success                   = true
         end
       end
     end
+
+    Log.application   = :auth_controller
+    Log.event_source  = params[:remote_ip]
+    if success
+      Log.info("User logged in: #{session[:user_username]}(#{session[:user_id]})")
+    else
+      Log.warn("User failed to log in: #{params[:username]}")
+    end
+
     { :set_result => success }
   end
 
