@@ -18,6 +18,7 @@ def graceful_shutdown
       vyatta_host.kill_all_daemons
     end
   end
+  Log.info("Daemon stopped")
   exit(0)
 end
 

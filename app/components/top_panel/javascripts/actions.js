@@ -20,6 +20,6 @@
   },
 
   onLogout: function() {
-		window.location = '/auth/login';
+		window.location = '/auth/logout';
   }
 }

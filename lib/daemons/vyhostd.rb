@@ -21,6 +21,7 @@ rescue => e
   exit 2
 end
 
+Log.event_source = "#{vyatta_host.hostname}(#{vyatta_host.id.to_s})"
 Log.info("Daemon started")
 
 while true do
