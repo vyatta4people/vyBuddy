@@ -43,6 +43,11 @@ class VyattaHost < ActiveRecord::Base
     self.execute_remote_commands([remote_command])[0]
   end
 
+  def set_daemon_log_parameters
+    Log.application   = :vyhostd
+    Log.event_source  = "#{self.hostname}(#{self.id.to_s})"
+  end
+
   def daemon_stdout
     "/dev/null"
   end
@@ -93,8 +98,7 @@ class VyattaHost < ActiveRecord::Base
   end
 
   def start_daemon
-    Log.application   = :vyhostd
-    Log.event_source  = "#{self.hostname}(#{self.id.to_s})"
+    self.set_daemon_log_parameters
     begin
       pid = Process.spawn("#{HOST_DAEMON_PATH} #{self.id.to_s}", STDOUT => self.daemon_stdout, STDERR => self.daemon_stderr)
       Process.detach(pid)
@@ -109,8 +113,7 @@ class VyattaHost < ActiveRecord::Base
   end
 
   def stop_daemon
-    Log.application   = :vyhostd
-    Log.event_source  = "#{self.hostname}(#{self.id.to_s})"
+    self.set_daemon_log_parameters
     begin
       Process.kill("TERM", self.vyatta_host_state.daemon_pid) if self.vyatta_host_state.daemon_pid != 0
     rescue => e

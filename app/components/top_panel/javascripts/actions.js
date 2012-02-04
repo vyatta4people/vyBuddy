@@ -16,7 +16,7 @@
   },
 
   onShowHelp: function() {
-		Ext.Msg.show({ title: 'Help', msg: 'OH SHI-! vyBuddy early alpha! Be careful! :)', buttons: Ext.Msg.OK, icon: Ext.Msg.INFO });
+		Ext.Msg.show({ title: 'Help', msg: 'vyBuddy by Ivan "Cartman" Ilves, 2012.<br/>It is early alpha! Be careful! :) :) :)', buttons: Ext.Msg.OK, icon: Ext.Msg.INFO });
   },
 
   onLogout: function() {

@@ -5,8 +5,6 @@
 
 require File.expand_path('../../../config/environment', __FILE__)
 
-Log.application = :vyhostd
-
 if ARGV.length != 1 or !ARGV[0].match(/^[0-9]+$/) or ARGV[0].to_i <= 0
   warn "Usage: #{File.basename(__FILE__, '.rb')} <id>"
   warn "       <id> = 1..N"
@@ -21,14 +19,14 @@ rescue => e
   exit 2
 end
 
-Log.event_source = "#{vyatta_host.hostname}(#{vyatta_host.id.to_s})"
+vyatta_host.set_daemon_log_parameters
 Log.info("Daemon started")
 
 while true do
   # Yes, we need to "refresh" vyatta_host each loop step
   vyatta_host           = VyattaHost.find(vyatta_host_id)
   vyatta_host_state     = vyatta_host.vyatta_host_state
-  Log.event_source      = "#{vyatta_host.hostname}(#{vyatta_host.id.to_s})"
+  vyatta_host.set_daemon_log_parameters
 
   # Try to establish SSH connection to Vyatta host and check Vyatta software version and load average
   version_check         = RemoteCommand.find_or_create_by_command("show version | grep 'Version' | sed 's/.*: *//'", :mode => "operational")
@@ -40,7 +38,7 @@ while true do
     Log.error("Could not reach Vyatta host: #{e.message}")
     vyatta_host_state.is_reachable    = false
   else
-    Log.info("Vyatta host become reachable") if !vyatta_host_state.is_reachable
+    Log.info("Vyatta host is reachable") if !vyatta_host_state.is_reachable
     vyatta_host_state.is_reachable    = true
     vyatta_host_state.vyatta_version  = version_check_result[:data]
     vyatta_host_state.load_average    = load_average_result[:data].to_f
