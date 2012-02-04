@@ -63,4 +63,5 @@ VyBuddy::Application.routes.draw do
 
   match 'data/get_global_summary' => 'data#get_global_summary'
   match 'data/get_displays/:id'   => 'data#get_displays_for_vyatta_host'
+  match 'data/export_logs'        => 'data#export_logs'
 end

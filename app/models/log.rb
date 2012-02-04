@@ -26,6 +26,10 @@ class Log < ActiveRecord::Base
     Log.html_message(self.severity, self.message)
   end
 
+  def as_text
+    sprintf("%-30s| %-20s| %-40s| %-10s| %s", !self.new_record? ? self.created_at.to_s(:eu) : Time.now.to_s(:eu), self.application, self.event_source, self.severity, self.message)
+  end
+
   class << self
     attr_accessor :application
     attr_accessor :event_source
@@ -80,7 +84,7 @@ class Log < ActiveRecord::Base
       self.application  = :system if !self.application
       self.event_source = 'n/a'   if !self.event_source
       log = Log.create(:created_date => Date.today, :application => self.application.to_s, :event_source => self.event_source, :severity => severity, :is_verbose => is_verbose, :message => message)
-      $stderr.puts(printf("%-30s| %-20s| %-40s| %-10s| %s", log ? log.created_at.to_s(:eu) : Time.now.to_s(:eu), log.application, log.event_source, log.severity, log.message)) if self.duplicate_to_stderr
+      $stderr.puts(log.as_text) if self.duplicate_to_stderr
       $stderr.puts("Failed to save [previous] log message: #{log.errors.full_messages.join(', ')}") if log.new_record?
     end
 

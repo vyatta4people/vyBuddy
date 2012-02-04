@@ -1,6 +1,7 @@
 class LogsGrid < Netzke::Basepack::GridPanel
-  action :search_logs,          :icon => :find,   :text => ""
-  action :clear_search_filter,  :icon => :stop,   :text => ""
+  action :search_logs,          :icon => :find,       :text => ""
+  action :clear_search_filter,  :icon => :stop,       :text => ""
+  action :download_logs,        :icon => :download,   :text => "", :disabled => true
 
   js_mixin :init_component
   js_mixin :actions
@@ -31,7 +32,7 @@ class LogsGrid < Netzke::Basepack::GridPanel
           "->", { :xtype => :displayfield, :field_label => "Search", :label_width => :auto },
           { :item_id => :search_message, :xtype => :textfield,     :width => 300, :empty_text => "Search log message..." },
           " ",
-          :search_logs.action, :clear_search_filter.action,
+          :search_logs.action, :clear_search_filter.action, :download_logs.action,
           " "
         ],
       :bbar               => [],

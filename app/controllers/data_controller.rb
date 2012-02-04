@@ -27,4 +27,24 @@ class DataController < ApplicationController
     render(:json => data)
   end
 
+  def export_logs
+    conditions    = Array.new
+    conditions[0] = "`created_date` >= ? AND `created_date` <= ?"
+    conditions[1] = params[:from_date]
+    conditions[2] = params[:to_date]
+    if params[:silent_log]
+      conditions[0] += " AND `is_verbose` = false"      
+    end
+    if params[:search_message] and !params[:search_message].empty?
+      conditions[0] += " AND `message` LIKE ?"
+      conditions[3] = "%#{params[:search_message]}%"
+    end
+    logs   = Log.find(:all, :conditions => conditions)
+    data   = Array.new
+    logs.each do |log|
+      data << log.as_text
+    end
+    send_data(data.join("\n"), :filename => "logs_#{Time.now.strftime("%Y%m%d%H%M%S")}.txt")
+  end
+
 end

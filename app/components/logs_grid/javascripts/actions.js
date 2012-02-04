@@ -29,9 +29,21 @@
 
   	proxy.extraParams.query = Ext.encode([ searchFilter ]);
 		store.loadPage(1); // NB! Triggers 'load' event!
+		this.actions.downloadLogs.setDisabled(false);
   },
 
   onClearSearchFilter: function() {
   	this.fireEvent('show');
+  },
+
+  onDownloadLogs: function() {
+  	var urlRoot 	= '/data/export_logs';
+    var	urlParams = Ext.Object.toQueryString({ 
+    	from_date: 			this.filterFromDate.getValue(),
+    	to_date: 				this.filterToDate.getValue(),
+    	silent_log: 		this.filterSilentLog.getValue(),
+    	search_message: this.filterSearchMessage.getValue()
+   	});
+		window.open(urlRoot + '?' + urlParams);
   }
 }

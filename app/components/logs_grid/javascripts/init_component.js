@@ -10,6 +10,8 @@
   		this.filterSilentLog.reset();
   		this.filterSearchMessage.reset();
 
+      this.actions.downloadLogs.setDisabled(true);
+
   		this.justLoaded = true;
 			this.getStore().getProxy().extraParams.query = null;
 			this.getStore().sort('created_at', 'ASC'); // NB! Triggers 'load' event!
