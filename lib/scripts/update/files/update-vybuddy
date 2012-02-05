@@ -1,0 +1,44 @@
+#!/bin/bash
+#
+# vyBuddy update script
+#
+source /etc/profile.d/rvm.sh
+source /etc/profile.d/vybuddy.sh
+VYBUDDY_DATABASE_YML="${VYBUDDY_RAILS_CAP_CONFIG_DIR}/database.yml"
+VYBUDDY_UPDATE_SCRIPT="${VYBUDDY_RAILS_APP_DIR}/lib/scripts/update/update.sh"
+
+if [ ${USER} != ${VYBUDDY_USER} ]; then
+  echo "Must be launched from user: ${VYBUDDY_USER}"
+  exit 1
+fi
+
+echo "[ PRE-DEPLOY ]"
+echo "* Stopping application server"
+sudo ${VYBUDDY_APPSRV_INIT_SCRIPT} stop
+echo "* Stopping vyBuddy daemon"
+sudo ${VYBUDDY_DAEMON_INIT_SCRIPT} stop
+
+echo "[ DEPLOY ]"
+cd ${VYBUDDY_RAILS_ROOT}
+echo "* Deploying project from GitHub"
+cap deploy
+export CAP_RETCODE=$?
+cap deploy:cleanup -s keep_releases=2
+echo "* Copying database.yml"
+cp ${VYBUDDY_DATABASE_YML} ${VYBUDDY_RAILS_APP_CONFIG_DIR}
+cd ${VYBUDDY_RAILS_APP_DIR}
+echo "* Updating bundle"
+bundle update
+
+echo "[ CUSTOM ]"
+echo "* Running custom update script"
+bash ${VYBUDDY_UPDATE_SCRIPT}
+echo "* Setting executable permissions on daemons and scripts"
+chmod +x ${VYBUDDY_DAEMONS_DIR}/*.rb
+chmod +x ${VYBUDDY_SCRIPTS_DIR}/*.rb
+
+echo "[ POST-DEPLOY ]"
+echo "* Starting vyBuddy daemon"
+sudo ${VYBUDDY_DAEMON_INIT_SCRIPT} start
+echo "* Starting application server"
+sudo ${VYBUDDY_APPSRV_INIT_SCRIPT} start
