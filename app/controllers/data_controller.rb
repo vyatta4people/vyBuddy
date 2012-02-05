@@ -30,8 +30,8 @@ class DataController < ApplicationController
   def export_logs
     conditions    = Array.new
     conditions[0] = "`created_date` >= ? AND `created_date` <= ?"
-    conditions[1] = params[:from_date]
-    conditions[2] = params[:to_date]
+    conditions[1] = params[:from_date].to_date
+    conditions[2] = params[:to_date].to_date
     if params[:silent_log]
       conditions[0] += " AND `is_verbose` = false"      
     end

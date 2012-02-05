@@ -83,7 +83,7 @@ class Log < ActiveRecord::Base
     def write_log(severity, message, is_verbose = false)
       self.application  = :system if !self.application
       self.event_source = 'n/a'   if !self.event_source
-      log = Log.create(:created_date => Date.today, :application => self.application.to_s, :event_source => self.event_source, :severity => severity, :is_verbose => is_verbose, :message => message)
+      log = Log.create(:created_date => Time.now.to_date, :application => self.application.to_s, :event_source => self.event_source, :severity => severity, :is_verbose => is_verbose, :message => message)
       $stderr.puts(log.as_text) if self.duplicate_to_stderr
       $stderr.puts("Failed to save [previous] log message: #{log.errors.full_messages.join(', ')}") if log.new_record?
     end
