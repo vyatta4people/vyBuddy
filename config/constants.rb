@@ -9,3 +9,6 @@ HOST_DAEMON_PATH      = DAEMONS_DIR.join(HOST_DAEMON_FILE)
 SSH_KEY_TYPES         = ["ssh-rsa", "ssh-dss"]
 SSH_TIMEOUT           = 30
 REMOTE_COMMAND_MODES  = ["operational", "configuration", "system"]
+
+KEEP_LOG_RECORDS      = 10000
+LOG_BACKUP_DIR        = ENV['VYBUDDY_ROOT'] + '/cache/log-backups'

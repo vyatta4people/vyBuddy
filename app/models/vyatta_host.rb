@@ -44,7 +44,7 @@ class VyattaHost < ActiveRecord::Base
   end
 
   def set_daemon_log_parameters
-    Log.application   = :vyhostd
+    Log.application   = HOST_DAEMON_NAME
     Log.event_source  = "#{self.hostname}(#{self.id.to_s})"
   end
 
