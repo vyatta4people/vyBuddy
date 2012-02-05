@@ -1,0 +1,9 @@
+/opt/vybuddy/rails/shared/log/*.log {
+  daily
+  rotate 14
+  compress
+  missingok
+  notifempty
+  delaycompress
+  copytruncate
+}
