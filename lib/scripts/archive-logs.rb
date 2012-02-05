@@ -19,7 +19,7 @@ logs_to_archive.each do |log|
   data << log.as_text
 end
 
-if ENV['RAILS_ENV'] == :production
+if ENV['RAILS_ENV'] == 'production'
   log_backup_file = "#{LOG_BACKUP_DIR}/logs_#{Time.now.strftime("%Y%m%d%H%M%S")}.txt"
   f = File.new(log_backup_file, "w")
   f.write(data.join("\n"))
