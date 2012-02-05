@@ -11,4 +11,4 @@ SSH_TIMEOUT           = 30
 REMOTE_COMMAND_MODES  = ["operational", "configuration", "system"]
 
 KEEP_LOG_RECORDS      = 10000
-LOG_BACKUP_DIR        = ENV['VYBUDDY_ROOT'] + '/cache/log-backups'
+LOG_BACKUP_DIR        = '/opt/vybuddy/cache/log-backups'
