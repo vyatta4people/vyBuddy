@@ -43,11 +43,11 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
     super
   end
 
-  endpoint :add_form__form_panel0__get_combobox_options do |params|
+  endpoint :add_form__netzke_0__get_combobox_options do |params|
     get_combobox_options(params)
   end
 
-  endpoint :edit_form__form_panel0__get_combobox_options do |params|
+  endpoint :add_form__netzke_0__get_combobox_options do |params|
     get_combobox_options(params)
   end
 
