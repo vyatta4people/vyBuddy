@@ -10,7 +10,9 @@
   	}, this);
 
   	this.store.on('load', function(self, records, successful, operation, eOpts) {
-  		this.getSelectionModel().select(this.selectedRow);
+  		if ((records) && (records.length > 0)) { 
+  			this.getSelectionModel().select(this.selectedRow); 
+  		}
   	}, this);
 
   	this.on('select', function(self, record, index, eOpts) {

@@ -19,7 +19,7 @@ class VyattaHost < ActiveRecord::Base
 
   scope :sorted, order(["`hostname` ASC"])
 
-  after_create   { |vyatta_host| VyattaHostState.create(:vyatta_host => vyatta_host) }
+  after_create   { |vyatta_host| ActiveRecord::Base.connection.execute("INSERT INTO `vyatta_host_states`(`id`) VALUES(#{vyatta_host.id.to_s});") }
   before_destroy { |vyatta_host| vyatta_host.kill_all_daemons; return true }
 
   def execute_remote_commands(remote_commands)
