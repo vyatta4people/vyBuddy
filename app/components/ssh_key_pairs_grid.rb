@@ -12,6 +12,10 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
     column_defaults[:draggable]     = false
     column_defaults[:fixed]         = true
 
+    form_window_config              = Hash.new
+    form_window_config[:width]      = 800
+    form_window_config[:height]     = 700
+
     super.merge(
       :name             => :ssh_key_pairs_grid,
       :title            => "SSH public/private key pairs",
@@ -29,9 +33,11 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :identifier,         :text => "ID",            :flex => true),
         column_defaults.merge(:name => :key_type,           :text => "Type",          :width => 80, :editor => {:xtype => :netzkeremotecombo}, :align => :center),
         column_defaults.merge(:name => :login_username,     :text => "Login as",      :width => 100),
-        column_defaults.merge(:name => :public_key,         :text => "Public key",    :hidden => true),
-        column_defaults.merge(:name => :private_key,        :text => "Private key",   :hidden => true)
-      ]
+        column_defaults.merge(:name => :public_key,         :text => "Public key",    :hidden => true, :editor => {:height => 100}),
+        column_defaults.merge(:name => :private_key,        :text => "Private key",   :hidden => true, :editor => {:height => 400})
+      ],
+      :add_form_window_config   => form_window_config.merge(:title => "Add SSH public/private key pair"),
+      :edit_form_window_config  => form_window_config.merge(:title => "Edit SSH public/private key pair")
     )
   end
 
