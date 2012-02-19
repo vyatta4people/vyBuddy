@@ -3,6 +3,8 @@ class TaskGroup < ActiveRecord::Base
 
   validates :name, :presence => true
 
+  validates :name, :uniqueness => true
+
   scope :sorted, order(["`sort_order` ASC", "`name` ASC"])
 
   def html_id

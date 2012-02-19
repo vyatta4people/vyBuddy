@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
 
   validates :username, :email, :password, :presence => true
 
+  validates :username, :email, :uniqueness => true
+
   validates :username,
     :format     => { :with => USERNAME_REGEX, :message => USERNAME_REASON }
 
