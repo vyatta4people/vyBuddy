@@ -1,6 +1,11 @@
 class Filter < ActiveRecord::Base
   has_many :task_remote_commands, :dependent => :destroy
 
+  validates :name, :interpreter, :code, :presence => true
+
+  validates :interpreter,
+    :inclusion  => { :in => INTERPRETERS, :message => "\'%{value}\' is not a valid script interpreter" }
+
   scope :sorted, order(["`name` ASC"])
 
   def apply(outputs)

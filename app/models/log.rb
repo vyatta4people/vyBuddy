@@ -3,12 +3,11 @@ class Log < ActiveRecord::Base
   validates :created_date, :application, :event_source, :severity, :message, :presence => true
 
   validates :application,
-    :length   => { :minimum => 2 }, 
-    :format   => { :with => /^[a-z_]+$/, :message => "must contain only lowercase letters and underscores" }
+    :length     => { :minimum => 2 }, 
+    :format     => { :with => /^[a-z_]+$/, :message => "must contain only lowercase letters and underscores" }
 
   validates :severity,
-    :inclusion  => { :in => %w(DEBUG ERROR FATAL INFO WARN CUSTOM), :message => "\"%{value}\" is not a valid log severity" },
-    :format     => { :with => /^[A-Z]+$/, :message => "must contain only uppercase letters" }
+    :inclusion  => { :in => LOG_SEVERITIES, :message => "\'%{value}\' is not a valid log severity" }
 
   before_update { |log| raise ActiveRecord::ReadOnlyRecord, "Log record(id: #{log.id.to_s}) should NOT be changed" }
 

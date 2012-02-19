@@ -9,6 +9,15 @@ class VyattaHost < ActiveRecord::Base
 
   has_many :displays, :dependent => :destroy
 
+  validates :hostname, :remote_address, :presence => true
+
+  validates :hostname,
+    :length     => { :minimum => 2 }, 
+    :format     => { :with => /^[a-zA-Z0-9\-]+$/, :message => "must contain only letters, numbers and hyphens" }
+
+  validates :remote_address,
+    :format     => { :with => /^(([1-2]?[0-9]{1,2}\.){3}[1-2]?[0-9]{1,2}|[a-z0-9][a-z0-9\.\-]+[a-z])$/, :message => "must be valid DNS name or IPv4 address" }
+
   default_scope joins(:vyatta_host_state).select([
     "`vyatta_hosts`.*", 
     "`vyatta_host_states`.`is_daemon_running`", 
