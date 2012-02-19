@@ -14,7 +14,7 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
 
     form_window_config              = Hash.new
     form_window_config[:width]      = 800
-    form_window_config[:height]     = 700
+    form_window_config[:height]     = 725
 
     super.merge(
       :name             => :ssh_key_pairs_grid,
@@ -33,8 +33,15 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :identifier,         :text => "ID",            :flex => true),
         column_defaults.merge(:name => :key_type,           :text => "Type",          :width => 80, :editor => {:xtype => :netzkeremotecombo}, :align => :center),
         column_defaults.merge(:name => :login_username,     :text => "Login as",      :width => 100),
-        column_defaults.merge(:name => :public_key,         :text => "Public key",    :hidden => true, :editor => {:height => 100}),
-        column_defaults.merge(:name => :private_key,        :text => "Private key",   :hidden => true, :editor => {:height => 400})
+        column_defaults.merge(:name => :public_key,         :text => "Public key",    :hidden => true, 
+          :editor => {
+            :height       => 100, 
+            :disabled     => true, 
+            :disabled_cls  => "x-form-empty-field", 
+            :empty_text   => "NB! Do not enter public key manually, it will be generated from your private key!"
+          }
+        ),
+        column_defaults.merge(:name => :private_key,        :text => "Private key",   :hidden => true, :editor => {:height => 425})
       ],
       :add_form_window_config   => form_window_config.merge(:title => "Add SSH public/private key pair"),
       :edit_form_window_config  => form_window_config.merge(:title => "Edit SSH public/private key pair")
@@ -53,7 +60,7 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
     get_combobox_options(params)
   end
 
-  endpoint :add_form__netzke_0__get_combobox_options do |params|
+  endpoint :edit_form__netzke_0__get_combobox_options do |params|
     get_combobox_options(params)
   end
 
