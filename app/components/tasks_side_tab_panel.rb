@@ -5,7 +5,7 @@ class TasksSideTabPanel < Netzke::Basepack::TabPanel
       :name             => :tasks_side_tab_panel,
       :title            => "Side panel",
       :prevent_header   => true,
-      :width            => 400,
+      :width            => 350,
       :border           => true,
       :frame            => false,
       :active_tab       => 1,

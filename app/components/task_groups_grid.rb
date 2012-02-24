@@ -25,7 +25,7 @@ class TaskGroupsGrid < Netzke::Basepack::GridPanel
       :multi_select     => false,
       :columns          => [
         column_defaults.merge(:name => :name,                     :text => "Name",            :flex => true),
-        column_defaults.merge(:name => :sort_order,               :text => "Order"),
+        column_defaults.merge(:name => :sort_order,               :text => "Order",           :editor => {:min_value => 0}),
         column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",        :hidden => true)
       ]
     )

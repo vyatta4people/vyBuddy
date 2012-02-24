@@ -20,7 +20,7 @@ class TasksGrid < Netzke::Basepack::GridPanel
       :prevent_header   => true,
       :model            => "Task",
       :scope            => lambda { |s| s.sorted },
-      :width            => 300,
+      :width            => 350,
       :border           => true,
       :context_menu     => [:edit_in_form.action, :del.action],
       :tbar             => [:add_in_form.action],
@@ -28,10 +28,10 @@ class TasksGrid < Netzke::Basepack::GridPanel
       :tools            => false,
       :multi_select     => false,
       :columns          => [
-        column_defaults.merge(:name => :task_group__name,         :text => "Task group",      :hidden => true, :default_value => TaskGroup.first ? TaskGroup.first.id : nil),
-        column_defaults.merge(:name => :name,                     :text => "Name",            :flex => true),
-        column_defaults.merge(:name => :sort_order,               :text => "Order"),
-        column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",        :hidden => true)
+        column_defaults.merge(:name => :task_group__name,         :text => "Group",      :default_value => TaskGroup.first ? TaskGroup.first.id : nil),
+        column_defaults.merge(:name => :name,                     :text => "Name",       :flex => true),
+        column_defaults.merge(:name => :sort_order,               :text => "Order",      :editor => {:min_value => 0}),
+        column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",   :hidden => true)
       ]
     )
   end

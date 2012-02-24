@@ -8,7 +8,7 @@ class Task < ActiveRecord::Base
 
   validates :name, :uniqueness => true
 
-  scope :sorted, order(["`sort_order` ASC", "`name` ASC"])
+  scope :sorted, joins(:task_group).order(["`task_groups`.`sort_order` ASC", "`task_groups`.`name` ASC", "`tasks`.`sort_order` ASC", "`tasks`.`name` ASC"])
 
   def html_id
     "task_#{self.id.to_s}"

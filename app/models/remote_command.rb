@@ -5,11 +5,13 @@ class RemoteCommand < ActiveRecord::Base
   has_many :tasks, :through => :task_remote_commands
 
   validates :mode, :command, :presence => true
-  
+
+  validates :command, :uniqueness => {:scope => :mode}
+
   validates :mode,
     :inclusion  => { :in => REMOTE_COMMAND_MODES, :message => "\'%{value}\' is not a valid remote command mode" }
 
-  scope :sorted, order(["`command` ASC"])
+  scope :sorted, order(["`mode` ASC, `command` ASC"])
 
   def executor
     return case self.mode

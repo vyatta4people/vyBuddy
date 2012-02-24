@@ -8,7 +8,7 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
   def configuration
     column_defaults                 = Hash.new
     column_defaults[:editable]      = false
-    column_defaults[:sortable]      = true
+    column_defaults[:sortable]      = false
     column_defaults[:menu_disabled] = true
     column_defaults[:resizable]     = false
     column_defaults[:draggable]     = false
@@ -31,7 +31,7 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :remote_command__mode,      :text => "Mode",     :width => 100, :editor => { :hidden => true }),
         column_defaults.merge(:name => :remote_command__command,   :text => "Command",  :flex => true),
         column_defaults.merge(:name => :filter__name,              :text => "Filter",   :width => 150),
-        column_defaults.merge(:name => :sort_order,                :text => "Order")
+        column_defaults.merge(:name => :sort_order,                :text => "Order",    :editor => {:min_value => 0})
       ]
     )
   end
