@@ -20,6 +20,7 @@ class LogsGrid < Netzke::Basepack::GridPanel
       :title              => "Logs",
       :prevent_header     => true,
       :model              => "Log",
+      :load_inline_data   => false,
       :border             => true,
       :context_menu       => false,
       :tbar               => [

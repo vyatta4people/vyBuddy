@@ -17,18 +17,19 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
     super.merge(
       :name               => :tasks_grid,
       :title              => "Remote commands for tasks",
+      :prevent_header     => true,
       :model              => "TaskRemoteCommand",
       :scope              => lambda { |s| s.sorted },
-      :border             => true,
+      :border             => false,
       :context_menu       => [:edit_in_form.action, :del.action],
       :tbar               => [:add_in_form.action],
-      :bbar               => [],
+      :bbar               => nil,
       :enable_pagination  => false,
       :tools              => false,
       :multi_select       => false,
       :columns            => [
         column_defaults.merge(:name => :task__name,                :text => "Task",     :hidden => true),
-        column_defaults.merge(:name => :remote_command__mode,      :text => "Mode",     :width => 100, :editor => { :hidden => true }),
+        column_defaults.merge(:name => :remote_command__mode,      :text => "Mode",     :width => 100, :editor => {:hidden => true}),
         column_defaults.merge(:name => :remote_command__command,   :text => "Command",  :flex => true),
         column_defaults.merge(:name => :filter__name,              :text => "Filter",   :width => 150),
         column_defaults.merge(:name => :sort_order,                :text => "Order",    :editor => {:min_value => 0})

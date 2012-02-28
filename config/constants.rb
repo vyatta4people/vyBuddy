@@ -19,3 +19,5 @@ INTERPRETERS          = ['/bin/bash', '/usr/bin/perl', '/usr/bin/ruby']
 LOG_SEVERITIES        = ['DEBUG', 'ERROR', 'FATAL', 'INFO', 'WARN', 'CUSTOM']
 KEEP_LOG_RECORDS      = 10000
 LOG_BACKUP_DIR        = '/opt/vybuddy/cache/log-backups'
+
+CSS_BORDER_STYLE      = '1px #99bce8 solid'

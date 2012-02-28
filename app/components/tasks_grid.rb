@@ -19,14 +19,18 @@ class TasksGrid < Netzke::Basepack::GridPanel
       :title            => "Tasks",
       :prevent_header   => true,
       :model            => "Task",
+      :load_inline_data => false,
       :scope            => lambda { |s| s.sorted },
       :width            => 350,
-      :border           => true,
+      :border           => false,
       :context_menu     => [:edit_in_form.action, :del.action],
       :tbar             => [:add_in_form.action],
       :bbar             => [],
       :tools            => false,
       :multi_select     => false,
+      :view_config      => {
+        :plugins => [ { :ptype => :gridviewdragdrop, :drag_group => :tasks_grid_dd_group, :drop_group => :tasks_grid_dd_group, :drag_text => "Drag and drop to reorganize" } ]
+      },
       :columns          => [
         column_defaults.merge(:name => :task_group__name,         :text => "Group",      :default_value => TaskGroup.first ? TaskGroup.first.id : nil),
         column_defaults.merge(:name => :name,                     :text => "Name",       :flex => true),
@@ -34,6 +38,13 @@ class TasksGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",   :hidden => true)
       ]
     )
+  end
+
+  endpoint :reorganize_with_persistent_order do |params|
+    moved_task    = Task.find(params[:moved_record_id].to_i)
+    replaced_task = Task.find(params[:replaced_record_id].to_i)
+    success       = Task.reorganize_with_persistent_order(moved_task, replaced_task, :task_group_id)
+    return { :set_result => { :success => success, :message => Task.reorganize_with_persistent_order_message } }
   end
 
 end

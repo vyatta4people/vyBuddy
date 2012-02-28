@@ -9,7 +9,7 @@
 			Ext.TaskManager.start({ run: updateVyattaHostsGrid, interval: 5000 });
   	}, this);
 
-  	this.store.on('load', function(self, records, successful, operation, eOpts) {
+  	this.getStore().on('load', function(self, records, successful, operation, eOpts) {
   		if ((records) && (records.length > 0)) { 
   			this.getSelectionModel().select(this.selectedRow); 
   		}

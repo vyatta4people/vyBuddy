@@ -15,19 +15,20 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
     column_defaults[:fixed]         = true
 
     super.merge(
-      :name         => :vyatta_hosts_grid,
-      :title        => "Vyatta hosts",
-      :model        => "VyattaHost",
-      :scope        => lambda { |s| s.sorted },
-      :width        => 600,
-      :border       => true,
-      :context_menu => session[:user_is_admin] ? [:edit_in_form.action, :del.action] : false,
-      :tbar         => session[:user_is_admin] ? [:add_in_form.action] : [],
-      :bbar         => [],
-      :tools        => false,
-      :multi_select => false,
-      :view_config  => { :load_mask => false },
-      :columns      => [
+      :name             => :vyatta_hosts_grid,
+      :title            => "Vyatta hosts",
+      :model            => "VyattaHost",
+      :load_inline_data => false,
+      :scope            => lambda { |s| s.sorted },
+      :width            => 600,
+      :border           => true,
+      :context_menu     => session[:user_is_admin] ? [:edit_in_form.action, :del.action] : false,
+      :tbar             => session[:user_is_admin] ? [:add_in_form.action] : [],
+      :bbar             => [],
+      :tools            => false,
+      :multi_select     => false,
+      :view_config      => { :load_mask => false },
+      :columns          => [
         column_defaults.merge(:name => :user__username,           :text => "Owner",           :hidden => true, :default_value => User.first ? User.first.id : nil),
         column_defaults.merge(:name => :ssh_key_pair__identifier, :text => "SSH key",         :hidden => true, :default_value => SshKeyPair.first ? SshKeyPair.first.id : nil),
         column_defaults.merge(:name => :hostname,                 :text => "Hostname",        :flex => true),

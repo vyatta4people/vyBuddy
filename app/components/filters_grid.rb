@@ -17,7 +17,7 @@ class FiltersGrid < Netzke::Basepack::GridPanel
       :title            => "Filters",
       :model            => "Filter",
       :scope            => lambda { |s| s.sorted },
-      :border           => true,
+      :border           => false,
       :context_menu     => [:edit_in_form.action, :del.action],
       :tbar             => [:add_in_form.action],
       :bbar             => [],

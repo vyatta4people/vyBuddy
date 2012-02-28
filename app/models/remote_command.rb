@@ -11,7 +11,7 @@ class RemoteCommand < ActiveRecord::Base
   validates :mode,
     :inclusion  => { :in => REMOTE_COMMAND_MODES, :message => "\'%{value}\' is not a valid remote command mode" }
 
-  scope :sorted, order(["`mode` ASC, `command` ASC"])
+  scope :sorted, order(["`mode` DESC, `command` ASC"])
 
   def executor
     return case self.mode

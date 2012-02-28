@@ -18,18 +18,20 @@ class ManageTasksWindow < Netzke::Basepack::Window
           :name       => :tasks_grid,
           :region     => :west,
           :class_name => "TasksGrid",
-          :split      => true
+          :style      => { :border_right => CSS_BORDER_STYLE },
+          :margin     => "0 2 0 0"
         ),
         :task_remote_commands_grid.component(
           :name       => :task_remote_commands_grid,
           :region     => :center,
-          :class_name => "TaskRemoteCommandsGrid"
+          :class_name => "TaskRemoteCommandsGrid",
+          :style      => { :border_left => CSS_BORDER_STYLE, :border_right => CSS_BORDER_STYLE }
         ),
         :tasks_side_tab_panel.component(
           :name       => :tasks_side_tab_panel,
           :region     => :east,
           :class_name => "TasksSideTabPanel",
-          :split      => true
+          :margin     => "2 2 2 2"
         )
       ]
     )
