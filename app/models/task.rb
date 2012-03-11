@@ -10,8 +10,16 @@ class Task < ActiveRecord::Base
 
   scope :sorted, joins(:task_group).order(["`task_groups`.`sort_order` ASC", "`task_groups`.`name` ASC", "`tasks`.`sort_order` ASC", "`tasks`.`name` ASC"])
 
+  before_create :set_sort_order
+
   def html_id
     "task_#{self.id.to_s}"
+  end
+
+private
+
+  def set_sort_order
+    self.sort_order = Task.get_next_sort_order(:task_group_id, self.task_group_id)
   end
 
 end

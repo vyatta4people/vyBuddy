@@ -10,7 +10,7 @@
 		      for (var d in displays) {
 		      	var display 		= displays[d];
 		      	var displayDiv 	= Ext.get(display.html_display_id);
-		      	displayDiv.update(display.information);
+		      	if (displayDiv) { displayDiv.update(display.information); }
 		      }
 		    }
 		  });

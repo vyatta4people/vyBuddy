@@ -27,7 +27,7 @@ class TaskGroupsGrid < Netzke::Basepack::GridPanel
       :tools            => false,
       :multi_select     => false,
       :view_config      => {
-        :plugins => [ { :ptype => :gridviewdragdrop, :drag_group => :task_groups_grid_dd_group, :drop_group => :task_groups_grid_dd_group, :drag_text => "Drag and drop to reorganize" } ]
+        :plugins => [ { :ptype => :gridviewdragdrop, :drag_group => :task_groups_dd_group, :drop_group => :task_groups_dd_group, :drag_text => "Drag and drop to reorganize" } ]
       },
       :columns          => [
         column_defaults.merge(:name => :name,                     :text => "Name",            :flex => true),
@@ -40,7 +40,8 @@ class TaskGroupsGrid < Netzke::Basepack::GridPanel
   endpoint :reorganize_with_persistent_order do |params|
     moved_task_group    = TaskGroup.find(params[:moved_record_id].to_i)
     replaced_task_group = TaskGroup.find(params[:replaced_record_id].to_i)
-    success             = TaskGroup.reorganize_with_persistent_order(moved_task_group, replaced_task_group)
+    position            = params[:position].to_sym
+    success             = TaskGroup.reorganize_with_persistent_order(moved_task_group, replaced_task_group, position)
     return { :set_result => { :success => success, :message => TaskGroup.reorganize_with_persistent_order_message } }
   end
 

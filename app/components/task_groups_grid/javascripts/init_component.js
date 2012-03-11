@@ -13,7 +13,7 @@
   	}, this);
 
  		this.getView().on('drop', function(node, data, dropRec, dropPosition) {
-			this.reorganizeWithPersistentOrder({ moved_record_id: data.records[0].data.id, replaced_record_id: dropRec.data.id }, function(result) {
+			this.reorganizeWithPersistentOrder({ moved_record_id: data.records[0].data.id, replaced_record_id: dropRec.data.id, position: dropPosition }, function(result) {
 				if (result.success) {
 			    this.getStore().load();
 			    Netzke.page.manageTasksWindow.getChildNetzkeComponent('tasks_grid').fireEvent('droptaskgroup', data.records[0].data.id);
