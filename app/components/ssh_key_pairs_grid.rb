@@ -21,7 +21,7 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
       :title            => "SSH public/private key pairs",
       :prevent_header   => true,
       :model            => "SshKeyPair",
-      :scope            => lambda { |s| s.sorted },
+      :scope            => :sorted,
       :border           => true,
       :context_menu     => [:edit_in_form.action, :del.action],
       :tbar             => [:add_in_form.action],
@@ -29,9 +29,9 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
       :tools            => false,
       :multi_select     => false,
       :columns          => [
-        column_defaults.merge(:name => :user__username,     :text => "Owner",         :hidden => true,  :default_value => User.first ? User.first.id : nil),
+        column_defaults.merge(:name => :user__username,     :text => "Owner",         :hidden => true,  :default_value => User.first ? User.first.id : nil, :editor => {:editable => false}),
         column_defaults.merge(:name => :identifier,         :text => "ID",            :flex => true),
-        column_defaults.merge(:name => :key_type,           :text => "Type",          :width => 80, :editor => {:xtype => :netzkeremotecombo}, :align => :center),
+        column_defaults.merge(:name => :key_type,           :text => "Type",          :width => 80, :editor => {:xtype => :netzkeremotecombo, :editable => false}, :align => :center),
         column_defaults.merge(:name => :login_username,     :text => "Login as",      :width => 100),
         column_defaults.merge(:name => :public_key,         :text => "Public key",    :hidden => true, 
           :editor => {
@@ -50,6 +50,8 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
 
   def get_combobox_options(params)
     case params[:column]
+    when "user__username"
+      return { :data => User.sorted.collect {|u| [u.id, u.username]} }
     when "key_type"
       return { :data => SSH_KEY_TYPES.collect {|t| [t, t]} }
     end

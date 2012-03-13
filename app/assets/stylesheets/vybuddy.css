@@ -49,3 +49,16 @@
 	font-size:						medium;
 	white-space: 					pre-wrap;
 }
+
+.trc-hint {
+	width: 								450px;
+	text-align:						center;
+	font-style: 					italic;
+	font-size:						small;
+	margin:								3px 4px 3px 4px;
+}
+
+.code-editor {
+		color:								#9c0707;
+		font-family:					"fixed";
+}

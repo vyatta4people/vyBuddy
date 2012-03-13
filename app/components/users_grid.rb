@@ -17,7 +17,7 @@ class UsersGrid < Netzke::Basepack::GridPanel
       :title            => "Users",
       :prevent_header   => true,
       :model            => "User",
-      :scope            => lambda { |s| s.sorted },
+      :scope            => :sorted,
       :border           => true,
       :context_menu     => [:edit_in_form.action, :del.action],
       :tbar             => [:add_in_form.action],

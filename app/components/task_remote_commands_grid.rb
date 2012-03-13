@@ -20,10 +20,10 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
       :prevent_header     => true,
       :model              => "TaskRemoteCommand",
       :load_inline_data   => false,
-      :scope              => lambda { |s| s.sorted },
+      :scope              => :sorted,
       :border             => false,
       :context_menu       => [:edit_in_form.action, :del.action],
-      :tbar               => [:add_in_form.action],
+      :tbar               => ["<div class='trc-hint'>Use drag-and-drop to add and sort remote commands</div>"],
       :bbar               => nil,
       :enable_pagination  => false,
       :tools              => false,
@@ -32,11 +32,11 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
         :plugins => [ { :ptype => :gridviewdragdrop, :drag_group => :remote_commands_dd_group, :drop_group => :remote_commands_dd_group, :drag_text => "Drag and drop to reorganize" } ]
       },
       :columns            => [
-        column_defaults.merge(:name => :task__name,                :text => "Task",     :hidden => true),
-        column_defaults.merge(:name => :remote_command__mode,      :text => "Mode",     :width => 100, :editor => {:hidden => true}),
-        column_defaults.merge(:name => :remote_command__command,   :text => "Command",  :flex => true),
-        column_defaults.merge(:name => :filter__name,              :text => "Filter",   :width => 150),
-        column_defaults.merge(:name => :sort_order,                :text => "Order",    :editor => {:min_value => 0})
+        column_defaults.merge(:name => :task__name,                :text => "Task",     :hidden => true,  :editor => {:hidden => true}),
+        column_defaults.merge(:name => :remote_command__mode,      :text => "Mode",     :width => 100,    :editor => {:hidden => true}),
+        column_defaults.merge(:name => :remote_command__command,   :text => "Command",  :flex => true,    :editor => {:hidden => true}),
+        column_defaults.merge(:name => :filter__name,              :text => "Filter",   :width => 100,    :editor => {:editable => false}),
+        column_defaults.merge(:name => :sort_order,                :text => "#",        :width => 40,     :align => :center, :editor => {:hidden => true})
       ]
     )
   end
@@ -74,7 +74,7 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
       record_ids = ActiveSupport::JSON.decode(params[:records])
       data_class.destroy(record_ids)
       on_data_changed
-      {:netzke_feedback => I18n.t('netzke.basepack.grid_panel.deleted_n_records', :n => record_ids.size), :reload_remote_commands => get_data}
+      {:netzke_feedback => I18n.t('netzke.basepack.grid_panel.deleted_n_records', :n => record_ids.size), :after_delete => get_data}
     else
       {:netzke_feedback => I18n.t('netzke.basepack.grid_panel.cannot_delete')}
     end

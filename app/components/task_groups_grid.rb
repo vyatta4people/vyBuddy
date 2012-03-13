@@ -19,7 +19,7 @@ class TaskGroupsGrid < Netzke::Basepack::GridPanel
       :title            => "Task groups",
       :model            => "TaskGroup",
       :load_inline_data => false,
-      :scope            => lambda { |s| s.sorted },
+      :scope            => :sorted,
       :border           => false,
       :context_menu     => [:edit_in_form.action, :del.action],
       :tbar             => [:add_in_form.action],
@@ -31,7 +31,7 @@ class TaskGroupsGrid < Netzke::Basepack::GridPanel
       },
       :columns          => [
         column_defaults.merge(:name => :name,                     :text => "Name",            :flex => true),
-        column_defaults.merge(:name => :sort_order,               :text => "Order",           :editor => {:min_value => 0}),
+        column_defaults.merge(:name => :sort_order,               :text => "#",               :width => 40, :align => :center, :editor => {:hidden => true}),
         column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",        :hidden => true)
       ]
     )
@@ -43,6 +43,25 @@ class TaskGroupsGrid < Netzke::Basepack::GridPanel
     position            = params[:position].to_sym
     success             = TaskGroup.reorganize_with_persistent_order(moved_task_group, replaced_task_group, position)
     return { :set_result => { :success => success, :message => TaskGroup.reorganize_with_persistent_order_message } }
+  end
+
+  endpoint :delete_data do |params|
+    if !config[:prohibit_delete]
+      record_ids = ActiveSupport::JSON.decode(params[:records])
+      data_class.destroy(record_ids)
+      on_data_changed
+      {:netzke_feedback => I18n.t('netzke.basepack.grid_panel.deleted_n_records', :n => record_ids.size), :after_delete => get_data}
+    else
+      {:netzke_feedback => I18n.t('netzke.basepack.grid_panel.cannot_delete')}
+    end
+  end
+
+  endpoint :reorder_records do |params|
+    records           = TaskGroup.sorted
+    reordered_records = TaskGroup.reorder_records(records)
+    success           = !reordered_records.nil? and !reordered_records.empty? ? true : false
+    message           = TaskGroup.reorder_records_message
+    { :set_result => { :success => success, :message => message } }
   end
 
 end

@@ -2,14 +2,28 @@
   initComponent: function(params) {
   	this.superclass.initComponent.call(this);
 
+		this.selectedTaskGroupId  = 0;
+
   	this.on('afterrender', function(self, eOpts) {
       this.getStore().load();
   	}, this);
 
  	 	this.getStore().on('load', function(self, records, successful, operation, eOpts) {
-	 	  if ((records) && (records.length > 0)) { 
+	 	  var tasksGrid = Netzke.page.manageTasksWindow.getChildNetzkeComponent('tasks_grid');
+	 	  if ((records) && (records.length > 0)) {
+	 	  	if (tasksGrid.isDisabled()) { tasksGrid.setDisabled(false); }
 	  		this.getSelectionModel().select(0);
-	    }
+	    } else {
+	    	if (!tasksGrid.isDisabled()) { tasksGrid.setDisabled(true); }
+	   	}
+  	}, this);
+
+ 		this.on('select', function(self, record, index, eOpts) {
+ 			this.selectedTaskGroupId = record.data.id;
+  	}, this);
+
+ 	 	this.getStore().on('datachanged', function(self, eOpts) {
+	  	Netzke.page.manageTasksWindow.getChildNetzkeComponent('tasks_grid').getStore().load();
   	}, this);
 
  		this.getView().on('drop', function(node, data, dropRec, dropPosition) {
@@ -22,5 +36,10 @@
 				}
 			});
   	}, this);
+  },
+
+  afterDelete: function(data) {
+    this.reorderRecords({ selected_task_group_id: this.selectedTaskGroupId }, function (result) { if (!result.success) { Ext.Msg.show({ title: 'Re-Order failed', msg: result.message, buttons: Ext.Msg.OK, icon: Ext.Msg.ERROR }); } });
+  	this.getStore().load();
   }
 }

@@ -46,7 +46,7 @@
   	}, this);
   },
 
-  reloadRemoteCommands: function(data) {
+  afterDelete: function(data) {
     var tasksGrid = Netzke.page.manageTasksWindow.getChildNetzkeComponent('tasks_grid');
     this.reorderRecords({ selected_task_id: tasksGrid.selectedTaskId }, function (result) { if (!result.success) { Ext.Msg.show({ title: 'Re-Order failed', msg: result.message, buttons: Ext.Msg.OK, icon: Ext.Msg.ERROR }); } });
     this.fireEvent('selecttask', tasksGrid.selectedTaskId, tasksGrid.selectedTaskName);

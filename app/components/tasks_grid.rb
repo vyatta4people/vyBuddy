@@ -20,7 +20,7 @@ class TasksGrid < Netzke::Basepack::GridPanel
       :prevent_header   => true,
       :model            => "Task",
       :load_inline_data => false,
-      :scope            => lambda { |s| s.sorted },
+      :scope            => :sorted,
       :width            => 350,
       :border           => false,
       :context_menu     => [:edit_in_form.action, :del.action],
@@ -32,9 +32,9 @@ class TasksGrid < Netzke::Basepack::GridPanel
         :plugins => [ { :ptype => :gridviewdragdrop, :drag_group => :tasks_dd_group, :drop_group => :tasks_dd_group, :drag_text => "Drag and drop to reorganize" } ]
       },
       :columns          => [
-        column_defaults.merge(:name => :task_group__name,         :text => "Group",      :default_value => TaskGroup.first ? TaskGroup.first.id : nil),
+        column_defaults.merge(:name => :task_group__name,         :text => "Group",      :default_value => TaskGroup.first ? TaskGroup.first.id : nil, :editor => {:editable => false}),
         column_defaults.merge(:name => :name,                     :text => "Name",       :flex => true),
-        column_defaults.merge(:name => :sort_order,               :text => "Order",      :editor => {:min_value => 0}),
+        column_defaults.merge(:name => :sort_order,               :text => "#",          :width => 40, :align => :center, :editor => {:hidden => true}),
         column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",   :hidden => true)
       ]
     )
@@ -46,6 +46,26 @@ class TasksGrid < Netzke::Basepack::GridPanel
     position      = params[:position].to_sym
     success       = Task.reorganize_with_persistent_order(moved_task, replaced_task, position, :task_group_id)
     return { :set_result => { :success => success, :message => Task.reorganize_with_persistent_order_message } }
+  end
+
+  endpoint :delete_data do |params|
+    if !config[:prohibit_delete]
+      record_ids = ActiveSupport::JSON.decode(params[:records])
+      data_class.destroy(record_ids)
+      on_data_changed
+      {:netzke_feedback => I18n.t('netzke.basepack.grid_panel.deleted_n_records', :n => record_ids.size), :after_delete => get_data}
+    else
+      {:netzke_feedback => I18n.t('netzke.basepack.grid_panel.cannot_delete')}
+    end
+  end
+
+  endpoint :reorder_records do |params|
+    records           = Array.new 
+    Task.sorted.where(:task_group_id => params[:selected_task_group_id].to_i).each { |record| records << Task.find(record.id) }
+    reordered_records = Task.reorder_records(records)
+    success           = !reordered_records.nil? and !reordered_records.empty? ? true : false
+    message           = Task.reorder_records_message
+    { :set_result => { :success => success, :message => message } }
   end
 
 end

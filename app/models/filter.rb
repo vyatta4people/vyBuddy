@@ -8,7 +8,11 @@ class Filter < ActiveRecord::Base
   validates :interpreter,
     :inclusion  => { :in => INTERPRETERS, :message => "\'%{value}\' is not a valid script interpreter" }
 
+  scope :public, where(["`name` != ?", DEFAULT_FILTER_NAME])
   scope :sorted, order(["`name` ASC"])
+
+  before_update  { |filter| return false if filter.name == DEFAULT_FILTER_NAME }
+  before_destroy { |filter| return false if filter.name == DEFAULT_FILTER_NAME }
 
   def apply(outputs)
     filter_script = Tempfile.new("vybuddy_filter")
