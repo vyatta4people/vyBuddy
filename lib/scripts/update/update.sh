@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# vyBuddy custom update script
+# vyBuddy custom update script: crazy stuff lives here :)
 #
 export UPDATE_DIR="${VYBUDDY_RAILS_APP_DIR}/vendor/vybuddy/update"
 export UPDATE_SCRIPT_DIR="${UPDATE_DIR}/script.d"
