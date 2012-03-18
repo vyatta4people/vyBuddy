@@ -1,0 +1,1 @@
+sed -i 's/:deploy_via, :export/:deploy_via, :remote_cache/' "${VYBUDDY_RAILS_CAP_CONFIG_DIR}/deploy.rb"
