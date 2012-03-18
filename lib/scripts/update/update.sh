@@ -1,13 +1,14 @@
 #!/bin/bash
 #
-# Custom update script
+# vyBuddy custom update script
 #
-UPDATE_DIR="${VYBUDDY_RAILS_APP_DIR}/lib/scripts/update"
-UPDATE_SCRIPT_DIR="${UPDATE_DIR}/script.d"
+export UPDATE_DIR="${VYBUDDY_RAILS_APP_DIR}/vendor/vybuddy/update"
+export UPDATE_SCRIPT_DIR="${UPDATE_DIR}/script.d"
+export UPDATE_FILE_DIR="${UPDATE_DIR}/file.d"
 
-CACHE_DIR="${VYBUDDY_ROOT}/cache"
-CACHE_SCRIPT_DIR="${CACHE_DIR}/script.d"
-CACHE_SQL_BCKP_DIR="${CACHE_DIR}/sql-backups"
+export CACHE_DIR="${VYBUDDY_ROOT}/cache"
+export CACHE_SCRIPT_DIR="${CACHE_DIR}/script.d"
+export CACHE_SQL_BCKP_DIR="${CACHE_DIR}/sql-backups"
 
 BASH_EXEC="/bin/bash"
 
