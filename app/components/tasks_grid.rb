@@ -1,6 +1,7 @@
 class TasksGrid < Netzke::Basepack::GridPanel
 
   js_mixin :init_component
+  js_mixin :methods
 
   action :add_in_form,  :text => "Add",  :tooltip => "Add Vyatta host"
   action :edit_in_form, :text => "Edit", :tooltip => "Edit Vyatta host"

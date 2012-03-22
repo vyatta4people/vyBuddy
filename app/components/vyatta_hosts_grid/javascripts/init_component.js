@@ -11,7 +11,7 @@
 
     this.getStore().on('load', function(self, records, successful, operation, eOpts) {
       if ((records) && (records.length > 0)) { 
-        this.getSelectionModel().select(this.selectedRow); 
+        this.getSelectionModel().select(this.selectedRow);
       }
     }, this);
 

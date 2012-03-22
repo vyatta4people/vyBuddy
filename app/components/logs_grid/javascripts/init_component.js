@@ -24,15 +24,15 @@
         if (this.justLoaded) {
           this.justLoaded = false;
           var pageCount   = this.getStore().getPageFromRecordIndex(this.getStore().getTotalCount()-1);
-           this.getStore().loadPage(pageCount); // NB! Triggers 'load' event!
+          this.getStore().loadPage(pageCount); // NB! Triggers 'load' event!
          }
       }
     }, this);
 
     this.on('afterrender', function(self, eOpts) {
       this.filterTbar           = this.getDockedItems('toolbar[dock="top"]')[0];
-      this.filterFromDate        = this.filterTbar.getComponent('from_date');
-      this.filterToDate          = this.filterTbar.getComponent('to_date');
+      this.filterFromDate       = this.filterTbar.getComponent('from_date');
+      this.filterToDate         = this.filterTbar.getComponent('to_date');
       this.filterSilentLog      = this.filterTbar.getComponent('silent_log');
       this.filterSearchMessage  = this.filterTbar.getComponent('search_message');
     }, this);
