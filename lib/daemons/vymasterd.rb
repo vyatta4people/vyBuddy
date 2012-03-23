@@ -14,6 +14,7 @@ def graceful_shutdown
     if vyatta_host.vyatta_host_state.is_daemon_running
       vyatta_host.stop_daemon
     end
+    sleep(0.2)
     if vyatta_host.daemon_running?
       vyatta_host.kill_all_daemons
     end
@@ -41,6 +42,7 @@ begin
       if vyatta_host.vyatta_host_state.is_daemon_running
         vyatta_host.stop_daemon
       end
+      sleep(0.2)
       if vyatta_host.daemon_running?
         vyatta_host.kill_all_daemons
       end

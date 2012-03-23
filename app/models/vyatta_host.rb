@@ -69,12 +69,12 @@ class VyattaHost < ActiveRecord::Base
 
   def self.daemon_pids(vyatta_host_id = nil)
     if vyatta_host_id
-      vyatta_host_match = vyatta_host_id.to_s
+      vyatta_host_id_match = vyatta_host_id.to_s
     else
-      vyatta_host_match = "[0-9]+"
+      vyatta_host_id_match = "[0-9]+"
     end
     daemon_pids = Array.new
-    `ps aux | egrep \"^${USER}\" | egrep \"#{HOST_DAEMON_PATH} #{vyatta_host_match}$\"`.split(/\n/).each do |ps_line|
+    `ps aux | egrep \"^${USER}\" | egrep \"#{HOST_DAEMON_PATH} #{vyatta_host_id_match}$\"`.split(/\n/).each do |ps_line|
       daemon_pids << ps_line.split(/[ \t]+/)[1].to_i
     end
     return daemon_pids

@@ -41,7 +41,7 @@ module VyBuddyActiveRecordExtensions
       return sort_order
     end
 
-    def get_moved_sort_order(moved_sort_order, replaced_sort_order, max_sort_order, position)
+    def get_moved_sort_order(moved_sort_order, replaced_sort_order, position)
       if position == :after
         if moved_sort_order > replaced_sort_order
           return replaced_sort_order + 1
@@ -59,29 +59,52 @@ module VyBuddyActiveRecordExtensions
 
     attr_accessor :reorganize_with_persistent_order_message
     def reorganize_with_persistent_order(moved_record, replaced_record, position, scope_attribute = nil)
-      if scope_attribute
-        moved_scope_value     = moved_record.read_attribute(scope_attribute)
-        replaced_scope_value  = replaced_record.read_attribute(scope_attribute)
-        all_records           = self.order(["`sort_order` ASC"]).where(["`#{scope_attribute}` = ?", moved_scope_value])
-      else
-        all_records           = self.order(["`sort_order` ASC"]).all
+      if moved_record.class.to_s != replaced_record.class.to_s
+        self.reorganize_with_persistent_order_message = "Different classes for moved and replaced records: #{moved_record.class.to_s} and #{replaced_record.class.to_s}"
+        return nil
       end
 
-      max_sort_order        = all_records.length - 1
       if scope_attribute
-        if moved_scope_value == replaced_scope_value
-          moved_sort_order = get_moved_sort_order(moved_record.sort_order, replaced_record.sort_order, max_sort_order, position)
-        elsif moved_scope_value < replaced_scope_value
+        moved_scope_value         = moved_record.read_attribute(scope_attribute)
+        replaced_scope_value      = replaced_record.read_attribute(scope_attribute)
+        if !scope_attribute.to_s.match(/_id$/) or moved_scope_value.class.to_s != "Fixnum" or replaced_scope_value.class.to_s != "Fixnum"
+          self.reorganize_with_persistent_order_message = "Inappropriate scope attribute: #{scope_attribute.to_s} => #{moved_scope_value.class.to_s} / #{replaced_scope_value.class.to_s}"
+          return nil
+        end
+        scope_class               = eval(scope_attribute.to_s.sub(/_id$/, '').camelcase)
+        moved_scope_record        = scope_class.find(moved_scope_value)
+        replaced_scope_record     = scope_class.find(replaced_scope_value)
+        if moved_scope_record.attribute_present?(:sort_order)
+          moved_scope_sort_order  = moved_scope_record.sort_order
+        else
+          moved_scope_sort_order  = moved_scope_value
+        end
+        if replaced_scope_record.attribute_present?(:sort_order)
+          replaced_scope_sort_order  = replaced_scope_record.sort_order
+        else
+          replaced_scope_sort_order  = replaced_scope_value
+        end
+        all_records               = self.order(["`sort_order` ASC"]).where(["`#{scope_attribute}` = ?", moved_scope_value])
+      else
+        all_records               = self.order(["`sort_order` ASC"]).all
+      end
+
+      max_sort_order = all_records.length - 1
+      if scope_attribute
+        if moved_scope_sort_order == replaced_scope_sort_order
+          moved_sort_order = get_moved_sort_order(moved_record.sort_order, replaced_record.sort_order, position)
+        elsif moved_scope_sort_order > replaced_scope_sort_order
           moved_sort_order  = 0
-        elsif moved_scope_value > replaced_scope_value
+        elsif moved_scope_sort_order < replaced_scope_sort_order
           moved_sort_order  = max_sort_order
         end
       else
-        moved_sort_order = get_moved_sort_order(moved_record.sort_order, replaced_record.sort_order, max_sort_order, position)
+        moved_sort_order = get_moved_sort_order(moved_record.sort_order, replaced_record.sort_order, position)
       end
 
       all_ordered_records   = self.reorder_records(all_records)
       if !all_ordered_records
+        self.reorganize_with_persistent_order_message = "No records reordered"
         return false
       end
 
@@ -117,6 +140,7 @@ module VyBuddyActiveRecordExtensions
         return true
       end
 
+      self.reorganize_with_persistent_order_message = "Unknown error"
       return nil
     end
 
