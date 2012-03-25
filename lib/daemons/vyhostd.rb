@@ -29,11 +29,9 @@ while true do
   vyatta_host.set_daemon_log_parameters
 
   # Try to establish SSH connection to Vyatta host and check Vyatta software version and load average
-  version_check         = RemoteCommand.find_or_create_by_command(DEFAULT_REMOTE_COMMANDS[0], :mode => "operational")
-  load_average          = RemoteCommand.find_or_create_by_command(DEFAULT_REMOTE_COMMANDS[1], :mode => "system")
   begin
-    version_check_result = vyatta_host.execute_remote_command(version_check)
-    load_average_result  = vyatta_host.execute_remote_command(load_average)
+    version_check_result = vyatta_host.execute_remote_command("show version | grep 'Version' | sed 's/.*: *//'")
+    load_average_result  = vyatta_host.execute_remote_command("uptime | sed 's/.*, //'")
   rescue => e
     Log.error("Could not reach Vyatta host: #{e.message}")
     vyatta_host_state.is_reachable    = false

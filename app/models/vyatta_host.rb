@@ -40,7 +40,12 @@ class VyattaHost < ActiveRecord::Base
         remote_command_result         = Hash.new
         remote_command_result[:data]  = String.new
         result_data_elements          = Array.new
-        ssh.exec!(remote_command.full_command) do |channel, stream, data|
+        full_remote_command = case remote_command.class.to_s
+          when "RemoteCommand" then remote_command.full_command
+          when "Hash"          then RemoteCommand.full_command(remote_command[:mode], remote_command[:command])
+          else RemoteCommand.full_command(DEFAULT_REMOTE_COMMAND_MODE, remote_command.to_s)
+        end
+        ssh.exec!(full_remote_command) do |channel, stream, data|
           result_data_elements << data
         end
         remote_command_result[:data] = result_data_elements.join

@@ -11,20 +11,31 @@ class RemoteCommand < ActiveRecord::Base
   validates :mode,
     :inclusion  => { :in => REMOTE_COMMAND_MODES, :message => "\'%{value}\' is not a valid remote command mode" }
 
-  scope :public, where(["`command` NOT IN (?)", DEFAULT_REMOTE_COMMANDS])
   scope :sorted, order(["`mode` DESC, `command` ASC"])
 
   def executor
-    return case self.mode
-      when "operational"    then "/opt/vyatta/bin/vyatta-op-cmd-wrapper"
-      when "configuration"  then "/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper"
-      when "system"         then ""
-      else nil
-    end
+    RemoteCommand.executor(self.mode)
   end
 
   def full_command
-    self.executor + " " + self.command
+    RemoteCommand.full_command(self.mode, self.command)
+  end
+
+  class << self
+
+    def executor(mode)
+      return case mode.to_s
+        when "operational"    then "/opt/vyatta/bin/vyatta-op-cmd-wrapper"
+        when "configuration"  then "/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper"
+        when "system"         then ""
+        else nil
+      end
+    end
+
+    def full_command(mode, command)
+      self.executor(mode) + " " + command
+    end
+
   end
 
 end
