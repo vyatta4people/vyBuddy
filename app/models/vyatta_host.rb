@@ -69,7 +69,12 @@ class VyattaHost < ActiveRecord::Base
   end
 
   def daemon_stderr
-    "/tmp/#{HOST_DAEMON_NAME}.err.#{self.id.to_s}"
+    if ENV["VYBUDDY_LOG_DIR"]
+      stderr_dir = ENV["VYBUDDY_LOG_DIR"]
+    else
+      stderr_dir = "/tmp"
+    end
+    "#{stderr_dir}/#{HOST_DAEMON_NAME}.err.#{self.id.to_s}"
   end
 
   def self.daemon_pids(vyatta_host_id = nil)
