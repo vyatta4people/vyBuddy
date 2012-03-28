@@ -20,7 +20,8 @@ logs_to_archive.each do |log|
 end
 
 if ENV['RAILS_ENV'] == 'production'
-  log_backup_file = "#{LOG_BACKUP_DIR}/logs_#{Time.now.strftime("%Y%m%d%H%M%S")}.txt"
+  log_backup_dir  = "#{ENV['VYBUDDY_ROOT']}/cache/log-backups"
+  log_backup_file = "#{log_backup_dir}/logs_#{Time.now.strftime("%Y%m%d%H%M%S")}.txt"
   f = File.new(log_backup_file, "w")
   f.write(data.join("\n"))
   f.close
