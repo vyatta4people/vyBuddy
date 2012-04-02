@@ -45,15 +45,16 @@ class VyattaHost < ActiveRecord::Base
 
   attr_accessor :execute_via_ssh_message
   def execute_via_ssh(command)
+    data = String.new
     Net::SSH.start(self.remote_address, self.ssh_key_pair.login_username, :key_data => self.ssh_key_pair.private_key, :timeout => SSH_TIMEOUT) do |ssh|
       begin
-        ssh.exec!(command)
+        data = ssh.exec!(command)
       rescue => e
         self.execute_via_ssh_message = e.message
         return nil
       end
     end
-    return true
+    return data
   end
 
   attr_accessor :upload_via_sftp_message
@@ -216,7 +217,6 @@ class VyattaHost < ActiveRecord::Base
       Net::SSH.start(self.remote_address, self.ssh_key_pair.login_username, :key_data => self.ssh_key_pair.private_key, :timeout => SSH_TIMEOUT) do |ssh|
         ssh.open_channel do |channel|
           command = "md5sum #{executor[:remote_executor]}"
-          #command = "md5sum /etc/passwd"
           channel.exec(command) do |ch, success|
 
             raise("Could not execute command using SSH: #{command}") unless success

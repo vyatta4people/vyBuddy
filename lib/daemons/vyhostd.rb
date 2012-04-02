@@ -30,9 +30,16 @@ while true do
 
   # Try to establish SSH connection to Vyatta host and check Vyatta software version and load average
   begin
-    vyatta_host.verify_executors(true)
+    begin
+      vyatta_host.verify_executors(true)
+    rescue
+    end
     version_check_result = vyatta_host.execute_remote_command("show version | grep 'Version' | sed 's/.*: *//'")
-    load_average_result  = vyatta_host.execute_remote_command("uptime | sed 's/.*, //'")
+    load_average_result  = vyatta_host.execute_remote_command("uptime | sed 's/.*, //'")    
+    begin
+      vyatta_host.verify_executors(true)
+    rescue
+    end
   rescue => e
     Log.error("Could not reach Vyatta host: #{e.message}")
     vyatta_host_state.is_reachable    = false
