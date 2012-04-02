@@ -16,6 +16,8 @@ SSH_TIMEOUT                 = 30
 REMOTE_COMMAND_MODES        = ['operational', 'configuration', 'system']
 DEFAULT_REMOTE_COMMAND_MODE = 'operational'
 INTERPRETERS                = ['/bin/bash', '/usr/bin/perl', '/usr/bin/ruby']
+EXECUTORS_LOCAL_DIR         = 'vendor/vybuddy/executors'
+EXECUTORS_REMOTE_DIR        = '/var/tmp'
 
 DEFAULT_FILTER_NAME         = 'AS-IS'
 

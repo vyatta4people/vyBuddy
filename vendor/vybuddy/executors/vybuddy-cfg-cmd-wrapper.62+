@@ -1,0 +1,115 @@
+#!/bin/bash
+
+# Author: Vyatta <eng@vyatta.com>
+# Date: 2007
+# Description: command wrapper
+
+# **** License ****
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# This code was originally developed by Vyatta, Inc.
+# Portions created by Vyatta are Copyright (C) 2006, 2007, 2008 Vyatta, Inc.
+# All Rights Reserved.
+# **** End License ****
+
+# note: this script MUST be running as the vyattacfg group, e.g., with "sg".
+# otherwise there WILL be permission problems with the files created.
+
+# some env variables are needed
+export vyatta_sysconfdir=/opt/vyatta/etc
+export vyatta_sbindir=/opt/vyatta/sbin
+
+LOGFILE=/var/log/vyatta/vyatta-commit.log
+
+# allow env variable to override default session id (ppid). this enables
+# the script to handle cases where the invocations can come from
+# different parents.
+SID=$PPID
+if [ -n "$CMD_WRAPPER_SESSION_ID" ]; then
+  SID=$CMD_WRAPPER_SESSION_ID
+fi
+
+# set up the session environment (get it from the unified lib)
+session_env=$(${vyatta_sbindir}/my_cli_shell_api getSessionEnv $SID)
+eval "$session_env"
+
+case "$1" in
+  begin)    # set up the session
+    exec ${vyatta_sbindir}/my_cli_shell_api setupSession
+    ;;
+  end)    # tear down the session
+    exec ${vyatta_sbindir}/my_cli_shell_api teardownSession
+    ;;
+  cleanup|discard)
+    exec ${vyatta_sbindir}/my_discard
+    ;;
+  set)
+    exec ${vyatta_sbindir}/my_set "${@:2}"
+    ;;
+  delete)
+    exec ${vyatta_sbindir}/my_delete "${@:2}"
+    ;;
+  deactivate)
+    exec ${vyatta_sbindir}/my_deactivate "${@:2}"
+    ;;
+  activate)
+    exec ${vyatta_sbindir}/my_activate "${@:2}"
+    ;;
+  show)
+    exec ${vyatta_sbindir}/my_cli_shell_api showCfg "${@:2}"
+    ;;
+  comment)
+    exec ${vyatta_sbindir}/my_comment "${@:2}"
+    ;;
+  commit)
+    export COMMIT_VIA=cfg-cmd-wrapper
+    ${vyatta_sbindir}/my_commit -a >> $LOGFILE
+    ${vyatta_sbindir}/my_commit -s >> $LOGFILE
+    exec ${vyatta_sbindir}/my_commit -e -d >> $LOGFILE
+    ;;
+  commit_with_error)
+    exec ${vyatta_sbindir}/my_commit
+    ;;
+  save)
+    exec ${vyatta_sbindir}/vyatta-save-config.pl "${@:2}"
+    ;;
+  load)
+    exec ${vyatta_sbindir}/vyatta-load-config.pl "${@:2}"
+    ;;
+  rule-rename)
+    # this option is to be used for renaming firewall and nat rules only
+    # usage for this option specified on the next two lines -
+    #             2        3                 4    5         6  7    8
+    # rule-rename firewall $firewall_ruleset rule $rule_num to rule $rename_rulenum
+    #             2   3    4         5  6    7
+    # rule-rename nat rule $rule_num to rule $rename_rulenum
+    if [ "$2" == "firewall" ]; then
+      exec ${vyatta_sbindir}/my_move firewall name "$3" rule "$5" to "$8"
+    elif [ "$2" == "nat" ]; then
+      exec ${vyatta_sbindir}/my_move service nat rule "$4" to "$7"
+    fi
+    ;;
+  move)
+    # this is similar to the CLI edit+rename command.
+    # e.g., "move interfaces ethernet eth2 vif 100 to 200"
+    # is similar to "edit interfaces ethernet eth2" plus
+    # "rename vif 100 to vif 200".
+    exec ${vyatta_sbindir}/my_move "${@:2}"
+    ;;
+  *)
+    echo "Invalid command \"$1\" for vyatta-cfg-cmd-wrapper"
+    exit 1
+    ;;
+esac
+
+# Only get here if exec failed.
+echo "!!! Missing Vyatta shell infrastructure for $1 !!!!"
+exit 1
+

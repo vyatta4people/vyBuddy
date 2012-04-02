@@ -1,0 +1,14 @@
+#!/bin/vbash -l
+shopt -s expand_aliases
+source /etc/default/vyatta
+
+if [ -f /etc/bash_completion.d/vyatta-op ]; then
+  source /etc/bash_completion.d/vyatta-op
+fi
+
+if [ -f /etc/bash_completion.d/10vyatta-op ]; then
+  source /etc/bash_completion.d/10vyatta-op
+fi
+
+_vyatta_op_init
+_vyatta_op_run "$@"

@@ -39,5 +39,6 @@ gem 'netzke-core', :git => 'git://github.com/skozlov/netzke-core.git'
 gem 'netzke-basepack', :git => 'git://github.com/skozlov/netzke-basepack.git'
 #gem 'netzke-communitypack', :git => 'git://github.com/skozlov/netzke-communitypack.git'
 
-# Net::SSH: a pure-Ruby implementation of the SSH2 client protocol
+# Pure-Ruby implementation of the SSH2/SFTP client protocol
 gem 'net-ssh'
+gem 'net-sftp'

@@ -1,5 +1,6 @@
 class VyattaHost < ActiveRecord::Base
   require 'net/ssh'
+  require 'net/sftp'
 
   belongs_to :user
 
@@ -33,6 +34,41 @@ class VyattaHost < ActiveRecord::Base
   after_create   { |vyatta_host| ActiveRecord::Base.connection.execute("INSERT INTO `vyatta_host_states`(`id`) VALUES(#{vyatta_host.id.to_s});") }
   before_destroy { |vyatta_host| vyatta_host.kill_all_daemons; return true }
 
+  def set_core_log_parameters
+    Log.event_source  = "#{self.hostname}(#{self.id.to_s})"
+  end
+
+  def set_daemon_log_parameters
+    Log.application   = HOST_DAEMON_NAME
+    Log.event_source  = "#{self.hostname}(#{self.id.to_s})"
+  end
+
+  attr_accessor :execute_via_ssh_message
+  def execute_via_ssh(command)
+    Net::SSH.start(self.remote_address, self.ssh_key_pair.login_username, :key_data => self.ssh_key_pair.private_key, :timeout => SSH_TIMEOUT) do |ssh|
+      begin
+        ssh.exec!(command)
+      rescue => e
+        self.execute_via_ssh_message = e.message
+        return nil
+      end
+    end
+    return true
+  end
+
+  attr_accessor :upload_via_sftp_message
+  def upload_via_sftp(local_path, remote_path)
+    Net::SFTP.start(self.remote_address, self.ssh_key_pair.login_username, :key_data => self.ssh_key_pair.private_key, :timeout => SSH_TIMEOUT) do |sftp|
+      begin
+        sftp.upload!(local_path, remote_path)
+      rescue => e
+        self.upload_via_sftp_message = e.message
+        return nil
+      end
+    end
+    return true
+  end
+
   def execute_remote_commands(remote_commands)
     remote_command_results = Array.new
     Net::SSH.start(self.remote_address, self.ssh_key_pair.login_username, :key_data => self.ssh_key_pair.private_key, :timeout => SSH_TIMEOUT) do |ssh|
@@ -57,11 +93,6 @@ class VyattaHost < ActiveRecord::Base
 
   def execute_remote_command(remote_command)
     self.execute_remote_commands([remote_command])[0]
-  end
-
-  def set_daemon_log_parameters
-    Log.application   = HOST_DAEMON_NAME
-    Log.event_source  = "#{self.hostname}(#{self.id.to_s})"
   end
 
   def daemon_stdout
@@ -145,6 +176,81 @@ class VyattaHost < ActiveRecord::Base
       self.vyatta_host_state.is_daemon_running  = false
       self.vyatta_host_state.daemon_pid         = 0
       return self.vyatta_host_state.save
+    end
+  end
+
+  def os_version
+    self.vyatta_version.sub(/^VC/, "").sub(/-.*/, "").to_f
+  end
+
+  def executor_label
+    if self.os_version >= 6.0 and self.os_version < 6.1
+      return "60-61"
+    elsif self.os_version >= 6.2
+      return "62+"
+    else
+      return nil
+    end
+  end
+
+  attr_accessor :verify_executors_message
+  def verify_executors(upload_missing = false)
+    self.set_core_log_parameters
+    self.verify_executors_message = Array.new
+    executors        = Hash.new
+    modes            = REMOTE_COMMAND_MODES
+    modes            << "configuration_real" # Add dummy mode for executor verification
+    modes.each do |mode|
+      executor                     = Hash.new
+      executor[:local_executor]    = RemoteCommand.local_executor(mode)
+      if mode == "configuration_real"
+        executor[:local_executor]  = executor[:local_executor].sub(/real$/, self.executor_label)
+      end
+      executor[:remote_executor]   = RemoteCommand.remote_executor(mode)
+      executor[:local_md5sum]      = Digest::MD5.hexdigest(File.read(executor[:local_executor]))
+      # Remote executor md5sum will be examined during SSH session
+      executors[RemoteCommand.executor(mode)] = executor
+    end
+    unmatched_executor_names = Array.new
+    executors.each do |executor_name, executor|
+      Net::SSH.start(self.remote_address, self.ssh_key_pair.login_username, :key_data => self.ssh_key_pair.private_key, :timeout => SSH_TIMEOUT) do |ssh|
+        ssh.open_channel do |channel|
+          command = "md5sum #{executor[:remote_executor]}"
+          #command = "md5sum /etc/passwd"
+          channel.exec(command) do |ch, success|
+
+            raise("Could not execute command using SSH: #{command}") unless success
+
+            channel.on_data do |ch, data|
+              executor[:remote_md5sum] = data.sub(/ +.*$/, "").strip
+              if executor[:remote_md5sum] != executor[:local_md5sum]
+                unmatched_executor_names << executor_name
+              end
+            end
+
+            channel.on_extended_data do |ch, type, data|
+              unmatched_executor_names      << executor_name if !unmatched_executor_names.include?(executor_name)
+              self.verify_executors_message << data
+            end
+          end
+        end
+        ssh.loop
+      end
+    end
+    if !upload_missing
+      if !unmatched_executor_names.empty?
+        return false
+      else
+        return true
+      end
+    else
+      unmatched_executor_names.each do |executor_name|
+        executor = executors[executor_name]
+        if !self.upload_via_sftp(executor[:local_executor], executor[:remote_executor]) or !self.execute_via_ssh("chmod +x #{executor[:remote_executor]}")
+          return nil
+        end
+      end
+      return true
     end
   end
 

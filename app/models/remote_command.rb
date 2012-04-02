@@ -27,6 +27,14 @@ class RemoteCommand < ActiveRecord::Base
     RemoteCommand.executor(self.mode)
   end
 
+  def local_executor
+    RemoteCommand.local_executor(self.mode)
+  end
+
+  def remote_executor
+    RemoteCommand.remote_executor(self.mode)
+  end
+
   def full_command
     RemoteCommand.full_command(self.mode, self.command)
   end
@@ -35,15 +43,32 @@ class RemoteCommand < ActiveRecord::Base
 
     def executor(mode)
       return case mode.to_s
-        when "operational"    then "/opt/vyatta/bin/vyatta-op-cmd-wrapper"
-        when "configuration"  then "/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper"
-        when "system"         then ""
+        when "operational"         then "vybuddy-op-cmd-wrapper"
+        when "configuration"       then "vybuddy-cfg-cmd-wrapper"
+        when "configuration_real"  then "vybuddy-cfg-cmd-wrapper.real" # dummy for executor verification
+        when "system"              then "vybuddy-sys-cmd-wrapper"
         else nil
       end
     end
 
+    def local_executor(mode)
+      executor = self.executor(mode)
+      if executor
+        return "#{ENV['VYBUDDY_RAILS_APP_DIR']}/#{EXECUTORS_LOCAL_DIR}/#{executor}"
+      end
+      return nil
+    end
+
+    def remote_executor(mode)
+      executor = self.executor(mode)
+      if executor
+        return "#{EXECUTORS_REMOTE_DIR}/#{executor}"
+      end
+      return nil
+    end
+
     def full_command(mode, command)
-      self.executor(mode) + " " + command
+      self.remote_executor(mode) + " " + command
     end
 
   end
