@@ -190,7 +190,7 @@ class VyattaHost < ActiveRecord::Base
     elsif self.os_version >= 6.2
       return "62+"
     else
-      return nil
+      return "60-61"
     end
   end
 
