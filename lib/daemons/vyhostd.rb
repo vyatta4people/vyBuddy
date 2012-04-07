@@ -20,63 +20,69 @@ rescue => e
 end
 
 vyatta_host.set_daemon_log_parameters
+
+def graceful_shutdown
+  Log.info("Daemon stopped")
+  exit(0)
+end
+Signal.trap("TERM") { graceful_shutdown }
+Signal.trap("INT")  { graceful_shutdown }
+
 Log.info("Daemon started")
 
 while true do
   # Yes, we need to "refresh" vyatta_host each loop step
   vyatta_host           = VyattaHost.find(vyatta_host_id)
   vyatta_host_state     = vyatta_host.vyatta_host_state
-  vyatta_host.set_daemon_log_parameters
+  vyatta_host.set_daemon_log_event_source # Event source i.e. daemon address may change at run-time
 
-  # Try to establish SSH connection to Vyatta host and check Vyatta software version and load average
+  # Try to establish SSH connection to Vyatta host, verify (and upload if needed) executors, check Vyatta software version and load average
   begin
-    begin
-      vyatta_host.verify_executors(true)
-    rescue
-    end
-    version_check_result = vyatta_host.execute_remote_command("show version | grep 'Version' | sed 's/.*: *//'")
-    load_average_result  = vyatta_host.execute_remote_command("uptime | sed 's/.*, //'")    
-    begin
-      vyatta_host.verify_executors(true)
-    rescue
-    end
+    raise("Unable to verify #{vyatta_host.unmatched_modes.join(', ')} mode executors") if !vyatta_host.verify_executors(["system", "operational"], true)
+    vyatta_host_state.vyatta_version = vyatta_host.execute_remote_command!("show version | grep 'Version' | sed 's/.*: *//'").strip
+    vyatta_host_state.load_average   = vyatta_host.execute_remote_command!("uptime | sed 's/.*, //'").to_f
   rescue => e
     Log.error("Could not reach Vyatta host: #{e.message}")
-    vyatta_host_state.is_reachable    = false
+    vyatta_host_state.is_reachable   = false
   else
-    Log.info("Vyatta host is reachable") if !vyatta_host_state.is_reachable
-    vyatta_host_state.is_reachable    = true
-    vyatta_host_state.vyatta_version  = version_check_result[:data]
-    vyatta_host_state.load_average    = load_average_result[:data].to_f
+    Log.info("Vyatta host become reachable") if !vyatta_host_state.is_reachable
+    vyatta_host_state.is_reachable   = true
   ensure
-    vyatta_host_state.save
+    begin
+      vyatta_host_state.save!
+    rescue => e
+      Log.fatal("Unable to save Vyatta host state: #{e.message}")
+    end
     if !vyatta_host_state.is_reachable
-      sleep 60
+      sleep(UNREACHABLE_HOST_SLEEP_TIME)
       next
     end
   end
 
-  tasks = Task.where(:is_enabled => true)
-  tasks.each do |task|
-    task.task_remote_commands(true).each do |trc|
-      remote_command  = trc.remote_command
-      filter          = trc.filter
-      display         = Display.find(:first, :conditions => { :vyatta_host_id => vyatta_host.id, :task_remote_command_id => trc.id })
-      if !display
-        display       = Display.create(:vyatta_host_id => vyatta_host.id, :task_remote_command_id => trc.id)
-      end
-      begin
-        remote_command_result = vyatta_host.execute_remote_command(remote_command)
-      rescue => e
-        Log.error("Could not execute task \"#{remote_command.command}\": #{e.message}")
-        display.information = "Failed to retrieve information... (#{e.message})"
-      else
-        display.information = filter.apply([remote_command_result])
-      ensure
+  Log.error("Unable to verify configuration mode executors") if !vyatta_host.verify_executors(["configuration", "configuration_real"], true)
+  task_groups = TaskGroup.enabled
+  task_groups.each do |task_group|
+    task_group.tasks(true).enabled.each do |task|
+      task_remote_commands  = task.task_remote_commands(true)
+      command_result_sets   = vyatta_host.execute_remote_commands(task_remote_commands.collect{ |trc| trc.remote_command })
+
+      ci = 0
+      task_remote_commands.each do |trc|
+        remote_command  = trc.remote_command
+        filter          = trc.filter
+
+        display         = Display.find(:first, :conditions => { :vyatta_host_id => vyatta_host.id, :task_remote_command_id => trc.id })
+        if !display
+          display       = Display.create(:vyatta_host_id => vyatta_host.id, :task_remote_command_id => trc.id)
+        end
+
+        display.information = filter.apply(command_result_sets[ci][:data])
         display.save
+
+        ci += 1
       end
     end
   end
 
-  sleep 60
+  sleep(HOST_POLLING_INTERVAL)
 end
