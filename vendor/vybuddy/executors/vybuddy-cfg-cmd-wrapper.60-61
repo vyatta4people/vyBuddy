@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -i
 
 # Author: An-Cheng Huang <ancheng@vyatta.com>
 # Date: 2007
