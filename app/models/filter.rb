@@ -13,20 +13,20 @@ class Filter < ActiveRecord::Base
   before_update  { |filter| return false if filter.name == DEFAULT_FILTER_NAME }
   before_destroy { |filter| return false if filter.name == DEFAULT_FILTER_NAME }
 
-  def apply(outputs)
+  def apply(data)
     filter_script = Tempfile.new("vybuddy_filter")
     filter_script.chmod(0700)
     filter_script.write("#!#{self.interpreter}\n")
     filter_script.write(self.code)
     filter_script.close
-    harvest = String.new
+    filtered_data = String.new
     IO.popen(filter_script.path, "w+") do |pipe|
-      outputs.each { |output| pipe.puts output[:data] }
+      pipe.puts data
       pipe.close_write
-      harvest = pipe.read.strip
+      filtered_data = pipe.read.strip
     end
     filter_script.unlink
-    return harvest
+    return filtered_data
   end
 
 end
