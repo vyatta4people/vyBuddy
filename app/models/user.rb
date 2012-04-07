@@ -13,4 +13,5 @@ class User < ActiveRecord::Base
     :format     => { :with => EMAIL_REGEX, :message => EMAIL_REASON }
 
   scope :sorted, order(["`username` ASC"])
+  scope :enabled, where(:is_enabled => true)
 end

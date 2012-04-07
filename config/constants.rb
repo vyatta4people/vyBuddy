@@ -2,9 +2,13 @@
 # vyBuddy projects constants
 #
 DAEMONS_DIR                 = Rails.root.join('lib/daemons')
-HOST_DAEMON_NAME            = 'vyhostd'
-HOST_DAEMON_FILE            = HOST_DAEMON_NAME + '.rb'
+HOST_DAEMON_NAME            = :vyhostd
+HOST_DAEMON_FILE            = HOST_DAEMON_NAME.to_s + '.rb'
 HOST_DAEMON_PATH            = DAEMONS_DIR.join(HOST_DAEMON_FILE)
+HOST_POLLING_INTERVAL       = 60
+UNREACHABLE_HOST_SLEEP_TIME = 300
+GRACE_PERIOD                = 0.2
+RETRY_PERIOD                = 5
 
 EMAIL_REGEX                 = /^([a-z0-9_\-\.\+]+)\@((([a-z0-9\-]+\.)+)([a-z]{2,4})|[a-z0-9][a-z0-9\-]+)$/
 EMAIL_REASON                = 'must be in email format'
@@ -13,7 +17,7 @@ USERNAME_REASON             = 'must start from lowercase letter and contain only
 
 SSH_KEY_TYPES               = ['ssh-rsa', 'ssh-dss']
 SSH_TIMEOUT                 = 30
-REMOTE_COMMAND_MODES        = ['operational', 'configuration', 'system']
+REMOTE_COMMAND_MODES        = ['system', 'operational', 'configuration']
 DEFAULT_REMOTE_COMMAND_MODE = 'operational'
 INTERPRETERS                = ['/bin/bash', '/usr/bin/perl', '/usr/bin/ruby']
 EXECUTORS_LOCAL_DIR         = 'vendor/vybuddy/executors'

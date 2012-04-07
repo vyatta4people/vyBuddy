@@ -6,6 +6,7 @@ class TaskGroup < ActiveRecord::Base
   validates :name, :uniqueness => true
 
   scope :sorted, order(["`sort_order` ASC", "`name` ASC"])
+  scope :enabled, where(:is_enabled => true)
 
   before_create :set_sort_order
 

@@ -38,7 +38,7 @@
 
   onDownloadLogs: function() {
     var urlRoot   = '/data/export_logs';
-    var  urlParams = Ext.Object.toQueryString({ 
+    var urlParams = Ext.Object.toQueryString({ 
       from_date:       this.filterFromDate.getValue(),
       to_date:         this.filterToDate.getValue(),
       silent_log:     this.filterSilentLog.getValue(),

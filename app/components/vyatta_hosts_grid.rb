@@ -19,7 +19,7 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
       :title            => "Vyatta hosts",
       :model            => "VyattaHost",
       :load_inline_data => false,
-      :scope            => :sorted,
+      #:scope            => :sorted,
       :width            => 600,
       :border           => true,
       :context_menu     => session[:user_is_admin] ? [:edit_in_form.action, :del.action] : false,
