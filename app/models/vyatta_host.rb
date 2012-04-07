@@ -166,7 +166,7 @@ class VyattaHost < ActiveRecord::Base
   end
 
   def executor_label
-    if self.os_version >= 6.0 and self.os_version < 6.1
+    if self.os_version >= 6.0 and self.os_version <= 6.1
       return "60-61"
     elsif self.os_version >= 6.2
       return "62+"
