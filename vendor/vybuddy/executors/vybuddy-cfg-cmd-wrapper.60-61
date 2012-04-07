@@ -221,7 +221,7 @@ case "$1" in
    RET_STATUS=$?
    ;;
   show)
-   /opt/vyatta/sbin/vyatta-output-config.pl "${@:2}"
+   /opt/vyatta/sbin/vyatta-output-config.pl "${@:2}" | sed 's/^-//'
    RET_STATUS=$?
    ;;
   comment)
