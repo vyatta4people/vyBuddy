@@ -40,7 +40,7 @@ while true do
   begin
     raise("Unable to verify #{vyatta_host.unmatched_modes.join(', ')} mode executors") if !vyatta_host.verify_executors(["system", "operational"], true)
     vyatta_host_state.vyatta_version = vyatta_host.execute_remote_command!("show version | grep 'Version' | sed 's/.*: *//'").strip
-    vyatta_host_state.load_average   = vyatta_host.execute_remote_command!("uptime | sed 's/.*, //'").to_f
+    vyatta_host_state.load_average   = vyatta_host.execute_remote_command!({:mode => "system", :command => "uptime | sed 's/.*, //'"}).strip.to_f
   rescue => e
     Log.error("Could not reach Vyatta host: #{e.message}")
     vyatta_host_state.is_reachable   = false
