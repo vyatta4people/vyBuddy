@@ -22,6 +22,9 @@ class VyattaHost < ActiveRecord::Base
   validates :remote_address,
     :format     => { :with => /^(([1-2]?[0-9]{1,2}\.){3}[1-2]?[0-9]{1,2}|[a-z0-9][a-z0-9\.\-]+[a-z])$/, :message => "must be valid DNS name or IPv4 address" }
 
+  validates :remote_port,
+    :numericality => { :only_integer => true, :greater_than_or_equal_to => 1, :less_than_or_equal_to => 65535 }
+
   default_scope joins(:vyatta_host_state).select([
     "`vyatta_hosts`.*", 
     "`vyatta_host_states`.`is_daemon_running`", 
@@ -60,7 +63,7 @@ class VyattaHost < ActiveRecord::Base
   def execute_commands_via_ssh(commands)
     command_result_sets = Array.new
     begin
-      Net::SSH.start(self.remote_address, self.ssh_key_pair.login_username, :key_data => self.ssh_key_pair.private_key, :timeout => SSH_TIMEOUT) do |ssh|
+      Net::SSH.start(self.remote_address, self.ssh_key_pair.login_username, :port => self.remote_port, :key_data => self.ssh_key_pair.private_key, :timeout => SSH_TIMEOUT) do |ssh|
         commands.each do |command|
           ssh.open_channel do |channel|
             command_result_set = Hash.new
@@ -133,7 +136,7 @@ class VyattaHost < ActiveRecord::Base
   attr_accessor :sftp_error
   def upload_file_via_sftp!(local_path, remote_path)
     begin
-      Net::SFTP.start(self.remote_address, self.ssh_key_pair.login_username, :key_data => self.ssh_key_pair.private_key, :timeout => SSH_TIMEOUT) do |sftp|
+      Net::SFTP.start(self.remote_address, self.ssh_key_pair.login_username, :port => self.remote_port, :key_data => self.ssh_key_pair.private_key, :timeout => SSH_TIMEOUT) do |sftp|
         sftp.upload!(local_path, remote_path)
       end
     rescue => e

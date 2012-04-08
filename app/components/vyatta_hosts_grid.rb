@@ -13,13 +13,13 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
     column_defaults[:resizable]     = false
     column_defaults[:draggable]     = false
     column_defaults[:fixed]         = true
+    column_defaults[:editor]        = {:allow_blank => false}
 
     super.merge(
       :name             => :vyatta_hosts_grid,
       :title            => "Vyatta hosts",
       :model            => "VyattaHost",
       :load_inline_data => false,
-      #:scope            => :sorted,
       :width            => 600,
       :border           => true,
       :context_menu     => session[:user_is_admin] ? [:edit_in_form.action, :del.action] : false,
@@ -33,6 +33,7 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :ssh_key_pair__identifier, :text => "SSH key",         :hidden => true, :default_value => SshKeyPair.first ? SshKeyPair.first.id : nil, :editor => {:editable => false}),
         column_defaults.merge(:name => :hostname,                 :text => "Hostname",        :flex => true),
         column_defaults.merge(:name => :remote_address,           :text => "Remote Address",  :hidden => true),
+        column_defaults.merge(:name => :remote_port,              :text => "Remote Port",     :hidden => true, :default_value => 22, :editor => {:allow_decimals => false, :auto_strip_chars => true, :min_value => 1, :max_value => 65535}),
         column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",        :hidden => true),
         column_defaults.merge(:name => :is_daemon_running,        :text => "Daemon running?", :width => 110, :attr_type => :boolean, :align => :center, :renderer => 'booleanRenderer'),
         column_defaults.merge(:name => :is_reachable,             :text => "Reachable?",      :width => 100, :attr_type => :boolean, :align => :center, :renderer => 'booleanRenderer'),
