@@ -76,7 +76,7 @@ while true do
           display       = Display.create(:vyatta_host_id => vyatta_host.id, :task_remote_command_id => trc.id)
         end
 
-        display.information = filter.apply(command_result_sets[ci][:data])
+        display.information = filter.apply(command_result_sets[ci][:stdout])
         display.save
 
         ci += 1
