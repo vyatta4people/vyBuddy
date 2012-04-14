@@ -104,7 +104,7 @@ module VyBuddyActiveRecordExtensions
 
       all_ordered_records   = self.reorder_records(all_records)
       if !all_ordered_records
-        self.reorganize_with_persistent_order_message = "No records reordered"
+        self.reorganize_with_persistent_order_message = "No records reordered (#{self.to_s}: #{self.reorder_records_message})"
         return false
       end
 

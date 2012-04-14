@@ -5,7 +5,7 @@ class TaskRemoteCommand < ActiveRecord::Base
 
   has_many :displays, :dependent => :destroy
 
-  default_scope joins(:remote_command).order(["`task_remote_commands`.`sort_order` ASC", "`remote_commands`.`command` ASC"])
+  default_scope select("`task_remote_commands`.*").joins(:remote_command).order(["`task_remote_commands`.`sort_order` ASC", "`remote_commands`.`command` ASC"])
 
   before_create :set_sort_order
 

@@ -8,7 +8,7 @@ class ManageTasksWindow < Netzke::Basepack::Window
       :title            => "::Tasks::",
       :layout           => :border,
       :width            => 1200,
-      :height           => 500,
+      :height           => 520,
       :y                => 50,
       :modal            => true,
       :close_action     => :hide,
