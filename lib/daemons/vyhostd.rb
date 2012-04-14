@@ -59,7 +59,7 @@ while true do
     end
   end
 
-  Log.error("Unable to verify configuration mode executors") if !vyatta_host.verify_executors(["configuration", "configuration_real"], true)
+  Log.error("Unable to verify configuration mode executor") if !vyatta_host.verify_executors(["configuration"], true)
   task_groups = TaskGroup.enabled
   task_groups.each do |task_group|
     task_group.tasks(true).enabled.each do |task|

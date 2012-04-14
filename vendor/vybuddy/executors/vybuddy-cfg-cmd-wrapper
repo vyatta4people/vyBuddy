@@ -1,4 +1,0 @@
-#!/bin/vbash -l
-WRAPPER="/var/tmp/vybuddy-cfg-cmd-wrapper.real"
-
-${WRAPPER} ${@}

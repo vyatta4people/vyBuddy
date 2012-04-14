@@ -184,8 +184,8 @@ class VyattaHost < ActiveRecord::Base
     modes.each do |mode|
       local_executor  = RemoteCommand.local_executor(mode)
       remote_executor = RemoteCommand.remote_executor(mode)
-      if mode == "configuration_real" and self.executor_label
-        local_executor = local_executor.gsub(/real$/, self.executor_label) # Configuration mode executor hook
+      if mode == "configuration" and self.executor_label
+        local_executor = local_executor + '.' + self.executor_label # Configuration mode executor hook
       end
       if !self.compare_files_via_ssh!(local_executor, remote_executor)
         if upload_unmatched 
