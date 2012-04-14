@@ -7,7 +7,7 @@ HOST_DAEMON_FILE            = HOST_DAEMON_NAME.to_s + '.rb'
 HOST_DAEMON_PATH            = DAEMONS_DIR.join(HOST_DAEMON_FILE)
 HOST_POLLING_INTERVAL       = 60
 UNREACHABLE_HOST_SLEEP_TIME = 60
-GRACE_PERIOD                = 0.2
+GRACE_PERIOD                = 1
 RETRY_PERIOD                = 5
 
 EMAIL_REGEX                 = /^([a-z0-9_\-\.\+]+)\@((([a-z0-9\-]+\.)+)([a-z]{2,4})|[a-z0-9][a-z0-9\-]+)$/

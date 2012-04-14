@@ -11,7 +11,7 @@ class Log < ActiveRecord::Base
 
   before_update { |log| raise ActiveRecord::ReadOnlyRecord, "Log record(id: #{log.id.to_s}) should NOT be changed" }
 
-  scope :sorted, order(["`created_at` ASC"])
+  default_scope order(["`created_at` ASC"])
 
   def get_severity_color
     return Log.get_severity_color(self.severity)

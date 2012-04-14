@@ -20,7 +20,6 @@ class TaskGroupsGrid < Netzke::Basepack::GridPanel
       :title            => "Task groups",
       :model            => "TaskGroup",
       :load_inline_data => false,
-      :scope            => :sorted,
       :border           => false,
       :context_menu     => [:edit_in_form.action, :del.action],
       :tbar             => [:add_in_form.action],
@@ -58,7 +57,7 @@ class TaskGroupsGrid < Netzke::Basepack::GridPanel
   end
 
   endpoint :reorder_records do |params|
-    records           = TaskGroup.sorted
+    records           = TaskGroup.all
     reordered_records = TaskGroup.reorder_records(records)
     success           = !reordered_records.nil? and !reordered_records.empty? ? true : false
     message           = TaskGroup.reorder_records_message

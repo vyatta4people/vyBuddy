@@ -47,7 +47,7 @@ begin
       end
       sleep(GRACE_PERIOD)
       if vyatta_host.daemon_running?
-        Log.fatal("Need to use silver bullets to stop vyHostD for #{vyatta_host.hostname}(#{vyatta_host.id.to_s})")
+        Log.warn("Need to use silver bullets to stop vyHostD for #{vyatta_host.hostname}(#{vyatta_host.id.to_s})")
         vyatta_host.kill_all_daemons
       end
     end

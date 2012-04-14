@@ -13,7 +13,7 @@ class RemoteCommand < ActiveRecord::Base
 
   validate :validate_safety
 
-  scope :sorted, order(["`mode` DESC, `command` ASC"])
+  default_scope order(["`mode` DESC, `command` ASC"])
 
   def validate_safety
     if self.mode == "configuration" and !self.command.match(/^show/)

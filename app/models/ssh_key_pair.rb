@@ -18,7 +18,7 @@ class SshKeyPair < ActiveRecord::Base
 
   validate :set_public_key_from_private_key
 
-  scope :sorted, order(["`identifier` ASC"])
+  default_scope order(["`identifier` ASC"])
 
   before_save :set_attributes
 

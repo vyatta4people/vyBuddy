@@ -38,7 +38,7 @@ while true do
 
   # Try to establish SSH connection to Vyatta host, verify (and upload if needed) executors, check Vyatta software version and load average
   begin
-    raise("Unable to verify #{vyatta_host.unmatched_modes.join(', ')} mode executors") if !vyatta_host.verify_executors(["system", "operational"], true)
+    raise("Unable to verify #{vyatta_host.unmatched_modes.join(' and ')} mode executors") if !vyatta_host.verify_executors(["system", "operational"], true)
     vyatta_host_state.vyatta_version = vyatta_host.execute_remote_command!("show version | grep 'Version' | sed 's/.*: *//'").strip
     vyatta_host_state.load_average   = vyatta_host.execute_remote_command!({:mode => "system", :command => "uptime | sed 's/.*, //'"}).strip.to_f
   rescue => e
@@ -58,6 +58,7 @@ while true do
       next
     end
   end
+  sleep(GRACE_PERIOD)
 
   Log.error("Unable to verify configuration mode executor") if !vyatta_host.verify_executors(["configuration"], true)
   task_groups = TaskGroup.enabled

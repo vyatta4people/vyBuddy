@@ -8,8 +8,10 @@ class Task < ActiveRecord::Base
 
   validates :name, :uniqueness => true
 
-  scope :sorted, joins(:task_group).order(["`task_groups`.`sort_order` ASC", "`task_groups`.`name` ASC", "`tasks`.`sort_order` ASC", "`tasks`.`name` ASC"])
-  scope :enabled, where(:is_enabled => true)
+  default_scope joins(:task_group).order(["`task_groups`.`sort_order` ASC", "`task_groups`.`name` ASC", "`tasks`.`sort_order` ASC", "`tasks`.`name` ASC"])
+
+  scope :enabled,   where(:is_enabled => true)
+  scope :disabled,  where(:is_enabled => false)
 
   before_create :set_sort_order
 

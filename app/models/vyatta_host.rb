@@ -33,8 +33,8 @@ class VyattaHost < ActiveRecord::Base
     "`vyatta_host_states`.`vyatta_version`", 
     "`vyatta_host_states`.`load_average`"]).order(["`hostname` ASC"])
 
-  scope :enabled, where(:is_enabled => true)
-  scope :disabled, where(:is_enabled => false)
+  scope :enabled,   where(:is_enabled => true)
+  scope :disabled,  where(:is_enabled => false)
 
   after_create   { |vyatta_host| ActiveRecord::Base.connection.execute("INSERT INTO `vyatta_host_states`(`id`) VALUES(#{vyatta_host.id.to_s});") }
   before_destroy { |vyatta_host| vyatta_host.kill_all_daemons; return true }

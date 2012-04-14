@@ -12,6 +12,8 @@ class User < ActiveRecord::Base
   validates :email,
     :format     => { :with => EMAIL_REGEX, :message => EMAIL_REASON }
 
-  scope :sorted, order(["`username` ASC"])
-  scope :enabled, where(:is_enabled => true)
+  default_scope order(["`username` ASC"])
+
+  scope :enabled,   where(:is_enabled => true)
+  scope :disabled,  where(:is_enabled => false)
 end

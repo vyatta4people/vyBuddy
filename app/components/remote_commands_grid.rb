@@ -16,7 +16,6 @@ class RemoteCommandsGrid < Netzke::Basepack::GridPanel
       :name             => :remote_commands_grid,
       :title            => "Remote commands",
       :model            => "RemoteCommand",
-      :scope            => :sorted,
       :border           => false,
       :context_menu     => [:edit_in_form.action, :del.action],
       :tbar             => [:add_in_form.action],

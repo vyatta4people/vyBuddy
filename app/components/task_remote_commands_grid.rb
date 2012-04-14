@@ -21,7 +21,6 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
       :prevent_header     => true,
       :model              => "TaskRemoteCommand",
       :load_inline_data   => false,
-      :scope              => :sorted,
       :border             => false,
       :context_menu       => [:edit_in_form.action, :del.action],
       :tbar               => ["<div class='trc-hint'>Use drag-and-drop to add and sort remote commands</div>"],
@@ -59,9 +58,9 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
       if moved_task_remote_command
         return { :set_result => { :success => false, :local => false, :message => "Already added: #{moved_task_remote_command.remote_command.mode}=>#{moved_task_remote_command.remote_command.command}" } }
       else
-        moved_task_remote_command = TaskRemoteCommand.create(:task_id => params[:selected_task_id].to_i, :remote_command_id => params[:moved_record_id].to_i, :filter_id => Filter.sorted.first.id)
+        moved_task_remote_command = TaskRemoteCommand.create(:task_id => params[:selected_task_id].to_i, :remote_command_id => params[:moved_record_id].to_i, :filter_id => Filter.first.id)
         if params[:replaced_record_id].to_i == 0
-          replaced_task_remote_command = TaskRemoteCommand.sorted.where(:task_id => params[:selected_task_id].to_i).last
+          replaced_task_remote_command = TaskRemoteCommand.where(:task_id => params[:selected_task_id].to_i).last
         else
           replaced_task_remote_command = TaskRemoteCommand.find(params[:replaced_record_id].to_i)
         end
@@ -83,11 +82,12 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
 
   endpoint :reorder_records do |params|
     records           = Array.new
-    TaskRemoteCommand.sorted.where(:task_id => params[:selected_task_id].to_i).each { |record| records << TaskRemoteCommand.find(record.id) }
+    TaskRemoteCommand.where(:task_id => params[:selected_task_id].to_i).each { |record| records << TaskRemoteCommand.find(record.id) }
     reordered_records = TaskRemoteCommand.reorder_records(records)
     success           = !reordered_records.nil? and !reordered_records.empty? ? true : false
     message           = TaskRemoteCommand.reorder_records_message
     { :set_result => { :success => success, :message => message } }
   end
 
+ 
 end
