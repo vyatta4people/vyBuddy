@@ -36,11 +36,9 @@ while true do
   vyatta_host_state     = vyatta_host.vyatta_host_state
   vyatta_host.set_daemon_log_event_source # Event source i.e. daemon address may change at run-time
 
-  # Try to establish SSH connection to Vyatta host, verify (and upload if needed) executors, check Vyatta software version and load average
+  # Try to establish SSH connection to Vyatta host
   begin
-    raise("Unable to verify #{vyatta_host.unmatched_modes.join(' and ')} mode executors") if !vyatta_host.verify_executors(["system", "operational"], true)
-    vyatta_host_state.vyatta_version = vyatta_host.execute_remote_command!("show version | grep 'Version' | sed 's/.*: *//'").strip
-    vyatta_host_state.load_average   = vyatta_host.execute_remote_command!({:mode => "system", :command => "uptime | sed 's/.*, //'"}).strip.to_f
+    raise(vyatta_host.ssh_error) if !vyatta_host.execute_command_via_ssh!("/bin/true")
   rescue => e
     Log.error("Could not reach Vyatta host: #{e.message}")
     vyatta_host_state.is_reachable   = false
@@ -58,6 +56,12 @@ while true do
       next
     end
   end
+  sleep(GRACE_PERIOD)
+
+  # Verify (and upload if needed) executors, check Vyatta software version and load average
+  Log.error("Unable to verify #{vyatta_host.unmatched_modes.join(' and ')} mode executors") if !vyatta_host.verify_executors(["system", "operational"], true)
+  vyatta_host_state.vyatta_version = vyatta_host.execute_remote_command!("show version | grep 'Version' | sed 's/.*: *//'").strip
+  vyatta_host_state.load_average   = vyatta_host.execute_remote_command!({:mode => "system", :command => "uptime | sed 's/.*, //'"}).strip.to_f
   sleep(GRACE_PERIOD)
 
   Log.error("Unable to verify configuration mode executor") if !vyatta_host.verify_executors(["configuration"], true)
