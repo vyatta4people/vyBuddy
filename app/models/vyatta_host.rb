@@ -179,12 +179,12 @@ class VyattaHost < ActiveRecord::Base
   end
 
   attr_accessor :unmatched_modes
-  def verify_executors(modes = ["operational"], upload_unmatched = false)
+  def verify_executors(modes = [:operational], upload_unmatched = false)
     self.unmatched_modes = Array.new
     modes.each do |mode|
       local_executor  = RemoteCommand.local_executor(mode)
       remote_executor = RemoteCommand.remote_executor(mode)
-      if mode == "configuration" and self.executor_label
+      if mode == :configuration and self.executor_label
         local_executor = local_executor + '.' + self.executor_label # Configuration mode executor hook
       end
       if !self.compare_files_via_ssh!(local_executor, remote_executor)

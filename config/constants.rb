@@ -17,15 +17,15 @@ USERNAME_REASON             = 'must start from lowercase letter and contain only
 
 SSH_KEY_TYPES               = ['ssh-rsa', 'ssh-dss']
 SSH_TIMEOUT                 = 30
-REMOTE_COMMAND_MODES        = ['system', 'operational', 'configuration']
-DEFAULT_REMOTE_COMMAND_MODE = 'operational'
+REMOTE_COMMAND_MODES        = [:system, :operational, :configuration]
+DEFAULT_REMOTE_COMMAND_MODE = :operational
 INTERPRETERS                = ['/bin/bash', '/usr/bin/perl', '/usr/bin/ruby']
 EXECUTORS_LOCAL_DIR         = 'vendor/vybuddy/executors'
 EXECUTORS_REMOTE_DIR        = '/var/tmp'
 
 DEFAULT_FILTER_NAME         = 'AS-IS'
 
-LOG_SEVERITIES              = ['DEBUG', 'ERROR', 'FATAL', 'INFO', 'WARN', 'CUSTOM']
+LOG_SEVERITIES              = [:DEBUG, :ERROR, :FATAL, :INFO, :WARN, :CUSTOM]
 KEEP_LOG_RECORDS            = 10000
 
 CSS_BORDER_STYLE            = '1px #99bce8 solid'

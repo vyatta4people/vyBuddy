@@ -59,12 +59,12 @@ while true do
   sleep(GRACE_PERIOD)
 
   # Verify (and upload if needed) executors, check Vyatta software version and load average
-  Log.error("Unable to verify #{vyatta_host.unmatched_modes.join(' and ')} mode executors") if !vyatta_host.verify_executors(["system", "operational"], true)
+  Log.error("Unable to verify #{vyatta_host.unmatched_modes.join(' and ')} mode executors") if !vyatta_host.verify_executors([:system, :operational], true)
   vyatta_host_state.vyatta_version = vyatta_host.execute_remote_command!("show version | grep 'Version' | sed 's/.*: *//'").strip
-  vyatta_host_state.load_average   = vyatta_host.execute_remote_command!({:mode => "system", :command => "uptime | sed 's/.*, //'"}).strip.to_f
+  vyatta_host_state.load_average   = vyatta_host.execute_remote_command!({:mode => :system, :command => "uptime | sed 's/.*, //'"}).strip.to_f
   sleep(GRACE_PERIOD)
 
-  Log.error("Unable to verify configuration mode executor") if !vyatta_host.verify_executors(["configuration"], true)
+  Log.error("Unable to verify configuration mode executor") if !vyatta_host.verify_executors([:configuration], true)
   task_groups = TaskGroup.enabled
   task_groups.each do |task_group|
     task_group.tasks(true).enabled.each do |task|

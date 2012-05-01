@@ -13,6 +13,10 @@ class Log < ActiveRecord::Base
 
   default_scope order(["`created_at` ASC"])
 
+  def severity
+    super.to_sym
+  end
+
   def get_severity_color
     return Log.get_severity_color(self.severity)
   end
@@ -36,11 +40,11 @@ class Log < ActiveRecord::Base
 
     def get_severity_color(severity)
       case severity
-        when "DEBUG"  then return "#999999"
-        when "ERROR"  then return "#ff4444"
-        when "FATAL"  then return "#ff0000"
-        when "INFO"   then return "#3c9351"
-        when "WARN"   then return "#ff8c00"
+        when :DEBUG  then return "#999999"
+        when :ERROR  then return "#ff4444"
+        when :FATAL  then return "#ff0000"
+        when :INFO   then return "#3c9351"
+        when :WARN   then return "#ff8c00"
         else return "#8b008b"
       end
     end
@@ -54,27 +58,27 @@ class Log < ActiveRecord::Base
     end
 
     def debug(message)
-      write_log('DEBUG', message, true)
+      write_log(:DEBUG, message, true)
     end
 
     def error(message)
-      write_log('ERROR', message)
+      write_log(:ERROR, message)
     end
 
     def fatal(message)
-      write_log('FATAL', message)
+      write_log(:FATAL, message)
     end
 
     def info(message)
-      write_log('INFO', message)
+      write_log(:INFO, message)
     end
 
     def warn(message)
-      write_log('WARN', message)
+      write_log(:WARN, message)
     end
 
     def custom(message)
-      write_log('CUSTOM', message, true)
+      write_log(:CUSTOM, message, true)
     end
 
   private
