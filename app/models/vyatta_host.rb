@@ -227,7 +227,7 @@ class VyattaHost < ActiveRecord::Base
     end
     daemon_pids = Array.new
     `ps xo pid,command | egrep \"#{HOST_DAEMON_PATH} #{vyatta_host_id_match}$\"`.split(/\n/).each do |ps_line|
-      daemon_pids << ps_line.split(/[ \t]+/)[1].to_i
+      daemon_pids << ps_line.strip.split(/[ \t]+/)[0].to_i
     end
     return daemon_pids
   end

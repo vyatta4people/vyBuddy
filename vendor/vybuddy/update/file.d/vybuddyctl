@@ -1,0 +1,85 @@
+#!/bin/bash
+#
+# vyBuddy vymaster daemon control
+#
+source /etc/profile.d/rvm.sh
+source /etc/profile.d/vybuddy.sh
+
+function start_daemon() {
+  if [ -f "${VYBUDDY_DAEMON_PID_FILE}" ]; then
+    echo "Not starting ${VYBUDDY_DAEMON} (PID file already exists: ${VYBUDDY_DAEMON_PID_FILE})"
+  else
+    nice -n ${VYBUDDY_DAEMON_NICE} ${VYBUDDY_DAEMON_COMMAND} >"${VYBUDDY_DAEMON_STDOUT}" 2>"${VYBUDDY_DAEMON_STDERR}" &
+    echo "${!}" > "${VYBUDDY_DAEMON_PID_FILE}"
+  fi
+  touch "${VYBUDDY_DAEMON_STATE_FILE}"
+  sleep 2
+}
+
+function stop_daemon() {
+  rm -f "${VYBUDDY_DAEMON_STATE_FILE}"
+  if [ ! -f "${VYBUDDY_DAEMON_PID_FILE}" ]; then
+    echo "Not stopping ${VYBUDDY_DAEMON} (no PID file)"
+  else
+    VYBUDDY_DAEMON_PID=$(cat ${VYBUDDY_DAEMON_PID_FILE})
+    kill "${VYBUDDY_DAEMON_PID}"
+    rm "${VYBUDDY_DAEMON_PID_FILE}"
+  fi
+}
+
+function restart_daemon() {
+  stop_daemon
+  sleep 2
+  start_daemon
+}
+
+function daemon_status() {
+  REAL_VYBUDDY_DAEMON_PID=$(pgrep ${VYBUDDY_DAEMON})
+  if [ -f "${VYBUDDY_DAEMON_PID_FILE}" ]; then
+    VYBUDDY_DAEMON_PID=$(cat ${VYBUDDY_DAEMON_PID_FILE})
+    if [ "${VYBUDDY_DAEMON_PID}" == "${REAL_VYBUDDY_DAEMON_PID}" ]; then
+      VYBUDDY_DAEMON_STATUS="Running (${VYBUDDY_DAEMON_PID})"
+    else
+      VYBUDDY_DAEMON_STATUS="Failed!" 
+    fi
+  else
+    if [ ! "${REAL_VYBUDDY_DAEMON_PID}" ]; then
+      VYBUDDY_DAEMON_STATUS="Stopped"
+    else
+      VYBUDDY_DAEMON_STATUS="Walking dead! (${VYBUDDY_DAEMON_PID})"
+    fi
+  fi
+  echo "vyMasterD status: ${VYBUDDY_DAEMON_STATUS}"
+}
+
+function rails_console() {
+  rails console
+}
+
+function list_scripts() {
+  cd "${VYBUDDY_SCRIPTS_DIR}"
+  ls -1 *.rb | sed 's/\.rb$//'
+}
+
+function run_script() {
+  SCRIPT_COMMAND="./${VYBUDDY_SCRIPTS_SUBDIR}/${1}.rb"; shift
+  SCRIPT_ARGS="${@}"
+  ${SCRIPT_COMMAND} ${SCRIPT_ARGS}
+}
+
+if [ ${USER} != ${VYBUDDY_USER} ]; then
+  echo "Must be launched from user: ${VYBUDDY_USER}"
+  exit 1
+fi
+
+cd "${VYBUDDY_DIR}"
+case ${1} in
+  "start")start_daemon;;
+  "stop")stop_daemon;;
+  "restart")restart_daemon;;
+  "status")daemon_status;;
+  "rails-console")rails_console;;
+  "list-scripts")list_scripts;;
+  "run-script")shift; run_script ${@};;
+  *)echo "Usage: vybuddyctl start|stop|restart|status|rails-console|list-scripts|run-script <script> [<args>]"; exit 1;;
+esac
