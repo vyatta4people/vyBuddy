@@ -46,7 +46,7 @@ class RemoteCommand < ActiveRecord::Base
   class << self
 
     def executor(mode)
-      return case mode.to_s
+      return case mode
         when :operational         then "vybuddy-op-cmd-wrapper"
         when :configuration       then "vybuddy-cfg-cmd-wrapper"
         when :system              then "vybuddy-sys-cmd-wrapper"
