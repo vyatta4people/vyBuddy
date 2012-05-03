@@ -32,10 +32,12 @@ class TasksGrid < Netzke::Basepack::GridPanel
         :plugins => [ { :ptype => :gridviewdragdrop, :drag_group => :tasks_dd_group, :drop_group => :tasks_dd_group, :drag_text => "Drag and drop to reorganize" } ]
       },
       :columns          => [
-        column_defaults.merge(:name => :task_group__name,         :text => "Group",      :default_value => TaskGroup.first ? TaskGroup.first.id : nil, :editor => {:editable => false}),
-        column_defaults.merge(:name => :name,                     :text => "Name",       :flex => true),
-        column_defaults.merge(:name => :sort_order,               :text => "#",          :width => 40, :align => :center, :editor => {:hidden => true}),
-        column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",   :hidden => true)
+        column_defaults.merge(:name => :task_group__name,         :text => "Group",                 :default_value => TaskGroup.first ? TaskGroup.first.id : nil, :editor => {:editable => false}),
+        column_defaults.merge(:name => :name,                     :text => "Name",                  :flex => true),
+        column_defaults.merge(:name => :is_on_demand,             :text => "On demand?",            :hidden => true),
+        column_defaults.merge(:name => :match_hostname,           :text => "Match Hostname",        :hidden => true),
+        column_defaults.merge(:name => :sort_order,               :text => "#",                     :width => 40, :align => :center, :editor => {:hidden => true}),
+        column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",              :hidden => true)
       ]
     )
   end

@@ -6,7 +6,7 @@
 require File.expand_path('../../../config/environment', __FILE__)
 
 Log.application         = :vymasterd
-Log.event_source        = "localhost"
+Log.event_source        = 'localhost'
 Log.duplicate_to_stderr = true
 
 def graceful_shutdown

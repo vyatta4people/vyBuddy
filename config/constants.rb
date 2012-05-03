@@ -25,6 +25,8 @@ EXECUTORS_REMOTE_DIR        = '/var/tmp'
 
 DEFAULT_FILTER_NAME         = 'AS-IS'
 
+DUMMY_DISPLAY_INFORMATION   = '<i>Not applicable to this host...</i>'
+
 LOG_SEVERITIES              = [:DEBUG, :ERROR, :FATAL, :INFO, :WARN, :CUSTOM]
 KEEP_LOG_RECORDS            = 10000
 

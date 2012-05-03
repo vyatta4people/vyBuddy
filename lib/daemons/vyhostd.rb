@@ -65,29 +65,8 @@ while true do
   sleep(GRACE_PERIOD)
 
   Log.error("Unable to verify configuration mode executor") if !vyatta_host.verify_executors([:configuration], true)
-  task_groups = TaskGroup.enabled
-  task_groups.each do |task_group|
-    task_group.tasks(true).enabled.each do |task|
-      task_remote_commands  = task.task_remote_commands(true)
-      command_result_sets   = vyatta_host.execute_remote_commands(task_remote_commands.collect{ |trc| trc.remote_command })
 
-      ci = 0
-      task_remote_commands.each do |trc|
-        remote_command  = trc.remote_command
-        filter          = trc.filter
-
-        display         = Display.find(:first, :conditions => { :vyatta_host_id => vyatta_host.id, :task_remote_command_id => trc.id })
-        if !display
-          display       = Display.create(:vyatta_host_id => vyatta_host.id, :task_remote_command_id => trc.id)
-        end
-
-        display.information = filter.apply(command_result_sets[ci][:stdout])
-        display.save
-
-        ci += 1
-      end
-    end
-  end
+  vyatta_host.execute_all_tasks(:background)
 
   sleep(HOST_POLLING_INTERVAL)
 end

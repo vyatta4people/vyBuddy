@@ -16,7 +16,7 @@ class RemoteCommand < ActiveRecord::Base
   default_scope order(["`mode` DESC, `command` ASC"])
 
   def validate_safety
-    if self.mode == :configuration and !self.command.match(/^show/)
+    if self.configuration? and !self.command.match(/^show/)
       self.errors[:command] << "\'#{self.command}\' is unsafe for #{self.mode} mode"
       return false
     end
@@ -25,6 +25,21 @@ class RemoteCommand < ActiveRecord::Base
 
   def mode
     super.to_sym
+  end
+
+  def system?
+    return true if self.mode == :system
+    return false
+  end
+
+  def operational?
+    return true if self.mode == :operational
+    return false
+  end
+
+  def configuration?
+    return true if self.mode == :configuration
+    return false
   end
 
   def executor

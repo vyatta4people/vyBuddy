@@ -4,7 +4,7 @@ class Task < ActiveRecord::Base
   has_many :task_remote_commands, :dependent => :destroy
   has_many :remote_commands, :through => :task_remote_commands
 
-  validates :name, :presence => true
+  validates :name, :match_hostname, :presence => true
 
   validates :name, :uniqueness => true
 
@@ -13,7 +13,15 @@ class Task < ActiveRecord::Base
   scope :enabled,   where(:is_enabled => true)
   scope :disabled,  where(:is_enabled => false)
 
+  scope :background,    where(:is_on_demand => false)
+  scope :on_demand,     where(:is_on_demand => true)
+
   before_create :set_sort_order
+
+  def applicable?(vyatta_host)
+    return true if vyatta_host.hostname.match(/#{self.match_hostname}/i)
+    return false
+  end
 
   def html_id
     "task_#{self.id.to_s}"

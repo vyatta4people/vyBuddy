@@ -204,6 +204,63 @@ class VyattaHost < ActiveRecord::Base
   end
 
   #
+  # Tasks
+  #
+  def execute_task(task)
+    task_remote_commands  = task.task_remote_commands(true)
+    command_result_sets   = self.execute_remote_commands(task_remote_commands.collect{ |trc| trc.remote_command })
+    ci                    = 0
+    task_remote_commands.each do |trc|
+      remote_command  = trc.remote_command
+      filter          = trc.filter
+      display         = Display.find(:first, :conditions => { :vyatta_host_id => self.id, :task_remote_command_id => trc.id })
+      if !display
+        display       = Display.create(:vyatta_host_id => self.id, :task_remote_command_id => trc.id)
+      end
+      display.information = filter.apply(command_result_sets[ci][:stdout])
+      display.save
+      ci += 1
+    end
+    return ci
+  end
+
+  def dummify_task(task)
+    task_remote_commands  = task.task_remote_commands(true)
+    di                    = 0
+    task_remote_commands.each do |trc|
+      display         = Display.find(:first, :conditions => { :vyatta_host_id => self.id, :task_remote_command_id => trc.id })
+      if !display
+        display       = Display.create(:vyatta_host_id => self.id, :task_remote_command_id => trc.id)
+      end
+      display.information = DUMMY_DISPLAY_INFORMATION
+      display.save
+      di += 1
+    end
+    return di
+  end
+
+  def execute_all_tasks(task_type = :background)
+    task_groups = TaskGroup.enabled
+    ti          = 0
+    task_groups.each do |task_group|
+      tasks = case task_type
+        when :background  then task_group.tasks(true).enabled.background
+        when :on_demand   then task_group.tasks(true).enabled.on_demand
+        else nil
+      end
+      tasks.each do |task|
+        if task.applicable?(self)
+          self.execute_task(task)
+          ti += 1
+        else
+          self.dummify_task(task)
+        end
+      end
+    end
+    return ti
+  end
+
+  #
   # Daemon control stuff
   #
   def daemon_stdout
