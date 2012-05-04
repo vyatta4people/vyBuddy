@@ -34,7 +34,7 @@ function restart_daemon() {
 }
 
 function daemon_status() {
-  REAL_VYBUDDY_DAEMON_PID=$(pgrep ${VYBUDDY_DAEMON})
+  REAL_VYBUDDY_DAEMON_PID=$(pgrep ^${VYBUDDY_DAEMON}.rb$)
   if [ -f "${VYBUDDY_DAEMON_PID_FILE}" ]; then
     VYBUDDY_DAEMON_PID=$(cat ${VYBUDDY_DAEMON_PID_FILE})
     if [ "${VYBUDDY_DAEMON_PID}" == "${REAL_VYBUDDY_DAEMON_PID}" ]; then
