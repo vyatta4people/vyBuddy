@@ -9,7 +9,7 @@ class LogsGrid < Netzke::Basepack::GridPanel
   def configuration
     column_defaults                 = Hash.new
     column_defaults[:editable]      = false
-    column_defaults[:sortable]      = true
+    column_defaults[:sortable]      = false
     column_defaults[:menu_disabled] = true
     column_defaults[:resizable]     = false
     column_defaults[:draggable]     = false
@@ -43,7 +43,8 @@ class LogsGrid < Netzke::Basepack::GridPanel
       :rows_per_page      => 20,
       :columns            => [
         { :xtype => :rownumberer, :text => "#", :width => 40, :align => :center },
-        column_defaults.merge(:name => :created_at,         :text => "Logged at",     :width => 150, :format => "Y-m-d H:i:s T"),
+        column_defaults.merge(:name => :created_at,         :hidden => true),
+        column_defaults.merge(:name => :logged_at,          :text => "Logged at",     :width => 150, :xtype => :datecolumn, :format => "Y-m-d H:i:s T"),
         column_defaults.merge(:name => :application,        :text => "Application",   :width => 100, :renderer => "textSteelBlueBoldRenderer"),
         column_defaults.merge(:name => :event_source,       :text => "Event source",  :width => 120, :renderer => "textSteelBlueRenderer"),
         column_defaults.merge(:name => :severity,           :text => "Severity",      :width => 75,  :align => :center, :getter => lambda {|r| r.html_severity }),

@@ -13,6 +13,10 @@ class Log < ActiveRecord::Base
 
   default_scope order(["`created_at` ASC"])
 
+  def logged_at
+    self.created_at.localtime
+  end
+
   def severity
     super.to_sym
   end
@@ -30,7 +34,7 @@ class Log < ActiveRecord::Base
   end
 
   def as_text
-    sprintf("%-30s| %-20s| %-40s| %-10s| %s", !self.new_record? ? self.created_at.to_s(:eu) : Time.now.to_s(:eu), self.application, self.event_source, self.severity, self.message)
+    sprintf("%-30s| %-20s| %-40s| %-10s| %s", !self.new_record? ? self.logged_at.to_s(:eu) : Time.now.to_s(:eu), self.application, self.event_source, self.severity, self.message)
   end
 
   class << self
