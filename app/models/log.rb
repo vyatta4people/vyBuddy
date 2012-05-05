@@ -56,9 +56,9 @@ class Log < ActiveRecord::Base
     def html_severity(severity)
       "<span style=\"background-color:#{get_severity_color(severity)};color:#ffffff;font-weight:bold;\">&nbsp;#{severity}&nbsp;</span>"
     end
-  
+
     def html_message(severity, message)
-      "<span style=\"color:#{get_severity_color(severity)};\">#{message}</span>" 
+      "<span style=\"color:#{get_severity_color(severity)};\">#{HTMLEntities.new.encode(message)}</span>"
     end
 
     def debug(message)

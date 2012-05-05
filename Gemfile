@@ -42,3 +42,6 @@ gem 'netzke-basepack', :git => 'git://github.com/skozlov/netzke-basepack.git'
 # Pure-Ruby implementation of the SSH2/SFTP client protocol
 gem 'net-ssh'
 gem 'net-sftp'
+
+# A module for encoding and decoding (X)HTML entities
+gem 'htmlentities'

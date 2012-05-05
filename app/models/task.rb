@@ -17,6 +17,7 @@ class Task < ActiveRecord::Base
   scope :on_demand,     where(:is_on_demand => true)
 
   before_create :set_sort_order
+  before_create :set_is_on_demand
 
   def applicable?(vyatta_host)
     return true if vyatta_host.hostname.match(/#{self.match_hostname}/i)
@@ -31,6 +32,11 @@ private
 
   def set_sort_order
     self.sort_order = Task.get_next_sort_order(:task_group_id, self.task_group_id)
+  end
+
+  def set_is_on_demand
+    self.is_on_demand = false if !self.is_on_demand
+    return true
   end
 
 end
