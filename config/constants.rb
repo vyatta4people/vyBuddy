@@ -23,6 +23,7 @@ INTERPRETERS                = ['/bin/bash', '/usr/bin/perl', '/usr/bin/ruby']
 EXECUTORS_LOCAL_DIR         = 'vendor/vybuddy/executors'
 EXECUTORS_REMOTE_DIR        = '/var/tmp'
 
+DEFAULT_USER_ID             = 1
 DEFAULT_FILTER_NAME         = 'AS-IS'
 
 DUMMY_DISPLAY_INFORMATION   = '<i>Not applicable to this host...</i>'

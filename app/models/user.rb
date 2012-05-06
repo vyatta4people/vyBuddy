@@ -16,4 +16,6 @@ class User < ActiveRecord::Base
 
   scope :enabled,   where(:is_enabled => true)
   scope :disabled,  where(:is_enabled => false)
+
+  before_destroy { |user| return false if user.id == DEFAULT_USER_ID }
 end

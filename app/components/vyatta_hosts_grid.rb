@@ -29,8 +29,10 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
       :multi_select     => false,
       :view_config      => { :load_mask => false },
       :columns          => [
-        column_defaults.merge(:name => :user__username,           :text => "Owner",           :hidden => true, :default_value => User.first ? User.first.id : nil, :editor => {:editable => false}),
-        column_defaults.merge(:name => :ssh_key_pair__identifier, :text => "SSH key",         :hidden => true, :default_value => SshKeyPair.first ? SshKeyPair.first.id : nil, :editor => {:editable => false}),
+        column_defaults.merge(:name => :user__username,           :text => "Owner",           :hidden => true, 
+          :editor => {:editable => false, :empty_text => "Choose user",     :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l} } }), 
+        column_defaults.merge(:name => :ssh_key_pair__identifier, :text => "SSH key pair",    :hidden => true, 
+          :editor => {:editable => false, :empty_text => "Choose key pair", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l} } } ),
         column_defaults.merge(:name => :hostname,                 :text => "Hostname",        :flex => true),
         column_defaults.merge(:name => :remote_address,           :text => "Remote Address",  :hidden => true),
         column_defaults.merge(:name => :remote_port,              :text => "Remote Port",     :hidden => true, :default_value => 22, :editor => {:allow_decimals => false, :auto_strip_chars => true, :min_value => 1, :max_value => 65535}),
@@ -49,6 +51,23 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
       return { :set_result => session[:user_is_admin] }
     end
     return { :set_result => false }
+  end
+
+  def get_combobox_options(params)
+    case params[:column]
+    when "user__username"
+      return { :data => User.enabled.collect {|u| [u.id, u.username]} }
+    when "ssh_key_pair__identifier"
+      return { :data => SshKeyPair.all.collect {|s| [s.id, s.identifier]} }
+    end
+  end
+
+  endpoint :add_form__netzke_0__get_combobox_options do |params|
+    get_combobox_options(params)
+  end
+
+  endpoint :edit_form__netzke_0__get_combobox_options do |params|
+    get_combobox_options(params)
   end
 
 end

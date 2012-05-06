@@ -35,7 +35,7 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :task__name,                :text => "Task",     :hidden => true,  :editor => {:hidden => true}),
         column_defaults.merge(:name => :remote_command__mode,      :text => "Mode",     :width => 100,    :editor => {:hidden => true}),
         column_defaults.merge(:name => :remote_command__command,   :text => "Command",  :flex => true,    :editor => {:hidden => true}),
-        column_defaults.merge(:name => :filter__name,              :text => "Filter",   :width => 100,    :editor => {:editable => false}),
+        column_defaults.merge(:name => :filter__name,              :text => "Filter",   :width => 100,    :editor => {:editable => false, :empty_text => "Choose filter", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l} } }),
         column_defaults.merge(:name => :sort_order,                :text => "#",        :width => 40,     :align => :center, :editor => {:hidden => true})
       ]
     )
@@ -89,5 +89,20 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
     { :set_result => { :success => success, :message => message } }
   end
 
+  def get_combobox_options(params)
+    case params[:column]
+    when "filter__name"
+      return { :data => Filter.all.collect {|f| [f.id, f.name]} }
  
+    end
+  end
+
+  endpoint :add_form__netzke_0__get_combobox_options do |params|
+    get_combobox_options(params)
+  end
+
+  endpoint :edit_form__netzke_0__get_combobox_options do |params|
+    get_combobox_options(params)
+  end
+
 end

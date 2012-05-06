@@ -28,9 +28,11 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
       :tools            => false,
       :multi_select     => false,
       :columns          => [
-        column_defaults.merge(:name => :user__username,     :text => "Owner",         :hidden => true,  :default_value => User.first ? User.first.id : nil, :editor => {:editable => false}),
+        column_defaults.merge(:name => :user__username,     :text => "Owner",         :hidden => true, 
+          :editor => {:editable => false, :empty_text => "Choose user", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l} } }),
         column_defaults.merge(:name => :identifier,         :text => "ID",            :flex => true),
-        column_defaults.merge(:name => :key_type,           :text => "Type",          :width => 80, :editor => {:xtype => :netzkeremotecombo, :editable => false}, :align => :center),
+        column_defaults.merge(:name => :key_type,           :text => "Type",          :width => 80, 
+          :editor => {:editable => false, :empty_text => "Choose SSH key type", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l} } }, :align => :center),
         column_defaults.merge(:name => :login_username,     :text => "Login as",      :width => 100),
         column_defaults.merge(:name => :public_key,         :text => "Public key",    :hidden => true, 
           :editor => {
@@ -49,10 +51,11 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
 
   def get_combobox_options(params)
     case params[:column]
+    when "user__username"
+      return { :data => User.enabled.collect {|u| [u.id, u.username]} }
     when "key_type"
       return { :data => SSH_KEY_TYPES.collect {|t| [t, t]} }
     end
-    super
   end
 
   endpoint :add_form__netzke_0__get_combobox_options do |params|

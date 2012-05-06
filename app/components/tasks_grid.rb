@@ -32,7 +32,8 @@ class TasksGrid < Netzke::Basepack::GridPanel
         :plugins => [ { :ptype => :gridviewdragdrop, :drag_group => :tasks_dd_group, :drop_group => :tasks_dd_group, :drag_text => "Drag and drop to reorganize" } ]
       },
       :columns          => [
-        column_defaults.merge(:name => :task_group__name,         :text => "Group",                 :default_value => TaskGroup.first ? TaskGroup.first.id : nil, :editor => {:editable => false}),
+        column_defaults.merge(:name => :task_group__name,         :text => "Group", :default_value => TaskGroup.first ? TaskGroup.first.id : nil, 
+          :editor => {:editable => false, :empty_text => "Choose task group", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l} } }),
         column_defaults.merge(:name => :name,                     :text => "Name",                  :flex => true),
         column_defaults.merge(:name => :is_on_demand,             :text => "On demand?",            :hidden => true),
         column_defaults.merge(:name => :match_hostname,           :text => "Match Hostname",        :hidden => true),
@@ -69,5 +70,20 @@ class TasksGrid < Netzke::Basepack::GridPanel
     message           = Task.reorder_records_message
     { :set_result => { :success => success, :message => message } }
   end
+
+  def get_combobox_options(params)
+    case params[:column]
+    when "task_group__name"
+      return { :data => TaskGroup.enabled.collect {|t| [t.id, t.name]} }
+    end
+  end
+
+  endpoint :add_form__netzke_0__get_combobox_options do |params|
+    get_combobox_options(params)
+  end
+
+  endpoint :edit_form__netzke_0__get_combobox_options do |params|
+    get_combobox_options(params)
+  end 
 
 end
