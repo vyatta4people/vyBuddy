@@ -11,6 +11,7 @@ class TaskGroup < ActiveRecord::Base
   scope :disabled,  where(:is_enabled => false)
 
   before_create :set_sort_order
+  before_create :set_defaults
 
   def html_id
     "task_group_#{self.id.to_s}"
@@ -20,6 +21,11 @@ private
 
   def set_sort_order
     self.sort_order = TaskGroup.get_next_sort_order
+  end
+
+  def set_defaults
+    self.is_enabled = false if !self.is_enabled
+    return true
   end
 
 end

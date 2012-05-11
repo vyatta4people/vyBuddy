@@ -13,8 +13,9 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
     column_defaults[:fixed]         = true
 
     form_window_config              = Hash.new
+    form_window_config[:y]          = 50
     form_window_config[:width]      = 800
-    form_window_config[:height]     = 725
+    form_window_config[:height]     = 525
 
     super.merge(
       :name             => :ssh_key_pairs_grid,
@@ -32,7 +33,7 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
           :editor => {:editable => false, :empty_text => "Choose user", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l} } }),
         column_defaults.merge(:name => :identifier,         :text => "ID",            :flex => true),
         column_defaults.merge(:name => :key_type,           :text => "Type",          :width => 80, 
-          :editor => {:editable => false, :empty_text => "Choose SSH key type", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l} } }, :align => :center),
+          :editor => {:xtype => :netzkeremotecombo, :editable => false, :empty_text => "Choose SSH key type" }, :align => :center),
         column_defaults.merge(:name => :login_username,     :text => "Login as",      :width => 100),
         column_defaults.merge(:name => :public_key,         :text => "Public key",    :hidden => true, 
           :editor => {
@@ -42,7 +43,7 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
             :empty_text   => "NB! Do not enter public key manually, it will be generated from your private key!"
           }
         ),
-        column_defaults.merge(:name => :private_key,        :text => "Private key",   :hidden => true, :editor => {:height => 425})
+        column_defaults.merge(:name => :private_key,        :text => "Private key",   :hidden => true, :editor => {:height => 225})
       ],
       :add_form_window_config   => form_window_config.merge(:title => "Add SSH public/private key pair"),
       :edit_form_window_config  => form_window_config.merge(:title => "Edit SSH public/private key pair")

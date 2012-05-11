@@ -35,7 +35,7 @@ begin
     enabled_vyatta_hosts.each do |vyatta_host|
       if !vyatta_host.vyatta_host_state.is_daemon_running or !vyatta_host.daemon_running?
         if !vyatta_host.start_daemon
-          Log.fatal("Unable to start vyHostD for #{vyatta_host.hostname}(#{vyatta_host.id.to_s}): #{vyatta_host.start_daemon_error}")
+          Log.fatal("Unable to start vyHostD for #{vyatta_host.label}: #{vyatta_host.start_daemon_error}")
         end
       end
     end
@@ -43,12 +43,12 @@ begin
     disabled_vyatta_hosts.each do |vyatta_host|
       if vyatta_host.vyatta_host_state.is_daemon_running
         if !vyatta_host.stop_daemon
-          Log.fatal("Unable to stop vyHostD for #{vyatta_host.hostname}(#{vyatta_host.id.to_s}): #{vyatta_host.stop_daemon_error}")
+          Log.fatal("Unable to stop vyHostD for #{vyatta_host.label}: #{vyatta_host.stop_daemon_error}")
         end
       end
       sleep(GRACE_PERIOD)
       if vyatta_host.daemon_running?
-        Log.warn("Need to use silver bullets to stop vyHostD for #{vyatta_host.hostname}(#{vyatta_host.id.to_s})")
+        Log.warn("Need to use silver bullets to stop vyHostD for #{vyatta_host.label}")
         vyatta_host.kill_all_daemons
       end
     end

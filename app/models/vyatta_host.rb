@@ -36,6 +36,7 @@ class VyattaHost < ActiveRecord::Base
   scope :enabled,   where(:is_enabled => true)
   scope :disabled,  where(:is_enabled => false)
 
+  before_create  :set_defaults
   after_create   { |vyatta_host| ActiveRecord::Base.connection.execute("INSERT INTO `vyatta_host_states`(`id`) VALUES(#{vyatta_host.id.to_s});") }
   before_destroy { |vyatta_host| vyatta_host.kill_all_daemons; return true }
 
@@ -43,12 +44,16 @@ class VyattaHost < ActiveRecord::Base
     self.user.username
   end
 
+  def label
+    "#{self.hostname} (#{self.id.to_s})"
+  end
+
   def set_daemon_log_application
     Log.application = HOST_DAEMON_NAME
   end
 
   def set_daemon_log_event_source
-    Log.event_source = "#{self.hostname}(#{self.id.to_s})"
+    Log.event_source = self.label
   end
 
   def set_daemon_log_parameters
@@ -362,6 +367,13 @@ class VyattaHost < ActiveRecord::Base
         return true
       end
     end
+  end
+
+private
+
+  def set_defaults
+    self.is_enabled = false if !self.is_enabled
+    return true
   end
 
 end

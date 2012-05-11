@@ -17,5 +17,15 @@ class User < ActiveRecord::Base
   scope :enabled,   where(:is_enabled => true)
   scope :disabled,  where(:is_enabled => false)
 
+  before_create  :set_defaults
   before_destroy { |user| return false if user.id == DEFAULT_USER_ID }
+
+private
+
+  def set_defaults
+    self.is_admin     = false if !self.is_admin
+    self.is_enabled   = false if !self.is_enabled
+    return true
+  end
+
 end
