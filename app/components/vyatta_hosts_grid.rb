@@ -1,9 +1,12 @@
 class VyattaHostsGrid < Netzke::Basepack::GridPanel
 
   js_mixin :init_component
+  js_mixin :actions
 
-  action :add_in_form,  :text => "Add",  :tooltip => "Add Vyatta host"
-  action :edit_in_form, :text => "Edit", :tooltip => "Edit Vyatta host"
+  action :add_in_form,    :text => "Add",  :tooltip => "Add Vyatta host"
+  action :edit_in_form,   :text => "Edit", :tooltip => "Edit Vyatta host"
+
+  action :execute_on_demand_tasks,  :text => "Execute on-demand tasks", :tooltip => "Execute on-demand tasks", :icon => :arrow_refresh
 
   def configuration
     column_defaults                 = Hash.new
@@ -22,7 +25,7 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
       :load_inline_data => false,
       :width            => 600,
       :border           => true,
-      :context_menu     => session[:user_is_admin] ? [:edit_in_form.action, :del.action] : false,
+      :context_menu     => session[:user_is_admin] ? [:execute_on_demand_tasks.action, '-', :edit_in_form.action, :del.action] : false,
       :tbar             => session[:user_is_admin] ? [:add_in_form.action] : [],
       :bbar             => [],
       :tools            => false,
@@ -68,6 +71,21 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
 
   endpoint :edit_form__netzke_0__get_combobox_options do |params|
     get_combobox_options(params)
+  end
+
+  endpoint :execute_tasks do |params|
+    success     = false
+    message     = ""
+    vyatta_host = VyattaHost.find(params[:vyatta_host_id].to_i)
+    task_type   = params[:task_type].to_sym
+    task_count  = vyatta_host.execute_all_tasks(task_type)
+    if task_count
+      success = true
+      message = "Executed #{task_count.to_s} tasks for #{vyatta_host.label}"
+    else
+      message = "Unable to execute tasks for #{vyatta_host.label}"
+    end
+    return { :set_result => { :success => success, :message => message } }
   end
 
 end

@@ -18,7 +18,7 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
         task_item               = Hash.new
         task_item[:id]          = task.html_id
         task_item[:name]        = task_item[:id]
-        task_item[:title]       = task.name
+        task_item[:title]       = task.title
         task_item[:class_name]  = "Netzke::Basepack::Panel"
         task_item[:auto_scroll] = true
         task_item[:html]        = task.task_remote_commands.collect{ |trc| "<div id='#{trc.html_display_id}' class='display-container'></div>" }.join

@@ -2,7 +2,8 @@
   initComponent: function(params) {
     this.superclass.initComponent.call(this);
 
-    this.selectedRow = 0;
+    this.selectedVyattaHostId = 0;
+    this.selectedRow          = 0;
 
     this.on('afterrender', function(self, eOpts) {
       var updateVyattaHostsGrid = function() { self.store.load(); }
@@ -16,8 +17,10 @@
     }, this);
 
     this.on('select', function(self, record, index, eOpts) {
-      this.selectedRow = index;
-      Netzke.page.vybuddyApp.getChildNetzkeComponent('display_tasks_tab_panel').fireEvent('selectvyattahost', record.data.id);
+      this.selectedVyattaHostId   = record.data.id;
+      this.selectedRow            = index;
+      this.actions.executeOnDemandTasks.setDisabled(!record.data.is_enabled || !record.data.is_reachable);
+      Netzke.page.vybuddyApp.getChildNetzkeComponent('display_tasks_tab_panel').fireEvent('selectvyattahost', this.selectedVyattaHostId);
     }, this);
 
     this.getView().on('itemdblclick', function(self, record, item, index, e, eOpts) {
