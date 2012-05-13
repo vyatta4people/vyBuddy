@@ -15,8 +15,8 @@
     Netzke.page.logsWindow.show();
   },
 
-  onShowHelp: function() {
-    Ext.Msg.show({ title: 'Help', msg: 'vyBuddy by Ivan "Cartman" Ilves, 2012.<br/>It is early alpha! Be careful! :) :) :)', buttons: Ext.Msg.OK, icon: Ext.Msg.INFO });
+  onShowAbout: function() {
+    Ext.Msg.show({ title: 'About', msg: 'vyBuddy by Ivan "Cartman" Ilves, 2012.<br/><br/>It is early alpha, so there are still many troubles... ;)<br/><br/><b>Thank you for using vyBuddy!</b>', buttons: Ext.Msg.OK, icon: Ext.Msg.INFO });
   },
 
   onLogout: function() {

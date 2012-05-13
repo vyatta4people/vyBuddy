@@ -15,7 +15,7 @@ class DataController < ApplicationController
     data        = Array.new
     TaskRemoteCommand.find(:all).each do |trc|
       if !Display.find(:first, :conditions => { :vyatta_host_id => vyatta_host.id, :task_remote_command_id => trc.id })
-        Display.create(:vyatta_host_id => vyatta_host.id, :task_remote_command_id => trc.id, :information => "Coming soon...")
+        Display.create(:vyatta_host_id => vyatta_host.id, :task_remote_command_id => trc.id, :information => "Not yet baby...")
       end
     end
     vyatta_host.displays.each do |display|

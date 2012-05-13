@@ -2,8 +2,9 @@ class RemoteCommandsGrid < Netzke::Basepack::GridPanel
 
   js_mixin :init_component
 
-  action :add_in_form,  :text => "Add",  :tooltip => "Add remote command"
-  action :edit_in_form, :text => "Edit", :tooltip => "Edit remote command"
+  action :add_in_form,  :text => "Add",  :tooltip => "Add remote command",  :icon => :brick_add
+  action :edit_in_form, :text => "Edit", :tooltip => "Edit remote command", :icon => :brick_edit, :disabled => false
+  action :del, :icon => :brick_delete
 
   def configuration
     column_defaults                 = Hash.new

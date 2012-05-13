@@ -3,8 +3,9 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
   js_mixin :init_component
   js_mixin :methods
 
-  action :add_in_form,  :text => "Add",     :tooltip => "Add remote command to selected task"
-  action :edit_in_form, :text => "Edit",    :tooltip => "Edit task's remote command"
+  action :add_in_form,  :text => "Add",     :tooltip => "Add remote command to selected task",  :icon => :brick_add
+  action :edit_in_form, :text => "Edit",    :tooltip => "Edit task's remote command",           :icon => :brick_edit, :disabled => false
+  action :del, :icon => :brick_delete
 
   def configuration
     column_defaults                 = Hash.new
@@ -100,7 +101,6 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
     case params[:column]
     when "filter__name"
       return { :data => Filter.all.collect {|f| [f.id, f.name]} }
- 
     end
   end
 

@@ -8,6 +8,8 @@
     this.on('afterrender', function(self, eOpts) {
       var updateVyattaHostsGrid = function() { self.store.load(); }
       Ext.TaskManager.start({ run: updateVyattaHostsGrid, interval: 5000 });
+      // Declare shorthand to fellow component
+      this.displayTasksTabPanel = Netzke.page.vybuddyApp.getChildNetzkeComponent('display_tasks_tab_panel');
     }, this);
 
     this.getStore().on('load', function(self, records, successful, operation, eOpts) {
@@ -19,8 +21,8 @@
     this.on('select', function(self, record, index, eOpts) {
       this.selectedVyattaHostId   = record.data.id;
       this.selectedRow            = index;
-      this.actions.executeOnDemandTasks.setDisabled(!record.data.is_enabled || !record.data.is_reachable);
-      Netzke.page.vybuddyApp.getChildNetzkeComponent('display_tasks_tab_panel').fireEvent('selectvyattahost', this.selectedVyattaHostId);
+      this.actions.executeOnDemandTasks.setDisabled(!record.data.is_enabled || !record.data.is_daemon_running || !record.data.is_reachable);
+      this.displayTasksTabPanel.fireEvent('selectvyattahost', this.selectedVyattaHostId);
     }, this);
 
     this.getView().on('itemdblclick', function(self, record, item, index, e, eOpts) {

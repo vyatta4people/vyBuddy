@@ -2,8 +2,9 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
 
   js_mixin :init_component
 
-  action :add_in_form,  :text => "Add",  :tooltip => "Add SSH public/private key pair"
-  action :edit_in_form, :text => "Edit", :tooltip => "Edit SSH public/private key pair"
+  action :add_in_form,  :text => "Add",     :tooltip => "Add SSH public/private key pair",   :icon => :key_add
+  action :edit_in_form, :text => "Examine", :tooltip => "Edit SSH public/private key pair",  :icon => :key, :disabled => false
+  action :del, :icon => :key_delete
 
   def configuration
     column_defaults                 = Hash.new

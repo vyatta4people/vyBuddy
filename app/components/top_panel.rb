@@ -3,16 +3,16 @@ class TopPanel < Netzke::Basepack::Panel
   action :manage_ssh_key_pairs, :icon => :server_key,                 :text => ""
   action :manage_tasks,         :icon => :table_gear,                 :text => ""
   action :view_logs,            :icon => :newspaper_go,               :text => ""
-  action :show_help,            :icon => :help,                       :text => ""
+  action :show_about,           :icon => :information,                :text => ""
   action :logout,               :icon => :door_out,                   :text => ""
 
   js_mixin :actions
 
   def get_bbar
     if session[:user_is_admin]
-      return [:manage_users.action, :manage_ssh_key_pairs.action, "-", :manage_tasks.action, :view_logs.action, '->', :show_help.action, '-', :logout.action]
+      return [:manage_users.action, :manage_ssh_key_pairs.action, "-", :manage_tasks.action, :view_logs.action, '->', :show_about.action, '-', :logout.action]
     else
-      return ['->', :show_help.action, '-', :logout.action]
+      return ['->', :show_about.action, '-', :logout.action]
     end
   end
 

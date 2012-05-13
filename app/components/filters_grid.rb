@@ -2,8 +2,9 @@ class FiltersGrid < Netzke::Basepack::GridPanel
 
   js_mixin :init_component
 
-  action :add_in_form,  :text => "Add",  :tooltip => "Add filter"
-  action :edit_in_form, :text => "Edit", :tooltip => "Edit filter"
+  action :add_in_form,  :text => "Add",  :tooltip => "Add filter",  :icon => :script_add
+  action :edit_in_form, :text => "Edit", :tooltip => "Edit filter", :icon => :script_edit, :disabled => false
+  action :del, :icon => :script_delete
 
   def configuration
     column_defaults                 = Hash.new

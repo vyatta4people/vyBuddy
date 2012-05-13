@@ -48,6 +48,15 @@ class VyattaHost < ActiveRecord::Base
     "#{self.hostname} (#{self.id.to_s})"
   end
 
+  def reachability
+    if self.vyatta_host_state.is_daemon_running
+      return 0 if !self.vyatta_host_state.is_reachable
+      return 1
+    else
+      return 2
+    end
+  end
+
   def set_daemon_log_application
     Log.application = HOST_DAEMON_NAME
   end
