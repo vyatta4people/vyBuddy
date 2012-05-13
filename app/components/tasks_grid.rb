@@ -15,6 +15,10 @@ class TasksGrid < Netzke::Basepack::GridPanel
     column_defaults[:draggable]     = false
     column_defaults[:fixed]         = true
 
+    form_window_config              = Hash.new
+    form_window_config[:y]          = 100
+    form_window_config[:width]      = 500
+
     super.merge(
       :name             => :tasks_grid,
       :title            => "Tasks",
@@ -28,6 +32,7 @@ class TasksGrid < Netzke::Basepack::GridPanel
       :bbar             => [],
       :tools            => false,
       :multi_select     => false,
+      :prohibit_update  => true,
       :view_config      => {
         :plugins => [ { :ptype => :gridviewdragdrop, :drag_group => :tasks_dd_group, :drop_group => :tasks_dd_group, :drag_text => "Drag and drop to reorganize" } ]
       },
@@ -39,7 +44,9 @@ class TasksGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :match_hostname,           :text => "Match Hostname",        :hidden => true),
         column_defaults.merge(:name => :sort_order,               :text => "#",                     :width => 40, :align => :center, :editor => {:hidden => true}),
         column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",              :hidden => true)
-      ]
+      ],
+      :add_form_window_config   => form_window_config,
+      :edit_form_window_config  => form_window_config
     )
   end
 

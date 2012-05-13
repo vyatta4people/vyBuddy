@@ -18,6 +18,10 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
     column_defaults[:fixed]         = true
     column_defaults[:editor]        = {:allow_blank => false}
 
+    form_window_config              = Hash.new
+    form_window_config[:y]          = 100
+    form_window_config[:width]      = 500
+
     super.merge(
       :name             => :vyatta_hosts_grid,
       :title            => "Vyatta hosts",
@@ -30,6 +34,7 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
       :bbar             => [],
       :tools            => false,
       :multi_select     => false,
+      :prohibit_update  => true,
       :view_config      => { :load_mask => false },
       :columns          => [
         column_defaults.merge(:name => :user__username,           :text => "Owner",           :hidden => true, 
@@ -44,7 +49,9 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :is_reachable,             :text => "Reachable?",      :width => 100, :attr_type => :boolean, :align => :center, :renderer => 'booleanRenderer'),
         column_defaults.merge(:name => :vyatta_version,           :text => "Version",         :width => 150),
         column_defaults.merge(:name => :load_average,             :text => "Load Average",    :width => 90, :format => '0.00', :xtype => :numbercolumn)
-      ]
+      ],
+      :add_form_window_config   => form_window_config,
+      :edit_form_window_config  => form_window_config
     )
   end
 

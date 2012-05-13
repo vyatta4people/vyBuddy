@@ -1,5 +1,7 @@
 class FiltersGrid < Netzke::Basepack::GridPanel
 
+  js_mixin :init_component
+
   action :add_in_form,  :text => "Add",  :tooltip => "Add filter"
   action :edit_in_form, :text => "Edit", :tooltip => "Edit filter"
 
@@ -13,6 +15,7 @@ class FiltersGrid < Netzke::Basepack::GridPanel
     column_defaults[:fixed]         = true
 
     form_window_config              = Hash.new
+    form_window_config[:y]          = 100
     form_window_config[:width]      = 700
     form_window_config[:height]     = 500
 
@@ -26,6 +29,7 @@ class FiltersGrid < Netzke::Basepack::GridPanel
       :bbar             => [],
       :tools            => false,
       :multi_select     => false,
+      :prohibit_update  => true,
       :columns          => [
         column_defaults.merge(:name => :name,               :text => "Name",          :flex => true),
         column_defaults.merge(:name => :interpreter,        :text => "Interpreter",   :editor => {:xtype => :netzkeremotecombo, :editable => false}),

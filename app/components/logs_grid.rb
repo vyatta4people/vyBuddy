@@ -41,6 +41,7 @@ class LogsGrid < Netzke::Basepack::GridPanel
       :multi_select       => true,
       :load_inline_data   => false,
       :rows_per_page      => 20,
+      :prohibit_update    => true,
       :columns            => [
         { :xtype => :rownumberer, :text => "#", :width => 40, :align => :center },
         column_defaults.merge(:name => :created_at,         :hidden => true),

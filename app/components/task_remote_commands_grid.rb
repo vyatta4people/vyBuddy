@@ -15,6 +15,10 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
     column_defaults[:draggable]     = false
     column_defaults[:fixed]         = true
 
+    form_window_config              = Hash.new
+    form_window_config[:y]          = 100
+    form_window_config[:width]      = 500
+
     super.merge(
       :name               => :task_remote_commands_grid,
       :title              => "Remote commands for tasks",
@@ -28,16 +32,19 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
       :enable_pagination  => false,
       :tools              => false,
       :multi_select       => false,
+      :prohibit_update    => true,
       :view_config        => {
         :plugins => [ { :ptype => :gridviewdragdrop, :drag_group => :remote_commands_dd_group, :drop_group => :remote_commands_dd_group, :drag_text => "Drag and drop to reorganize" } ]
       },
       :columns            => [
-        column_defaults.merge(:name => :task__name,                :text => "Task",     :hidden => true,  :editor => {:hidden => true}),
-        column_defaults.merge(:name => :remote_command__mode,      :text => "Mode",     :width => 100,    :editor => {:hidden => true}),
-        column_defaults.merge(:name => :remote_command__command,   :text => "Command",  :flex => true,    :editor => {:hidden => true}),
+        column_defaults.merge(:name => :task_id,                   :text => "Task",     :hidden => true,  :editor => {:hidden => true}),
+        column_defaults.merge(:name => :mode,    :virtual => true, :text => "Mode",     :width => 100,    :editor => {:hidden => true}),
+        column_defaults.merge(:name => :command, :virtual => true, :text => "Command",  :flex => true,    :editor => {:hidden => true}),
         column_defaults.merge(:name => :filter__name,              :text => "Filter",   :width => 100,    :editor => {:editable => false, :empty_text => "Choose filter", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l} } }),
         column_defaults.merge(:name => :sort_order,                :text => "#",        :width => 40,     :align => :center, :editor => {:hidden => true})
-      ]
+      ],
+      :add_form_window_config   => form_window_config,
+      :edit_form_window_config  => form_window_config
     )
   end
 

@@ -9,6 +9,14 @@ class TaskRemoteCommand < ActiveRecord::Base
 
   before_create :set_sort_order
 
+  def mode
+    self.remote_command.mode
+  end
+
+  def command
+    self.remote_command.command
+  end
+
   def html_id
     "task_remote_command_#{self.id.to_s}"
   end

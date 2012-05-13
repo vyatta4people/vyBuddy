@@ -5,7 +5,7 @@
     this.on('afterrender', function(self, eOpts) {
       // Define fellow components
       this.tasksGrid            = Netzke.page.manageTasksWindow.getChildNetzkeComponent('tasks_grid');
-      this.remoteCommandsGrid   = Netzke.page.manageTasksWindow.getChildNetzkeComponent('tasks_side_tab_panel').getChildNetzkeComponent('remote_commands_grid');
+      this.remoteCommandsGrid   = Netzke.page.manageTasksWindow.getChildNetzkeComponent('tasks_side_tab_panel').getChildNetzkeComponent('remote_commands_grid');      
       // Setup drop target for remote commands
       var dropTargetEl   = this.body.dom;
       var dropTarget     = Ext.create('Ext.dd.DropTarget', dropTargetEl, {
@@ -45,6 +45,10 @@
           Ext.Msg.show({ title: title, msg: result.message, buttons: Ext.Msg.OK, icon: Ext.Msg.ERROR });
         }
       });
+    }, this);
+
+    this.getView().on('itemdblclick', function(self, record, item, index, e, eOpts) {
+      this.onEditInForm();
     }, this);
   }
 }

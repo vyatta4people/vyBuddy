@@ -1,5 +1,7 @@
 class UsersGrid < Netzke::Basepack::GridPanel
 
+  js_mixin :init_component
+
   action :add_in_form,  :text => "Add",  :tooltip => "Add user"
   action :edit_in_form, :text => "Edit", :tooltip => "Edit user"
 
@@ -12,6 +14,10 @@ class UsersGrid < Netzke::Basepack::GridPanel
     column_defaults[:draggable]     = false
     column_defaults[:fixed]         = true
 
+    form_window_config              = Hash.new
+    form_window_config[:y]          = 100
+    form_window_config[:width]      = 500
+
     super.merge(
       :name             => :users_grid,
       :title            => "Users",
@@ -23,13 +29,16 @@ class UsersGrid < Netzke::Basepack::GridPanel
       :bbar             => [],
       :tools            => false,
       :multi_select     => false,
+      :prohibit_update  => true,
       :columns          => [
         column_defaults.merge(:name => :username,           :text => "Username",  :width => 120),
         column_defaults.merge(:name => :email,              :text => "Email",     :flex => true),
         column_defaults.merge(:name => :password,           :text => "Password",  :hidden => true,  :editor => {:input_type => :password}),
         column_defaults.merge(:name => :is_enabled,         :text => "Enabled?",  :width => 80,     :align => :center),
         column_defaults.merge(:name => :is_admin,           :text => "Admin?",    :width => 80,     :align => :center)
-      ]
+      ],
+      :add_form_window_config   => form_window_config,
+      :edit_form_window_config  => form_window_config
     )
   end
 
