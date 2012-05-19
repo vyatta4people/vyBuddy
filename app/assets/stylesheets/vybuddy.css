@@ -95,6 +95,20 @@
 }
 
 .code-editor {
-    color:                #9c0707;
-    font-family:          "fixed";
+  color:                #9c0707;
+  font-family:          "fixed";
+}
+
+.task-button-container {
+  background-color:     #f5f5f5;
+  border-style:         solid;
+  border-width:         1px;
+  border-color:         #99bce8;
+  margin:               10px;
+  padding:              10px;
+}
+
+.task-button-icon {
+  background:           url(/images/icons/arrow_refresh.png) no-repeat;
+  margin:               10px;
 }

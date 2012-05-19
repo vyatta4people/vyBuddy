@@ -21,7 +21,9 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
         task_item[:title]       = task.title
         task_item[:class_name]  = "Netzke::Basepack::Panel"
         task_item[:auto_scroll] = true
-        task_item[:html]        = task.task_remote_commands.collect{ |trc| "<div id='#{trc.html_display_id}' class='display-container'></div>" }.join
+        button_template         = DirectoryTemplate::ErbTemplate.new(File.read(ActionController::Base.view_paths[0].to_s + '/data/task_button_container.html.erb'))
+        task_item[:html]        = button_template.result(:html_button_container_id => task.html_button_container_id)
+        task_item[:html]        += task.task_remote_commands.collect{ |trc| "<div id='#{trc.html_display_id}' class='display-container'></div>" }.join
         task_group_item[:items] << task_item
       end
       task_group_items << task_group_item
@@ -38,5 +40,18 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
       :deferred_render  => false
     )
   end
+
+  endpoint :execute_task do |params|
+    vyatta_host = VyattaHost.find(params[:vyatta_host_id])
+    task        = Task.find(params[:task_id])
+    if vyatta_host.execute_task(task)
+      success = true
+      message = "Task \"#{task.name}\" executed successfully."
+    else
+      success = false
+      message = "Failed to execute task \"#{task.name}\"! Please examine logs."
+    end
+    return { :set_result => { :success => success, :message => message, :verbose => true } }
+  end 
 
 end

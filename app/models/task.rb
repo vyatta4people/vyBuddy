@@ -33,6 +33,14 @@ class Task < ActiveRecord::Base
     "task_#{self.id.to_s}"
   end
 
+  def html_button_container_id
+    "task_#{self.id.to_s}_button_container"
+  end
+
+  def html_execute_button_id
+    "task_#{self.id.to_s}_execute_button"
+  end
+
 private
 
   def set_sort_order

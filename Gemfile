@@ -45,3 +45,7 @@ gem 'net-sftp'
 
 # A module for encoding and decoding (X)HTML entities
 gem 'htmlentities'
+
+# A helper class for ERB
+gem 'directory_template'
+
