@@ -25,6 +25,9 @@ class VyattaHost < ActiveRecord::Base
   validates :remote_port,
     :numericality => { :only_integer => true, :greater_than_or_equal_to => 1, :less_than_or_equal_to => 65535 }
 
+  validates :polling_interval,
+    :numericality => { :only_integer => true, :greater_than_or_equal_to => 30, :less_than_or_equal_to => 86400 }
+
   default_scope joins(:vyatta_host_state).select([
     "`vyatta_hosts`.*", 
     "`vyatta_host_states`.`is_daemon_running`", 

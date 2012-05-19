@@ -5,8 +5,6 @@ DAEMONS_DIR                 = Rails.root.join('lib/daemons')
 HOST_DAEMON_NAME            = :vyhostd
 HOST_DAEMON_FILE            = HOST_DAEMON_NAME.to_s + '.rb'
 HOST_DAEMON_PATH            = DAEMONS_DIR.join(HOST_DAEMON_FILE)
-HOST_POLLING_INTERVAL       = 60
-UNREACHABLE_HOST_SLEEP_TIME = 60
 GRACE_PERIOD                = 1
 RETRY_PERIOD                = 5
 

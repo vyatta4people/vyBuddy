@@ -43,14 +43,15 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :ssh_key_pair__identifier, :text => "SSH key pair",          :hidden => true, 
           :editor => {:editable => false, :empty_text => "Choose key pair", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l} } } ),
         column_defaults.merge(:name => :hostname,                 :text => "Hostname",              :flex => true),
-        column_defaults.merge(:name => :remote_address,           :text => "Remote Address",        :hidden => true),
-        column_defaults.merge(:name => :remote_port,              :text => "Remote Port",           :hidden => true, :default_value => 22, :editor => {:allow_decimals => false, :auto_strip_chars => true, :min_value => 1, :max_value => 65535}),
+        column_defaults.merge(:name => :remote_address,           :text => "Remote address",        :hidden => true),
+        column_defaults.merge(:name => :remote_port,              :text => "Remote port",           :hidden => true, :default_value => 22, :editor => {:allow_decimals => false, :auto_strip_chars => true, :min_value => 1,  :max_value => 65535}),
+        column_defaults.merge(:name => :polling_interval,         :text => "Polling interval",      :hidden => true, :default_value => 60, :editor => {:allow_decimals => false, :auto_strip_chars => true, :min_value => 30, :max_value => 86400}),
         column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",              :hidden => true),
         column_defaults.merge(:name => :is_daemon_running,        :text => "Daemon running?",       :width => 110, :attr_type => :boolean, :align => :center, :renderer => 'booleanRenderer'),
         column_defaults.merge(:name => :is_reachable,             :text => "Reachable? (real)",     :width => 110, :attr_type => :boolean, :hidden => true),
         column_defaults.merge(:name => :reachability,             :text => "Reachable?",            :width => 100, :attr_type => :integer, :align => :center, :renderer => 'booleanRenderer2', :virtual => true),
         column_defaults.merge(:name => :vyatta_version,           :text => "Version",               :width => 150),
-        column_defaults.merge(:name => :load_average,             :text => "Load Average",          :width => 90, :format => '0.00', :xtype => :numbercolumn)
+        column_defaults.merge(:name => :load_average,             :text => "Load average",          :width => 90, :format => '0.00', :xtype => :numbercolumn)
       ],
       :add_form_window_config   => form_window_config,
       :edit_form_window_config  => form_window_config

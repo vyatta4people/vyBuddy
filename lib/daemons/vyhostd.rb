@@ -52,7 +52,7 @@ while true do
       Log.fatal("Unable to save Vyatta host state: #{e.message}")
     end
     if !vyatta_host_state.is_reachable
-      sleep(UNREACHABLE_HOST_SLEEP_TIME)
+      sleep(vyatta_host.polling_interval)
       next
     end
   end
@@ -69,5 +69,5 @@ while true do
 
   vyatta_host.execute_all_tasks(:background)
 
-  sleep(HOST_POLLING_INTERVAL)
+  sleep(vyatta_host.polling_interval)
 end
