@@ -294,7 +294,7 @@ class VyattaHost < ActiveRecord::Base
     else
       stderr_dir = "/tmp"
     end
-    "#{stderr_dir}/#{HOST_DAEMON_NAME}.err.#{self.id.to_s}"
+    "#{stderr_dir}/#{HOST_DAEMON_NAME}.err.#{self.id.to_s}.log"
   end
 
   def self.daemon_pids(vyatta_host_id = nil)
