@@ -2,8 +2,9 @@
   initComponent: function(params) {
     this.superclass.initComponent.call(this);
 
-    this.selectedVyattaHostId = 0;
-    this.selectedRow          = 0;
+    this.selectedVyattaHostId         = 0;
+    this.selectedRow                  = 0;
+    this.isSelectedVyattaHostOperable = false
 
     this.on('afterrender', function(self, eOpts) {
       var updateVyattaHostsGrid = function() { self.store.load(); }
@@ -19,9 +20,11 @@
     }, this);
 
     this.on('select', function(self, record, index, eOpts) {
-      this.selectedVyattaHostId   = record.data.id;
-      this.selectedRow            = index;
-      this.actions.executeOnDemandTasks.setDisabled(!record.data.is_enabled || !record.data.is_daemon_running || !record.data.is_reachable);
+      this.selectedVyattaHostId         = record.data.id;
+      this.selectedRow                  = index;
+      this.isSelectedVyattaHostOperable = record.data.is_enabled && record.data.is_daemon_running && record.data.is_reachable;
+      this.actions.executeOnDemandTasks.setDisabled(!this.isSelectedVyattaHostOperable);
+      this.displayTasksTabPanel.setDisabled(!this.isSelectedVyattaHostOperable);
       this.displayTasksTabPanel.fireEvent('selectvyattahost', this.selectedVyattaHostId);
     }, this);
 
