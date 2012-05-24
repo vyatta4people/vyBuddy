@@ -28,7 +28,7 @@
                   displayTasksTabPanel.executeTask({ vyatta_host_id: vyattaHostsGrid.selectedVyattaHostId, task_id: button.taskId }, function(result) {
                     displayTasksTabPanel.fireEvent('selectvyattahost', vyattaHostsGrid.selectedVyattaHostId);
                     mask.hide();
-                    netzkeEndpointHandler(result, mask);
+                    netzkeEndpointHandler(result);
                   }, this);
                 }
               });

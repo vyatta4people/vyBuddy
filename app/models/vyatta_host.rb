@@ -260,7 +260,7 @@ class VyattaHost < ActiveRecord::Base
     return di
   end
 
-  def execute_all_tasks(task_type = :background)
+  def execute_tasks(task_type = :background)
     task_groups = TaskGroup.enabled
     ti          = 0
     task_groups.each do |task_group|
