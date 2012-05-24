@@ -1,4 +1,8 @@
 {
+  onExecuteAllTasks: function() {
+    this.onExecuteTasks('all');
+  },
+
   onExecuteOnDemandTasks: function() {
     this.onExecuteTasks('on_demand');
   },

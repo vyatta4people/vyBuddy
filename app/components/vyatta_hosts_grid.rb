@@ -8,8 +8,9 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
   action :edit_in_form,   :text => "Edit", :tooltip => "Edit Vyatta host", :icon => :server_edit, :disabled => false
   action :del, :icon => :server_delete, :disabled => false
 
-  action :execute_on_demand_tasks,    :text => "Execute on-demand  tasks", :tooltip => "Execute on-demand tasks",  :icon => :arrow_refresh
-  action :execute_background_tasks,   :text => "Execute background tasks", :tooltip => "Execute background tasks", :icon => :arrow_refresh
+  action :execute_all_tasks,          :text => "Execute all tasks",         :tooltip => "Execute all tasks",        :icon => :arrow_refresh
+  action :execute_on_demand_tasks,    :text => "Execute on-demand tasks",   :tooltip => "Execute on-demand tasks",  :icon => :arrow_refresh
+  action :execute_background_tasks,   :text => "Execute background tasks",  :tooltip => "Execute background tasks", :icon => :arrow_refresh
 
   def configuration
     column_defaults                 = Hash.new
@@ -32,7 +33,7 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
       :load_inline_data   => false,
       :width              => 600,
       :border             => true,
-      :context_menu       => session[:user_is_admin] ? [:execute_on_demand_tasks.action, :execute_background_tasks.action, '-', :edit_in_form.action, :del.action] : [:execute_on_demand_tasks.action, :execute_background_tasks.action],
+      :context_menu       => session[:user_is_admin] ? [:execute_all_tasks.action, :execute_on_demand_tasks.action, :execute_background_tasks.action, '-', :edit_in_form.action, :del.action] : [:execute_all_tasks.action, :execute_on_demand_tasks.action, :execute_background_tasks.action],
       :tbar               => session[:user_is_admin] ? [:add_in_form.action] : [],
       :bbar               => [],
       :enable_pagination  => false,
@@ -49,6 +50,7 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :remote_address,           :text => "Remote address",        :hidden => true),
         column_defaults.merge(:name => :remote_port,              :text => "Remote port",           :hidden => true, :default_value => 22, :editor => {:allow_decimals => false, :auto_strip_chars => true, :min_value => 1,  :max_value => 65535}),
         column_defaults.merge(:name => :polling_interval,         :text => "Polling interval",      :hidden => true, :default_value => 60, :editor => {:allow_decimals => false, :auto_strip_chars => true, :min_value => 30, :max_value => 86400}),
+        column_defaults.merge(:name => :is_passive,               :text => "Passive?",              :hidden => true),
         column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",              :hidden => true),
         column_defaults.merge(:name => :is_daemon_running,        :text => "Daemon running?",       :width => 110, :attr_type => :boolean, :align => :center, :renderer => 'booleanRenderer'),
         column_defaults.merge(:name => :is_reachable,             :text => "Reachable? (real)",     :width => 110, :attr_type => :boolean, :hidden => true),

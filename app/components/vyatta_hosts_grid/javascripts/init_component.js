@@ -23,6 +23,7 @@
       this.selectedVyattaHostId         = record.data.id;
       this.selectedRow                  = index;
       this.isSelectedVyattaHostOperable = record.data.is_enabled && record.data.is_daemon_running && record.data.is_reachable;
+      this.actions.executeAllTasks.setDisabled(!this.isSelectedVyattaHostOperable);
       this.actions.executeOnDemandTasks.setDisabled(!this.isSelectedVyattaHostOperable);
       this.actions.executeBackgroundTasks.setDisabled(!this.isSelectedVyattaHostOperable);
       this.displayTasksTabPanel.setDisabled(!this.isSelectedVyattaHostOperable);

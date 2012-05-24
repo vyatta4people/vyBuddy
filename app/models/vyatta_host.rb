@@ -265,6 +265,7 @@ class VyattaHost < ActiveRecord::Base
     ti          = 0
     task_groups.each do |task_group|
       tasks = case task_type
+        when :all         then task_group.tasks(true).enabled
         when :background  then task_group.tasks(true).enabled.background
         when :on_demand   then task_group.tasks(true).enabled.on_demand
         else nil
@@ -384,6 +385,7 @@ class VyattaHost < ActiveRecord::Base
 private
 
   def set_defaults
+    self.is_passive = false if !self.is_passive
     self.is_enabled = false if !self.is_enabled
     return true
   end

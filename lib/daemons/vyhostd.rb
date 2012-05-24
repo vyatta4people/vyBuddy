@@ -67,7 +67,7 @@ while true do
 
   Log.error("Unable to verify configuration mode executor") if !vyatta_host.verify_executors([:configuration], true)
 
-  vyatta_host.execute_tasks(:background)
+  vyatta_host.execute_tasks(:background) if !vyatta_host.is_passive
 
   sleep(vyatta_host.polling_interval)
 end
