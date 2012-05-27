@@ -16,11 +16,11 @@
             enabledDisplayDiv.update(summary.enabled_vyatta_hosts.toString());
             unreachableDisplayDiv.update(summary.unreachable_vyatta_hosts.toString());
             if (summary.unreachable_vyatta_hosts != 0) {
-              unreachableLabelDiv.replaceCls('global-summary-blue-item', 'global-summary-red-item');
-              unreachableDisplayDiv.replaceCls('global-summary-blue-item', 'global-summary-red-item');
+              unreachableLabelDiv.setStyle('color', itemRed);
+              unreachableDisplayDiv.setStyle('color', itemRed);
             } else {
-              unreachableLabelDiv.replaceCls('global-summary-red-item', 'global-summary-blue-item');
-              unreachableDisplayDiv.replaceCls('global-summary-red-item', 'global-summary-blue-item');
+              unreachableLabelDiv.setStyle('color', itemBlue);
+              unreachableDisplayDiv.setStyle('color', itemBlue);
             }
           }
         });

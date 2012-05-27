@@ -6,9 +6,10 @@
       Ext.Ajax.request({
         url: '/data/get_tasks',
         success: function(response) {
-          var tasks = Ext.decode(response.responseText);
-          for (var t in tasks) {
-            var task              = tasks[t];
+          var displayTasksTabPanel    = Netzke.page.vybuddyApp.getChildNetzkeComponent('display_tasks_tab_panel');
+          displayTasksTabPanel.tasks  = Ext.decode(response.responseText);
+          for (var t in displayTasksTabPanel.tasks) {
+            var task              = displayTasksTabPanel.tasks[t];
             var taskButtonDiv     = Ext.get(task.html_button_container_id);
             if (taskButtonDiv) { 
               Ext.create('Ext.Button', {
@@ -22,7 +23,6 @@
                 renderTo: taskButtonDiv,
                 handler: function(button, e) {
                   var vyattaHostsGrid       = Netzke.page.vybuddyApp.getChildNetzkeComponent('vyatta_hosts_grid');
-                  var displayTasksTabPanel  = Netzke.page.vybuddyApp.getChildNetzkeComponent('display_tasks_tab_panel');
                   var mask                  = new Ext.LoadMask(Ext.getBody(), { msg: "Please wait for task execution..." });
                   mask.show();
                   displayTasksTabPanel.executeTask({ vyatta_host_id: vyattaHostsGrid.selectedVyattaHostId, task_id: button.taskId }, function(result) {
@@ -49,7 +49,7 @@
             var displayData   = '<div class="display-header">' + 
             display.remote_command_mode + ' :: '+ display.remote_command + ' | ' + display.filter +
               '</div><pre><div class="display-information">' + display.information + 
-              '</div></pre><div class="display-footer">Last updated at: ' + display.updated_at + '</div>';
+              '</div></pre><div class="display-footer">Changed at: ' + display.updated_at + '</div>';
             var displayDiv    = Ext.get(display.html_display_id);
             if (displayDiv) { displayDiv.update(displayData); }
           }

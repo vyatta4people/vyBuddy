@@ -40,7 +40,7 @@ class VyattaHost < ActiveRecord::Base
   scope :disabled,  where(:is_enabled => false)
 
   before_create  :set_defaults
-  after_create   { |vyatta_host| ActiveRecord::Base.connection.execute("INSERT INTO `vyatta_host_states`(`id`) VALUES(#{vyatta_host.id.to_s});") }
+  after_create   { |vyatta_host| ActiveRecord::Base.connection.execute("INSERT INTO `vyatta_host_states`(`id`,`is_reachable`) VALUES(#{vyatta_host.id.to_s},1);") }
   before_destroy { |vyatta_host| vyatta_host.kill_all_daemons; return true }
 
   def owner

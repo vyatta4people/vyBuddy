@@ -26,7 +26,23 @@
       this.actions.executeAllTasks.setDisabled(!this.isSelectedVyattaHostOperable);
       this.actions.executeOnDemandTasks.setDisabled(!this.isSelectedVyattaHostOperable);
       this.actions.executeBackgroundTasks.setDisabled(!this.isSelectedVyattaHostOperable);
-      this.displayTasksTabPanel.setDisabled(!this.isSelectedVyattaHostOperable);
+      var containerColor = shadowGreen;
+      if (!this.isSelectedVyattaHostOperable) {
+        if (!record.data.is_reachable) {
+          containerColor = shadowRed;
+        } else if (!record.data.is_enabled) {
+          containerColor = shadowGrey;
+        } else {
+          containerColor = shadowViolet;
+        }
+      }
+      for (var t in this.displayTasksTabPanel.tasks) {
+        var task              = this.displayTasksTabPanel.tasks[t];
+        var containerDiv      = Ext.get(task.html_container_id);
+        var taskExecuteButton = Ext.getCmp(task.html_execute_button_id);
+        containerDiv.setStyle('background-color', containerColor);
+        taskExecuteButton.setDisabled(!this.isSelectedVyattaHostOperable);
+      }
       this.displayTasksTabPanel.fireEvent('selectvyattahost', this.selectedVyattaHostId);
     }, this);
 

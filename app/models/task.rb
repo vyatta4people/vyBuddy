@@ -33,6 +33,10 @@ class Task < ActiveRecord::Base
     "task_#{self.id.to_s}"
   end
 
+  def html_container_id
+    "task_#{self.id.to_s}_container"
+  end
+
   def html_button_container_id
     "task_#{self.id.to_s}_button_container"
   end

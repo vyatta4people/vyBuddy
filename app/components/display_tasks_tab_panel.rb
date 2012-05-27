@@ -15,15 +15,18 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
       task_group_item[:deferred_render]   = false
       task_group_item[:items]             = Array.new
       task_group.tasks.enabled.each do |task|
-        task_item               = Hash.new
-        task_item[:id]          = task.html_id
-        task_item[:name]        = task_item[:id]
-        task_item[:title]       = task.title
-        task_item[:class_name]  = "Netzke::Basepack::Panel"
-        task_item[:auto_scroll] = true
-        button_template         = DirectoryTemplate::ErbTemplate.new(File.read(ActionController::Base.view_paths[0].to_s + '/data/task_button_container.html.erb'))
-        task_item[:html]        = button_template.result(:html_button_container_id => task.html_button_container_id)
-        task_item[:html]        += task.task_remote_commands.collect{ |trc| "<div id='#{trc.html_display_id}' class='display-container'></div>" }.join
+        task_item                       = Hash.new
+        task_item[:id]                  = task.html_id
+        task_item[:name]                = task_item[:id]
+        task_item[:title]               = task.title
+        task_item[:class_name]          = "Netzke::Basepack::Panel"
+        task_item[:auto_scroll]         = true
+        task_item[:html]                = "<div id='#{task.html_container_id}' class='task-container'>"
+        button_template                 = DirectoryTemplate::ErbTemplate.new(File.read(ActionController::Base.view_paths[0].to_s + '/data/task_button_container.html.erb'))
+        task_item[:html]                += button_template.result(:html_button_container_id => task.html_button_container_id)
+        task_item[:html]                += task.task_remote_commands.collect{ |trc| "<div id='#{trc.html_display_id}' class='display-container'></div>" }.join
+        task_item[:html]                += "<div>&nbsp;</div>"
+        task_item[:html]                += "</div>"
         task_group_item[:items] << task_item
       end
       task_group_items << task_group_item
@@ -37,7 +40,7 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
       :title            => "Tasks to display",
       :border           => true,
       :frame            => false,
-      :deferred_render  => false
+      :deferred_render  => false,
     )
   end
 
