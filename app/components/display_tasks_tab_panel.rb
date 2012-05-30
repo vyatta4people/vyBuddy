@@ -24,6 +24,8 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
         task_item[:html]                = "<div id='#{task.html_container_id}' class='task-container'>"
         button_template                 = DirectoryTemplate::ErbTemplate.new(File.read(ActionController::Base.view_paths[0].to_s + '/data/task_button_container.html.erb'))
         task_item[:html]                += button_template.result(:html_button_container_id => task.html_button_container_id)
+        comment_template                = DirectoryTemplate::ErbTemplate.new(File.read(ActionController::Base.view_paths[0].to_s + '/data/task_comment_container.html.erb'))
+        task_item[:html]                += comment_template.result(:html_comment_container_id => task.html_comment_container_id)
         task_item[:html]                += task.task_remote_commands.collect{ |trc| "<div id='#{trc.html_display_id}' class='display-container'></div>" }.join
         task_item[:html]                += "<div>&nbsp;</div>"
         task_item[:html]                += "</div>"
@@ -56,5 +58,9 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
     end
     return { :set_result => { :success => success, :message => message, :verbose => true } }
   end 
+
+  endpoint :get_task_comment do |params|
+    return { :set_result => { :comment => Rinku.auto_link(Task.find(params[:task_id].to_i).comment, :all, 'target="_blank"') } }
+  end
 
 end

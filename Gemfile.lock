@@ -1,12 +1,12 @@
 GIT
-  remote: git://github.com/skozlov/netzke-basepack.git
+  remote: git://github.com/nomadcoder/netzke-basepack.git
   revision: a19808f7e1df4bda39ca7f1d47df5c769e694a79
   specs:
     netzke-basepack (0.7.4)
       netzke-core (~> 0.7.4)
 
 GIT
-  remote: git://github.com/skozlov/netzke-core.git
+  remote: git://github.com/nomadcoder/netzke-core.git
   revision: 092470b5e3fec7874e39a2cc80683d5aeee83582
   specs:
     netzke-core (0.7.5)
@@ -104,6 +104,7 @@ GEM
     rake (0.9.2.2)
     rdoc (3.12)
       json (~> 1.4)
+    rinku (1.5.1)
     sass (3.1.18)
     sass-rails (3.1.6)
       actionpack (~> 3.1.0)
@@ -142,6 +143,7 @@ DEPENDENCIES
   netzke-basepack!
   netzke-core!
   rails (= 3.1.4)
+  rinku
   sass-rails (~> 3.1.4)
   therubyracer
   uglifier (>= 1.0.3)

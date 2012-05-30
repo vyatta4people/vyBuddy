@@ -19,7 +19,7 @@
                 tooltip: 'Just do it!',
                 width: 132,
                 height: 42,
-                iconCls: 'task-button-icon', 
+                iconCls: 'task-execute-button-icon', 
                 renderTo: taskButtonDiv,
                 handler: function(button, e) {
                   var vyattaHostsGrid       = Netzke.page.vybuddyApp.getChildNetzkeComponent('vyatta_hosts_grid');
@@ -32,6 +32,35 @@
                   }, this);
                 }
               });
+              Ext.create('Ext.Button', {
+                id: task.html_comment_button_id,
+                taskId: task.id,
+                taskCommentContainerId: task.html_comment_container_id,
+                text: ' ',
+                tooltip: 'View comment?..',
+                width: 42,
+                height: 42,
+                iconCls: 'task-comment-button-icon',
+                margin: '0 0 0 10',
+                renderTo: taskButtonDiv,
+                handler: function(button, e) {
+                  displayTasksTabPanel.getTaskComment({ task_id: button.taskId }, function(result) {
+                    var commentDiv = Ext.get(button.taskCommentContainerId);
+                    if (commentDiv.isVisible()) {
+                      var margin = commentDiv.getHeight() + 10;
+                      commentDiv.setStyle('margin-bottom', '-' + margin.toString() + 'px');
+                      commentDiv.hide(true);
+                    } else {
+                      commentDiv.update(result.comment);
+                      commentDiv.setStyle('margin-bottom', '10px');
+                      commentDiv.show(true);
+                    }
+                  }, this);
+                }
+              });
+              var commentDiv = Ext.get(task.html_comment_container_id);
+              commentDiv.setStyle('margin-bottom', '-32px');
+              commentDiv.hide();
             }
           }
         }

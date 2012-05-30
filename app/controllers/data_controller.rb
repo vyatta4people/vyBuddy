@@ -35,10 +35,12 @@ class DataController < ApplicationController
     data = Array.new
     Task.all.each do |task|
       item = Hash.new
-      item[:id]                       = task.id
-      item[:html_container_id]        = task.html_container_id
-      item[:html_button_container_id] = task.html_button_container_id
-      item[:html_execute_button_id]   = task.html_execute_button_id
+      item[:id]                         = task.id
+      item[:html_container_id]          = task.html_container_id
+      item[:html_button_container_id]   = task.html_button_container_id
+      item[:html_execute_button_id]     = task.html_execute_button_id
+      item[:html_comment_button_id]     = task.html_comment_button_id
+      item[:html_comment_container_id]  = task.html_comment_container_id
       data << item
     end
     render(:json => data)

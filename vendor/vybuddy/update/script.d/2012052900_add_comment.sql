@@ -1,0 +1,1 @@
+ALTER TABLE `tasks` ADD COLUMN `comment` TEXT NOT NULL AFTER `is_enabled`;

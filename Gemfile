@@ -49,3 +49,5 @@ gem 'htmlentities'
 # A helper class for ERB
 gem 'directory_template'
 
+# Fast autolinking library
+gem 'rinku'

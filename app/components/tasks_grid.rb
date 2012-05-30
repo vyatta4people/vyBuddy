@@ -18,7 +18,8 @@ class TasksGrid < Netzke::Basepack::GridPanel
 
     form_window_config              = Hash.new
     form_window_config[:y]          = 100
-    form_window_config[:width]      = 500
+    form_window_config[:width]      = 700
+    form_window_config[:height]     = 320
 
     super.merge(
       :name             => :tasks_grid,
@@ -44,7 +45,8 @@ class TasksGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :is_on_demand,             :text => "On demand?",            :hidden => true),
         column_defaults.merge(:name => :match_hostname,           :text => "Match Hostname",        :hidden => true),
         column_defaults.merge(:name => :sort_order,               :text => "#",                     :width => 40, :align => :center, :editor => {:hidden => true}),
-        column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",              :hidden => true)
+        column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",              :hidden => true),
+        column_defaults.merge(:name => :comment,                  :text => "Comment",               :hidden => true, :editor => {:height => 100})
       ],
       :add_form_window_config   => form_window_config,
       :edit_form_window_config  => form_window_config
@@ -92,6 +94,6 @@ class TasksGrid < Netzke::Basepack::GridPanel
 
   endpoint :edit_form__netzke_0__get_combobox_options do |params|
     get_combobox_options(params)
-  end 
+  end
 
 end

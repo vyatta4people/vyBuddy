@@ -45,6 +45,14 @@ class Task < ActiveRecord::Base
     "task_#{self.id.to_s}_execute_button"
   end
 
+  def html_comment_button_id
+    "task_#{self.id.to_s}_comment_button"
+  end
+
+  def html_comment_container_id
+    "task_#{self.id.to_s}_comment_container"
+  end
+
 private
 
   def set_sort_order

@@ -104,12 +104,27 @@
   padding:              10px;
 }
 
-.task-button-icon {
+.task-execute-button-icon {
   background:           url(/images/icons/arrow_refresh.png) no-repeat;
+  margin:               10px;
+}
+
+.task-comment-button-icon {
+  background:           url(/images/icons/comment.png) no-repeat;
   margin:               10px;
 }
 
 .task-container {
   width:                100%;
   min-height:           100%;
+}
+
+.task-comment-container {
+  background-color:     #f5f5f5;
+  margin:               10px;
+  padding:              10px;
+  border-style:         dashed;
+  border-width:         1px;
+  border-color:         #99bce8;
+  white-space:          pre-wrap;
 }
