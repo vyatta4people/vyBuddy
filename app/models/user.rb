@@ -23,8 +23,9 @@ class User < ActiveRecord::Base
 private
 
   def set_defaults
-    self.is_admin     = false if !self.is_admin
-    self.is_enabled   = false if !self.is_enabled
+    self.receives_notifications     = false if !self.receives_notifications
+    self.is_admin                   = false if !self.is_admin
+    self.is_enabled                 = false if !self.is_enabled
     return true
   end
 

@@ -51,6 +51,7 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :remote_port,              :text => "Remote port",           :hidden => true, :default_value => 22, :editor => {:allow_decimals => false, :auto_strip_chars => true, :min_value => 1,  :max_value => 65535}),
         column_defaults.merge(:name => :polling_interval,         :text => "Polling interval",      :hidden => true, :default_value => 60, :editor => {:allow_decimals => false, :auto_strip_chars => true, :min_value => 30, :max_value => 86400}),
         column_defaults.merge(:name => :is_passive,               :text => "Passive?",              :hidden => true),
+        column_defaults.merge(:name => :is_monitored,             :text => "Monitored?",            :hidden => true),
         column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",              :hidden => true),
         column_defaults.merge(:name => :is_daemon_running,        :text => "Daemon running?",       :width => 110, :attr_type => :boolean, :align => :center, :renderer => 'booleanRenderer'),
         column_defaults.merge(:name => :is_reachable,             :text => "Reachable? (real)",     :width => 110, :attr_type => :boolean, :hidden => true),

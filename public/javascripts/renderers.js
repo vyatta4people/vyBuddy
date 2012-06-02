@@ -13,6 +13,10 @@ function booleanRenderer2(value) {
   return '<div class="boolean-' + cssClass + '"></div>';
 }
 
+function boldRenderer(value) {
+  return '<b>' + value + '</b>';
+}
+
 function textSteelBlueRenderer(value) {
 	return '<div class="text-steel-blue">' + value + '</div>';
 }

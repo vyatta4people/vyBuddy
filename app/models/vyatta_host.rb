@@ -60,6 +60,14 @@ class VyattaHost < ActiveRecord::Base
     end
   end
 
+  def public_reachability
+    return case self.reachability
+      when 0 then "unreachable"
+      when 1 then "reachable"
+      else "unknown"
+    end
+  end
+
   def set_daemon_log_application
     Log.application = HOST_DAEMON_NAME
   end
@@ -385,8 +393,9 @@ class VyattaHost < ActiveRecord::Base
 private
 
   def set_defaults
-    self.is_passive = false if !self.is_passive
-    self.is_enabled = false if !self.is_enabled
+    self.is_passive   = false if !self.is_passive
+    self.is_monitored = false if !self.is_monitored
+    self.is_enabled   = false if !self.is_enabled
     return true
   end
 

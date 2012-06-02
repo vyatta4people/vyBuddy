@@ -32,11 +32,12 @@ class UsersGrid < Netzke::Basepack::GridPanel
       :multi_select     => false,
       :prohibit_update  => true,
       :columns          => [
-        column_defaults.merge(:name => :username,           :text => "Username",  :width => 120),
-        column_defaults.merge(:name => :email,              :text => "Email",     :flex => true),
-        column_defaults.merge(:name => :password,           :text => "Password",  :hidden => true,  :editor => {:input_type => :password}),
-        column_defaults.merge(:name => :is_enabled,         :text => "Enabled?",  :width => 80,     :align => :center),
-        column_defaults.merge(:name => :is_admin,           :text => "Admin?",    :width => 80,     :align => :center)
+        column_defaults.merge(:name => :username,                 :text => "Username",                  :width => 120),
+        column_defaults.merge(:name => :email,                    :text => "Email",                     :flex => true),
+        column_defaults.merge(:name => :password,                 :text => "Password",                  :hidden => true,  :editor => {:input_type => :password}),
+        column_defaults.merge(:name => :receives_notifications,   :text => "Receives notifications?",   :width => 80,     :hidden => true),
+        column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",                  :width => 80,     :align => :center),
+        column_defaults.merge(:name => :is_admin,                 :text => "Admin?",                    :width => 80,     :align => :center)
       ],
       :add_form_window_config   => form_window_config,
       :edit_form_window_config  => form_window_config

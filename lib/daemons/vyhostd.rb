@@ -32,20 +32,33 @@ Log.info("Daemon started")
 
 while true do
   # Yes, we need to "refresh" vyatta_host each loop step
-  vyatta_host           = VyattaHost.find(vyatta_host_id)
-  vyatta_host_state     = vyatta_host.vyatta_host_state
+  vyatta_host               = VyattaHost.find(vyatta_host_id)
+  vyatta_host_state         = vyatta_host.vyatta_host_state
   vyatta_host.set_daemon_log_event_source # Event source i.e. daemon address may change at run-time
 
   # Try to establish SSH connection to Vyatta host
+  vyatta_host_state_changed = false
   begin
     raise(vyatta_host.ssh_error) if !vyatta_host.execute_command_via_ssh!("/bin/true")
   rescue => e
     Log.error("Could not reach Vyatta host: #{e.message}")
-    vyatta_host_state.is_reachable   = false
+    vyatta_host_state_changed         = true if vyatta_host_state.is_reachable
+    vyatta_host_state.is_reachable    = false
   else
     Log.info("Vyatta host become reachable") if !vyatta_host_state.is_reachable
-    vyatta_host_state.is_reachable   = true
+    vyatta_host_state_changed         = true if !vyatta_host_state.is_reachable
+    vyatta_host_state.is_reachable    = true
   ensure
+    if vyatta_host.is_monitored and vyatta_host_state_changed
+      notified_users = User.enabled.where(:receives_notifications => true)
+      notified_users.each do |user|
+        begin
+          UserMailer.vyatta_host_state_change_notification(user, vyatta_host).deliver
+        rescue => e
+          Log.error("Could not send email notification to #{user.email}: #{e.inspect}")
+        end
+      end
+    end
     begin
       vyatta_host_state.save!
     rescue => e
