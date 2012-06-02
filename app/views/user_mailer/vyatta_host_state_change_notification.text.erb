@@ -1,3 +1,18 @@
+Hi <%= @user.username %>,
+
 ===============================================
 Host state changed: <%= @vyatta_host.hostname %> become <%= @vyatta_host.public_reachability %>
 ===============================================
+
+Event time:
+<%= @time.strftime("%Y-%m-%d %H:%M:%S %Z") %>
+
+<% if @vyatta_host.reachability == 0 and @vyatta_host.ssh_error %>
+Last Net::SSH error:
+<%=raw @vyatta_host.ssh_error %>
+
+<% end %>
+--
+<%= @system_name %>
+<%= @system_email %>
+<%= @system_url %>
