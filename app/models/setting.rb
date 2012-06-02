@@ -23,8 +23,8 @@ class Setting < ActiveRecord::Base
   end
 
   def grid_value
-    return self.public_value.gsub(/./,'*') if self.value_type == :p
-    return self.public_value
+    return self.value.gsub(/./,'*') if self.value_type == :p
+    return self.value
   end
 
   def self.get(name)
