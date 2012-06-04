@@ -38,7 +38,7 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :identifier,         :text => "ID",            :flex => true),
         column_defaults.merge(:name => :key_type,           :text => "Type",          :width => 80, 
           :editor => {:xtype => :netzkeremotecombo, :editable => false, :empty_text => "Choose SSH key type" }, :align => :center),
-        column_defaults.merge(:name => :login_username,     :text => "Login as",      :width => 100),
+        column_defaults.merge(:name => :login_username,     :text => "Login as",      :width => 100, :default_value => Setting.get(:default_ssh_username)),
         column_defaults.merge(:name => :public_key,         :text => "Public key",    :hidden => true, 
           :editor => {
             :height       => 100, 
