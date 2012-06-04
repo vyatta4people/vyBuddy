@@ -60,7 +60,9 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
   end 
 
   endpoint :get_task_comment do |params|
-    return { :set_result => { :comment => Rinku.auto_link(Task.find(params[:task_id].to_i).comment, :all, 'target="_blank"') } }
+    comment = Rinku.auto_link(Task.find(params[:task_id].to_i).comment)
+    comment = '<i style="color:#777777;">No comment</i>' if comment.empty?
+    return { :set_result => { :comment => comment } }
   end
 
 end
