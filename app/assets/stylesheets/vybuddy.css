@@ -46,7 +46,7 @@
 }
 
 .display-header {
-  background-color:       #ffffff;
+  background-color:       #f5f5f5;
   border-style:           solid;
   border-width:           1px;
   border-color:           #99bce8;
@@ -120,11 +120,13 @@
 }
 
 .task-comment-container {
-  background-color:     #f5f5f5;
+  background-color:     #ffffff;
   margin:               10px;
   padding:              10px;
   border-style:         dashed;
   border-width:         1px;
   border-color:         #99bce8;
   white-space:          pre-wrap;
+  -moz-border-radius:   10px;
+  border-radius:        10px;
 }
