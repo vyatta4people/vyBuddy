@@ -41,6 +41,7 @@ class DataController < ApplicationController
       item[:html_execute_button_id]     = task.html_execute_button_id
       item[:html_comment_button_id]     = task.html_comment_button_id
       item[:html_comment_container_id]  = task.html_comment_container_id
+      item[:is_comment_empty]           = task.comment.empty?
       data << item
     end
     render(:json => data)
