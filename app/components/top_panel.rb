@@ -11,7 +11,7 @@ class TopPanel < Netzke::Basepack::Panel
 
   def get_bbar
     if session[:user_is_admin]
-      return [:manage_users.action, :manage_ssh_key_pairs.action, "-", :manage_tasks.action, :view_logs.action, '->', :manage_settings.action, :show_about.action, '-', :logout.action]
+      return [:manage_tasks.action, '->', :manage_users.action, :manage_ssh_key_pairs.action, "-", :view_logs.action, :manage_settings.action, '-', :show_about.action, '-', :logout.action]
     else
       return ['->', :show_about.action, '-', :logout.action]
     end
