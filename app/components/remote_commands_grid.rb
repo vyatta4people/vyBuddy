@@ -21,7 +21,7 @@ class RemoteCommandsGrid < Netzke::Basepack::GridPanel
 
     super.merge(
       :name             => :remote_commands_grid,
-      :title            => "Remote commands",
+      :title            => "Commands",
       :model            => "RemoteCommand",
       :border           => false,
       :context_menu     => [:edit_in_form.action, :del.action],

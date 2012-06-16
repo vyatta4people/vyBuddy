@@ -2,7 +2,7 @@ class VyattaHost < ActiveRecord::Base
   require 'net/ssh'
   require 'net/sftp'
 
-  belongs_to :user
+  belongs_to :vyatta_host_group
 
   belongs_to :ssh_key_pair
 
@@ -28,24 +28,21 @@ class VyattaHost < ActiveRecord::Base
   validates :polling_interval,
     :numericality => { :only_integer => true, :greater_than_or_equal_to => 30, :less_than_or_equal_to => 86400 }
 
-  default_scope joins(:vyatta_host_state).select([
+  default_scope joins(:vyatta_host_state, :vyatta_host_group).select([
     "`vyatta_hosts`.*", 
     "`vyatta_host_states`.`is_daemon_running`", 
     "`vyatta_host_states`.`daemon_pid`", 
     "`vyatta_host_states`.`is_reachable`", 
     "`vyatta_host_states`.`vyatta_version`", 
-    "`vyatta_host_states`.`load_average`"]).order(["`hostname` ASC"])
+    "`vyatta_host_states`.`load_average`"]).order(["`vyatta_host_groups`.`sort_order` ASC", "`vyatta_host_groups`.`name` ASC", "`vyatta_hosts`.`sort_order` ASC", "`vyatta_hosts`.`hostname` ASC"])
 
   scope :enabled,   where(:is_enabled => true)
   scope :disabled,  where(:is_enabled => false)
 
+  before_create  :set_sort_order
   before_create  :set_defaults
   after_create   { |vyatta_host| ActiveRecord::Base.connection.execute("INSERT INTO `vyatta_host_states`(`id`,`is_reachable`) VALUES(#{vyatta_host.id.to_s},1);") }
   before_destroy { |vyatta_host| vyatta_host.kill_all_daemons; return true }
-
-  def owner
-    self.user.username
-  end
 
   def label
     "#{self.hostname} (#{self.id.to_s})"
@@ -391,6 +388,10 @@ class VyattaHost < ActiveRecord::Base
   end
 
 private
+
+  def set_sort_order
+    self.sort_order = VyattaHost.get_next_sort_order(:vyatta_host_group_id, self.vyatta_host_group_id)
+  end
 
   def set_defaults
     self.is_passive   = false if !self.is_passive

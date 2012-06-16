@@ -3,6 +3,7 @@
     this.superclass.initComponent.call(this);
 
     this.selectedVyattaHostId         = 0;
+    this.selectedVyattaHostGroupId    = 0;
     this.selectedRow                  = 0;
     this.isSelectedVyattaHostOperable = false
 
@@ -21,6 +22,7 @@
 
     this.on('select', function(self, record, index, eOpts) {
       this.selectedVyattaHostId         = record.data.id;
+      this.selectedVyattaHostGroupId    = record.data.vyatta_host_group__name;
       this.selectedRow                  = index;
       this.isSelectedVyattaHostOperable = record.data.is_enabled && record.data.is_daemon_running && record.data.is_reachable;
       this.actions.executeAllTasks.setDisabled(!this.isSelectedVyattaHostOperable);
@@ -46,6 +48,16 @@
         taskCommentButton.setDisabled(task.is_comment_empty);
       }
       this.displayTasksTabPanel.fireEvent('selectvyattahost', this.selectedVyattaHostId);
+    }, this);
+
+    this.getView().on('drop', function(node, data, dropRec, dropPosition) {
+      this.reorganizeWithPersistentOrder({ moved_record_id: data.records[0].data.id, replaced_record_id: dropRec.data.id, position: dropPosition }, function(result) {
+        if (result.success) {
+          this.getStore().load();
+        } else {
+          Ext.Msg.show({ title: 'Vyatta host re-order failed', msg: result.message, buttons: Ext.Msg.OK, icon: Ext.Msg.ERROR });
+        }
+      });
     }, this);
 
     this.getView().on('itemdblclick', function(self, record, item, index, e, eOpts) {

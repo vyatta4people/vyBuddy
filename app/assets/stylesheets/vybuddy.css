@@ -91,6 +91,10 @@
   margin:                 3px 4px 3px 4px;
 }
 
+.vyatta-host-hint {
+  font-style:             italic;
+  font-size:              small;
+}
 .code-editor {
   color:                #9c0707;
   font-family:          "fixed";

@@ -7,5 +7,12 @@
       mask.hide();
       netzkeEndpointHandler(result);
     }, this);
+  },
+  
+  afterDelete: function(data) {
+    this.reorderRecords({ selected_vyatta_host_group_id: this.selectedVyattaHostGroupId }, function (result) { 
+      if (!result.success) { Ext.Msg.show({ title: 'Re-Order failed', msg: result.message, buttons: Ext.Msg.OK, icon: Ext.Msg.ERROR }); } 
+    });
+    this.getStore().load();
   }
 }

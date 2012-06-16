@@ -43,7 +43,7 @@ class TasksGrid < Netzke::Basepack::GridPanel
           :editor => {:editable => false, :empty_text => "Choose task group", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l} } }),
         column_defaults.merge(:name => :name,                     :text => "Name",                  :flex => true),
         column_defaults.merge(:name => :is_on_demand,             :text => "On demand?",            :hidden => true),
-        column_defaults.merge(:name => :match_hostname,           :text => "Match Hostname",        :hidden => true),
+        column_defaults.merge(:name => :match_hostname,           :text => "Match hostname",        :hidden => true),
         column_defaults.merge(:name => :sort_order,               :text => "#",                     :width => 40, :align => :center, :editor => {:hidden => true}),
         column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",              :hidden => true),
         column_defaults.merge(:name => :comment,                  :text => "Comment",               :hidden => true, :editor => {:height => 100})

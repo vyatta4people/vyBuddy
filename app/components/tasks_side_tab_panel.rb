@@ -5,11 +5,15 @@ class TasksSideTabPanel < Netzke::Basepack::TabPanel
       :name             => :tasks_side_tab_panel,
       :title            => "Toolbox",
       :prevent_header   => false,
-      :width            => 350,
+      :width            => 400,
       :border           => true,
       :frame            => false,
-      :active_tab       => 1,
+      :active_tab       => 2,
       :items            => [
+        :vyatta_host_groups_grid.component(
+          :name       => :vyatta_host_groups_grid,
+          :class_name => "VyattaHostGroupsGrid"
+        ),
         :task_groups_grid.component(
           :name       => :task_groups_grid,
           :class_name => "TaskGroupsGrid"
