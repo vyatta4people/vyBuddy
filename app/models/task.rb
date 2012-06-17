@@ -66,6 +66,7 @@ private
   def set_defaults
     self.is_on_demand = false if !self.is_on_demand
     self.is_enabled   = false if !self.is_enabled
+    self.comment      = ""    if !self.comment
     return true
   end
 
