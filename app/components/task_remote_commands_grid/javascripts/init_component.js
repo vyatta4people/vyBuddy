@@ -5,14 +5,14 @@
     this.on('afterrender', function(self, eOpts) {
       // Define fellow components
       this.tasksGrid            = Netzke.page.manageTasksWindow.getChildNetzkeComponent('tasks_grid');
-      this.remoteCommandsGrid   = Netzke.page.manageTasksWindow.getChildNetzkeComponent('tasks_side_tab_panel').getChildNetzkeComponent('remote_commands_grid');      
+      this.remoteCommandsGrid   = Netzke.page.manageTasksWindow.getChildNetzkeComponent('tasks_side_tab_panel').getChildNetzkeComponent('commands_tab_panel').getChildNetzkeComponent('remote_commands_grid');
       // Setup drop target for remote commands
       var dropTargetEl   = this.body.dom;
       var dropTarget     = Ext.create('Ext.dd.DropTarget', dropTargetEl, {
         ddGroup: 'remote_commands_dd_group',
         notifyEnter: function(ddSource, e, data) {
           var targetGrid = Netzke.page.manageTasksWindow.getChildNetzkeComponent('task_remote_commands_grid'); // Yes, we need to find ourselves here :)
-          if (ddSource.id == 'manage_tasks_window__tasks_side_tab_panel__remote_commands_grid-body') {
+          if (ddSource.id == 'manage_tasks_window__tasks_side_tab_panel__commands_tab_panel__remote_commands_grid-body') {
             targetGrid.body.stopAnimation();
             targetGrid.body.highlight();
           }
@@ -36,7 +36,7 @@
     this.getView().on('drop', function(node, data, dropRec, dropPosition) {
       var movedRecordId = data.records[0].data.id;
       if (dropRec) { var replacedRecordId   = dropRec.data.id; } else { var replacedRecordId   = 0; }
-      if (data.view.ownerCt.id == 'manage_tasks_window__tasks_side_tab_panel__remote_commands_grid') { var local = false; } else { var local = true; }
+      if (data.view.ownerCt.id == 'manage_tasks_window__tasks_side_tab_panel__commands_tab_panel__remote_commands_grid') { var local = false; } else { var local = true; }
       this.reorganizeWithPersistentOrder({ moved_record_id: movedRecordId, replaced_record_id: replacedRecordId, local: local, selected_task_id: this.tasksGrid.selectedTaskId, position: dropPosition }, function(result) {
         this.getStore().load();
         if (!result.local) { this.remoteCommandsGrid.getStore().load(); }

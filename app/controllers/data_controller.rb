@@ -6,7 +6,7 @@ class DataController < ApplicationController
     global_summary = Hash.new
     global_summary[:total_vyatta_hosts]        = VyattaHost.count
     global_summary[:enabled_vyatta_hosts]      = VyattaHost.enabled.count
-    global_summary[:unreachable_vyatta_hosts]  = VyattaHost.enabled.where('vyatta_host_states.is_reachable' => false).count
+    global_summary[:unreachable_vyatta_hosts]  = VyattaHost.enabled.joins(:vyatta_host_state).where('vyatta_host_states.is_reachable' => false).count
     render(:json => global_summary)
   end
 

@@ -30,7 +30,7 @@
       this.actions.executeBackgroundTasks.setDisabled(!this.isSelectedVyattaHostOperable);
       var containerColor = shadowGreen;
       if (!this.isSelectedVyattaHostOperable) {
-        if (!record.data.is_reachable) {
+        if (!record.data.is_reachable && record.data.is_daemon_running) {
           containerColor = shadowRed;
         } else if (!record.data.is_enabled) {
           containerColor = shadowGrey;

@@ -28,20 +28,19 @@ class VyattaHost < ActiveRecord::Base
   validates :polling_interval,
     :numericality => { :only_integer => true, :greater_than_or_equal_to => 30, :less_than_or_equal_to => 86400 }
 
-  default_scope joins(:vyatta_host_state, :vyatta_host_group).select([
-    "`vyatta_hosts`.*", 
-    "`vyatta_host_states`.`is_daemon_running`", 
-    "`vyatta_host_states`.`daemon_pid`", 
-    "`vyatta_host_states`.`is_reachable`", 
-    "`vyatta_host_states`.`vyatta_version`", 
-    "`vyatta_host_states`.`load_average`"]).order(["`vyatta_host_groups`.`sort_order` ASC", "`vyatta_host_groups`.`name` ASC", "`vyatta_hosts`.`sort_order` ASC", "`vyatta_hosts`.`hostname` ASC"])
+  default_scope joins(:vyatta_host_group).order([
+    "`vyatta_host_groups`.`sort_order` ASC", 
+    "`vyatta_host_groups`.`name` ASC", 
+    "`vyatta_hosts`.`sort_order` ASC", 
+    "`vyatta_hosts`.`hostname` ASC"
+  ])
 
   scope :enabled,   where(:is_enabled => true)
   scope :disabled,  where(:is_enabled => false)
 
   before_create  :set_sort_order
   before_create  :set_defaults
-  after_create   { |vyatta_host| ActiveRecord::Base.connection.execute("INSERT INTO `vyatta_host_states`(`id`,`is_reachable`) VALUES(#{vyatta_host.id.to_s},1);") }
+  after_create   { |vyatta_host| ActiveRecord::Base.connection.execute("INSERT INTO `vyatta_host_states`(`id`,`is_reachable`,`created_at`,`updated_at`) VALUES(#{vyatta_host.id.to_s},1,NOW(),NOW());") }
   before_destroy { |vyatta_host| vyatta_host.kill_all_daemons; return true }
 
   def label
@@ -65,6 +64,22 @@ class VyattaHost < ActiveRecord::Base
     end
   end
 
+  def is_daemon_running
+    self.vyatta_host_state.is_daemon_running
+  end
+  
+  def is_reachable
+    self.vyatta_host_state.is_reachable
+  end
+  
+  def vyatta_version
+    self.vyatta_host_state.vyatta_version
+  end
+  
+  def load_average
+    self.vyatta_host_state.load_average
+  end
+  
   def set_daemon_log_application
     Log.application = HOST_DAEMON_NAME
   end

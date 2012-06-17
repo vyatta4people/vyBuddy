@@ -45,7 +45,7 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
           :plugins => [ { :ptype => :gridviewdragdrop, :drag_group => :vyatta_hosts_dd_group, :drop_group => :vyatta_hosts_dd_group, :drag_text => "Drag and drop to reorganize" } ]
       },
       :columns            => [
-        column_defaults.merge(:name => :vyatta_host_group__name,  :text => "Group",                 :hidden => false, 
+        column_defaults.merge(:name => :vyatta_host_group__name,  :text => "Host group",            :hidden => false, 
           :editor => {:editable => false, :empty_text => "Choose group", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l}} } ),
         column_defaults.merge(:name => :ssh_key_pair__identifier, :text => "SSH key pair",          :hidden => true, 
           :editor => {:editable => false, :empty_text => "Choose key pair", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l}} } ),
@@ -56,11 +56,11 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :is_passive,               :text => "Passive?",              :hidden => true),
         column_defaults.merge(:name => :is_monitored,             :text => "Monitored?",            :hidden => true),
         column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",              :hidden => true),
-        column_defaults.merge(:name => :is_daemon_running,        :text => "Daemon running?",       :width => 110, :attr_type => :boolean, :align => :center, :renderer => 'booleanRenderer'),
-        column_defaults.merge(:name => :is_reachable,             :text => "Reachable? (real)",     :width => 110, :attr_type => :boolean, :hidden => true),
+        column_defaults.merge(:name => :is_daemon_running,        :text => "Daemon running?",       :width => 110, :attr_type => :boolean, :align => :center, :renderer => 'booleanRenderer', :virtual => true),
+        column_defaults.merge(:name => :is_reachable,             :text => "Reachable? (real)",     :width => 110, :attr_type => :boolean, :hidden => true, :virtual => true),
         column_defaults.merge(:name => :reachability,             :text => "Reachable?",            :width => 100, :attr_type => :integer, :align => :center, :renderer => 'booleanRenderer2', :virtual => true),
-        column_defaults.merge(:name => :vyatta_version,           :text => "Version",               :width => 110, :align => :center),
-        column_defaults.merge(:name => :load_average,             :text => "Load average",          :width => 100, :format => '0.00', :xtype => :numbercolumn, :align => :center),
+        column_defaults.merge(:name => :vyatta_version,           :text => "Version",               :width => 110, :align => :center, :virtual => true),
+        column_defaults.merge(:name => :load_average,             :text => "Load average",          :width => 100, :format => '0.00', :xtype => :numbercolumn, :align => :center, :virtual => true),
         column_defaults.merge(:name => :sort_order,               :text => "#",                     :width => 40,  :align => :center, :editor => {:hidden => true})        
       ],
       :add_form_window_config   => form_window_config,
