@@ -1,5 +1,5 @@
 class TaskGroup < ActiveRecord::Base
-  has_many :tasks, :dependent => :destroy
+  has_many :tasks
 
   validates :name, :presence => true
 
@@ -12,6 +12,7 @@ class TaskGroup < ActiveRecord::Base
 
   before_create :set_sort_order
   before_create :set_defaults
+  before_destroy { |task_group| return false if task_group.tasks.count > 0 }
 
   def html_id
     "task_group_#{self.id.to_s}"

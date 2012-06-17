@@ -21,6 +21,7 @@ class SshKeyPair < ActiveRecord::Base
   default_scope order(["`identifier` ASC"])
 
   before_save :set_attributes
+  before_destroy { |ssh_key_pair| return false if ssh_key_pair.vyatta_hosts.count > 0 }
 
   def get_public_key_from_private_key
     private_key_file = Tempfile.new("vybuddy_private_key.")

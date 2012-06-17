@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
 
   before_create  :set_defaults
   before_destroy { |user| return false if user.id == DEFAULT_USER_ID }
+  before_destroy { |user| return false if user.ssh_key_pairs.count > 0 }
 
 private
 

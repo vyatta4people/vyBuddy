@@ -11,8 +11,9 @@ class VyattaHostGroup < ActiveRecord::Base
   scope :enabled,   where(:is_enabled => true)
   scope :disabled,  where(:is_enabled => false)
 
-  before_create :set_sort_order
-  before_create :set_defaults
+  before_create  :set_sort_order
+  before_create  :set_defaults
+  before_destroy { |vyatta_host_group| return false if vyatta_host_group.vyatta_hosts.count > 0 }
 
 private
 
