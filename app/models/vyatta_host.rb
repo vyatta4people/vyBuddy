@@ -28,7 +28,7 @@ class VyattaHost < ActiveRecord::Base
   validates :polling_interval,
     :numericality => { :only_integer => true, :greater_than_or_equal_to => 30, :less_than_or_equal_to => 86400 }
 
-  default_scope joins(:vyatta_host_group).order([
+  default_scope select("`vyatta_hosts`.*").joins(:vyatta_host_group).order([
     "`vyatta_host_groups`.`sort_order` ASC", 
     "`vyatta_host_groups`.`name` ASC", 
     "`vyatta_hosts`.`sort_order` ASC", 
