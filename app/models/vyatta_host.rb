@@ -47,6 +47,10 @@ class VyattaHost < ActiveRecord::Base
     "#{self.hostname} (#{self.id.to_s})"
   end
 
+  def html_hostname
+    "<div style=\"color:##{self.vyatta_host_group.color}\">#{self.hostname}</div>"
+  end
+
   def reachability
     if self.vyatta_host_state.is_daemon_running
       return 0 if !self.vyatta_host_state.is_reachable

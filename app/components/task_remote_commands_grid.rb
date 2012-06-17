@@ -42,7 +42,7 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :mode,    :virtual => true, :text => "Mode",     :width => 100,    :editor => {:hidden => true}),
         column_defaults.merge(:name => :command, :virtual => true, :text => "Command",  :flex => true,    :editor => {:hidden => true}),
         column_defaults.merge(:name => :filter__name,              :text => "Filter",   :width => 100,    :editor => {:editable => false, :empty_text => "Choose filter", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l} } }),
-        column_defaults.merge(:name => :sort_order,                :text => "#",        :width => 40,     :align => :center, :editor => {:hidden => true})
+        column_defaults.merge(:name => :sort_order,                :text => "#",        :width => 40,     :align => :center, :renderer => "textSteelBlueRenderer", :editor => {:hidden => true})
       ],
       :add_form_window_config   => form_window_config,
       :edit_form_window_config  => form_window_config

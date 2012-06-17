@@ -35,8 +35,10 @@ class VyattaHostGroupsGrid < Netzke::Basepack::GridPanel
         :plugins => [ { :ptype => :gridviewdragdrop, :drag_group => :vyatta_host_groups_dd_group, :drop_group => :vyatta_host_groups_dd_group, :drag_text => "Drag and drop to reorganize" } ]
       },
       :columns          => [
-        column_defaults.merge(:name => :name,                     :text => "Name",            :flex => true),
-        column_defaults.merge(:name => :sort_order,               :text => "#",               :width => 40, :align => :center, :editor => {:hidden => true}),
+        column_defaults.merge(:name => :name,                     :text => "Name",            :hidden => true),
+        column_defaults.merge(:name => :html_name,                :text => "Name",            :flex => true, :renderer => 'boldRenderer', :editor => {:hidden => true}, :virtual => true),
+        column_defaults.merge(:name => :color,                    :text => "Color",           :hidden => true),
+        column_defaults.merge(:name => :sort_order,               :text => "#",               :width => 40, :align => :center, :renderer => "textSteelBlueRenderer", :editor => {:hidden => true}),
         column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",        :hidden => true)
       ],
       :add_form_window_config   => form_window_config,

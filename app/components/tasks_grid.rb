@@ -39,12 +39,14 @@ class TasksGrid < Netzke::Basepack::GridPanel
         :plugins => [ { :ptype => :gridviewdragdrop, :drag_group => :tasks_dd_group, :drop_group => :tasks_dd_group, :drag_text => "Drag and drop to reorganize" } ]
       },
       :columns          => [
-        column_defaults.merge(:name => :task_group__name,         :text => "Task group", :default_value => TaskGroup.first ? TaskGroup.first.id : nil, 
+        column_defaults.merge(:name => :task_group__name,         :text => "Task group", :hidden => true, :default_value => TaskGroup.first ? TaskGroup.first.id : nil, 
           :editor => {:editable => false, :empty_text => "Choose task group", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l} } }),
-        column_defaults.merge(:name => :name,                     :text => "Name",                  :flex => true),
+        column_defaults.merge(:name => :task_group__html_name,    :text => "Task group", :renderer => 'boldRenderer', :editor => {:xtype => :textfield, :hidden => true}, :virtual => true),
+        column_defaults.merge(:name => :name,                     :text => "Name",                  :hidden => true),
+        column_defaults.merge(:name => :html_name,                :text => "Name",                  :flex => true, :editor => {:hidden => true}, :virtual => true),
         column_defaults.merge(:name => :is_on_demand,             :text => "On demand?",            :hidden => true),
         column_defaults.merge(:name => :match_hostname,           :text => "Match hostname",        :hidden => true),
-        column_defaults.merge(:name => :sort_order,               :text => "#",                     :width => 40, :align => :center, :editor => {:hidden => true}),
+        column_defaults.merge(:name => :sort_order,               :text => "#",                     :width => 40, :align => :center, :renderer => "textSteelBlueRenderer", :editor => {:hidden => true}),
         column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",              :hidden => true),
         column_defaults.merge(:name => :comment,                  :text => "Comment",               :hidden => true, :editor => {:height => 100})
       ],

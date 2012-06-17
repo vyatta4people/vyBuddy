@@ -1,0 +1,2 @@
+ALTER TABLE `task_groups` ADD COLUMN `color` VARCHAR(6) NOT NULL DEFAULT '000000' AFTER `name`;
+ALTER TABLE `vyatta_host_groups` ADD COLUMN `color` VARCHAR(6) NOT NULL DEFAULT '000000' AFTER `name`;

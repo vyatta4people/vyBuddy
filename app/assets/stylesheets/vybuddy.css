@@ -134,3 +134,9 @@
   -moz-border-radius:   10px;
   border-radius:        10px;
 }
+
+.task-group-indicator {
+  border-style:         solid;
+  border-width:         1px;
+  border-color:         #99bce8;
+}

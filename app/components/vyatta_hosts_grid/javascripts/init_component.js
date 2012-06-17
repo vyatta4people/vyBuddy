@@ -51,22 +51,19 @@
     }, this);
 
     this.getView().on('drop', function(node, data, dropRec, dropPosition) {
-      this.reorganizeWithPersistentOrder({ moved_record_id: data.records[0].data.id, replaced_record_id: dropRec.data.id, position: dropPosition }, function(result) {
-        if (result.success) {
-          this.getStore().load();
-        } else {
-          Ext.Msg.show({ title: 'Vyatta host re-order failed', msg: result.message, buttons: Ext.Msg.OK, icon: Ext.Msg.ERROR });
+      this.getUserRights({ action: 'edit_in_form' }, function(userIsAdmin) {
+        if (userIsAdmin) { 
+          this.reorganizeWithPersistentOrder({ moved_record_id: data.records[0].data.id, replaced_record_id: dropRec.data.id, position: dropPosition }, function(result) {
+            if (!result.success) { Ext.Msg.show({ title: 'Vyatta host re-order failed', msg: result.message, buttons: Ext.Msg.OK, icon: Ext.Msg.ERROR }); }
+          });
         }
       });
+      this.getStore().load();
     }, this);
 
     this.getView().on('itemdblclick', function(self, record, item, index, e, eOpts) {
       this.getUserRights({ action: 'edit_in_form' }, function(userIsAdmin) {
-        if (userIsAdmin) {
-          this.onEditInForm();
-        } else {
-          Ext.Msg.show({ title: 'Access denied', msg: 'You have no rights to perform edit action!', buttons: Ext.Msg.OK, icon: Ext.Msg.ERROR });
-        }
+        if (userIsAdmin) { this.onEditInForm(); }
       });
     }, this);
   }

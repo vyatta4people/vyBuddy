@@ -6,7 +6,7 @@ class Task < ActiveRecord::Base
 
   validates :name, :match_hostname, :presence => true
 
-  validates :name, :uniqueness => true
+  validates :name, :uniqueness => { :scope => :task_group_id }
 
   default_scope select("`tasks`.*").joins(:task_group).order(["`task_groups`.`sort_order` ASC", "`task_groups`.`name` ASC", "`tasks`.`sort_order` ASC", "`tasks`.`name` ASC"])
 
@@ -27,6 +27,10 @@ class Task < ActiveRecord::Base
   def applicable?(vyatta_host)
     return true if vyatta_host.hostname.match(/#{self.match_hostname}/i)
     return false
+  end
+
+  def html_name
+    "<div style=\"color:##{self.task_group.color}\">#{self.name}</div>"
   end
 
   def html_id

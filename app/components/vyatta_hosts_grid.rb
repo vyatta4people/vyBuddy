@@ -45,11 +45,13 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
           :plugins => [ { :ptype => :gridviewdragdrop, :drag_group => :vyatta_hosts_dd_group, :drop_group => :vyatta_hosts_dd_group, :drag_text => "Drag and drop to reorganize" } ]
       },
       :columns            => [
-        column_defaults.merge(:name => :vyatta_host_group__name,  :text => "Host group",            :hidden => false, 
+        column_defaults.merge(:name => :vyatta_host_group__name,        :text => "Host group",      :hidden => true,
           :editor => {:editable => false, :empty_text => "Choose group", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l}} } ),
+        column_defaults.merge(:name => :vyatta_host_group__html_name,   :text => "Host group",      :renderer => 'boldRenderer', :editor => {:xtype => :textfield, :hidden => true}, :virtual => true),
         column_defaults.merge(:name => :ssh_key_pair__identifier, :text => "SSH key pair",          :hidden => true, 
           :editor => {:editable => false, :empty_text => "Choose key pair", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l}} } ),
-        column_defaults.merge(:name => :hostname,                 :text => "Hostname",              :flex => true),
+        column_defaults.merge(:name => :hostname,                 :text => "Hostname",              :hidden => true),
+        column_defaults.merge(:name => :html_hostname,            :text => "Hostname",              :flex => true, :editor => {:hidden => true}, :virtual => true),
         column_defaults.merge(:name => :remote_address,           :text => "Remote address",        :hidden => true),
         column_defaults.merge(:name => :remote_port,              :text => "Remote port",           :hidden => true, :default_value => 22, :editor => {:allow_decimals => false, :auto_strip_chars => true, :min_value => 1,  :max_value => 65535}),
         column_defaults.merge(:name => :polling_interval,         :text => "Polling interval",      :hidden => true, :default_value => 60, :editor => {:allow_decimals => false, :auto_strip_chars => true, :min_value => 30, :max_value => 86400}),
@@ -61,7 +63,7 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :reachability,             :text => "Reachable?",            :width => 100, :attr_type => :integer, :align => :center, :renderer => 'booleanRenderer2', :virtual => true),
         column_defaults.merge(:name => :vyatta_version,           :text => "Version",               :width => 110, :align => :center, :virtual => true),
         column_defaults.merge(:name => :load_average,             :text => "Load average",          :width => 100, :format => '0.00', :xtype => :numbercolumn, :align => :center, :virtual => true),
-        column_defaults.merge(:name => :sort_order,               :text => "#",                     :width => 40,  :align => :center, :editor => {:hidden => true})        
+        column_defaults.merge(:name => :sort_order,               :text => "#",                     :width => 40,  :align => :center, :renderer => "textSteelBlueRenderer", :editor => {:hidden => true})
       ],
       :add_form_window_config   => form_window_config,
       :edit_form_window_config  => form_window_config
