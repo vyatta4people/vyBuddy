@@ -32,6 +32,7 @@ class TasksGrid < Netzke::Basepack::GridPanel
       :context_menu     => [:edit_in_form.action, :del.action],
       :tbar             => [:add_in_form.action],
       :bbar             => [],
+      :rows_per_page    => 18,
       :tools            => false,
       :multi_select     => false,
       :prohibit_update  => true,
