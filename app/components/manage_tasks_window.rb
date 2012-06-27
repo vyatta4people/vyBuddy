@@ -20,13 +20,23 @@ class ManageTasksWindow < Netzke::Basepack::Window
           :class_name => "TasksGrid",
           :style      => { :border_right => CSS_BORDER_STYLE },
           :margin     => "0 2 0 0"
-        ),
-        :task_remote_commands_grid.component(
-          :name       => :task_remote_commands_grid,
-          :region     => :center,
-          :class_name => "TaskRemoteCommandsGrid",
-          :style      => { :border_left => CSS_BORDER_STYLE, :border_right => CSS_BORDER_STYLE }
-        ),
+        ), 
+        {
+          :name             => :task_details_tab_panel,
+          :region           => :center,
+          :title            => "Task details",
+          :prevent_header   => false,
+          :border           => true,
+          :margin           => "2 0 2 0",
+          :class_name       => "Netzke::Basepack::TabPanel",
+          :active_tab       => 0,
+          :items => [
+            :task_remote_commands_grid.component(
+              :name       => :task_remote_commands_grid,
+              :class_name => "TaskRemoteCommandsGrid",
+            )
+          ]
+        },
         :tasks_side_tab_panel.component(
           :name       => :tasks_side_tab_panel,
           :region     => :east,

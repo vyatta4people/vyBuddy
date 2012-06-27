@@ -8,7 +8,8 @@
 
     this.on('afterrender', function(self, eOpts) {
       // Define fellow components
-      this.taskRemoteCommandsGrid = Netzke.page.manageTasksWindow.getChildNetzkeComponent('task_remote_commands_grid');
+      this.taskDetailsTabPanel    = Netzke.page.manageTasksWindow.getChildNetzkeComponent('task_details_tab_panel');
+      this.taskRemoteCommandsGrid = this.taskDetailsTabPanel.getChildNetzkeComponent('task_remote_commands_grid');
       // Load records
       this.getStore().load();
     }, this);
@@ -33,6 +34,7 @@
       this.selectedTaskId       = record.data.id;
       this.selectedTaskGroupId  = record.data.task_group__name;
       this.selectedTaskName     = record.data.name;
+      this.taskDetailsTabPanel.setTitle('Task details (' + this.selectedTaskName + ')');
       this.taskRemoteCommandsGrid.fireEvent('selecttask', this.selectedTaskId, this.selectedTaskName);
     }, this);
 

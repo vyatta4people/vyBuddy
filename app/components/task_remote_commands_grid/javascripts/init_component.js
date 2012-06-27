@@ -11,7 +11,7 @@
       var dropTarget     = Ext.create('Ext.dd.DropTarget', dropTargetEl, {
         ddGroup: 'remote_commands_dd_group',
         notifyEnter: function(ddSource, e, data) {
-          var targetGrid = Netzke.page.manageTasksWindow.getChildNetzkeComponent('task_remote_commands_grid'); // Yes, we need to find ourselves here :)
+          var targetGrid = Netzke.page.manageTasksWindow.getChildNetzkeComponent('task_details_tab_panel').getChildNetzkeComponent('task_remote_commands_grid'); // Yes, we need to find ourselves here :)
           if (ddSource.id == 'manage_tasks_window__tasks_side_tab_panel__commands_tab_panel__remote_commands_grid-body') {
             targetGrid.body.stopAnimation();
             targetGrid.body.highlight();

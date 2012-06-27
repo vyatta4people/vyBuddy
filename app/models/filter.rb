@@ -1,5 +1,7 @@
 class Filter < ActiveRecord::Base
-  has_many :task_remote_commands, :dependent => :destroy
+  has_many :task_remote_commands
+  has_many :tasks,    :through => :task_remote_commands
+  has_many :filters,  :through => :task_remote_commands
 
   validates :name, :interpreter, :code, :presence => true
   
@@ -12,6 +14,7 @@ class Filter < ActiveRecord::Base
 
   before_update  { |filter| return false if filter.name == DEFAULT_FILTER_NAME }
   before_destroy { |filter| return false if filter.name == DEFAULT_FILTER_NAME }
+  before_destroy { |filter| return false if filter.task_remote_commands.count > 0 }
 
   def apply(data)
     filter_script = Tempfile.new("vybuddy_filter")

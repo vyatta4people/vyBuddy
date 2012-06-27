@@ -2,7 +2,8 @@ class Task < ActiveRecord::Base
   belongs_to :task_group
 
   has_many :task_remote_commands, :dependent => :destroy
-  has_many :remote_commands, :through => :task_remote_commands
+  has_many :remote_commands,  :through => :task_remote_commands
+  has_many :filters,          :through => :task_remote_commands
 
   validates :name, :match_hostname, :presence => true
 

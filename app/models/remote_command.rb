@@ -1,8 +1,9 @@
 class RemoteCommand < ActiveRecord::Base
   belongs_to :user
 
-  has_many :task_remote_commands, :dependent => :destroy
-  has_many :tasks, :through => :task_remote_commands
+  has_many :task_remote_commands
+  has_many :tasks,    :through => :task_remote_commands
+  has_many :filters,  :through => :task_remote_commands
 
   validates :mode, :command, :presence => true
 
@@ -14,6 +15,8 @@ class RemoteCommand < ActiveRecord::Base
   validate :validate_safety
 
   default_scope order(["`mode` DESC, `command` ASC"])
+
+  before_destroy { |remote_command| return false if remote_command.task_remote_commands.count > 0 }
 
   def validate_safety
     if self.configuration? and !self.command.match(/^show/)

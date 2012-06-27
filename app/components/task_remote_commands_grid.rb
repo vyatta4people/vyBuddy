@@ -22,7 +22,7 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
 
     super.merge(
       :name               => :task_remote_commands_grid,
-      :title              => "Remote commands for tasks",
+      :title              => "Remote commands",
       :prevent_header     => true,
       :model              => "TaskRemoteCommand",
       :load_inline_data   => false,
