@@ -37,7 +37,7 @@ class TasksGrid < Netzke::Basepack::GridPanel
       :multi_select     => false,
       :prohibit_update  => true,
       :view_config      => {
-        :plugins => [ { :ptype => :gridviewdragdrop, :drag_group => :tasks_dd_group, :drop_group => :tasks_dd_group, :drag_text => "Drag and drop to reorganize" } ]
+        :plugins => [ { :ptype => :gridviewdragdrop, :dd_group => :tasks_dd_group, :drag_text => "Drag and drop to reorganize" } ]
       },
       :columns          => [
         column_defaults.merge(:name => :task_group__name,         :text => "Task group", :hidden => true, :default_value => TaskGroup.first ? TaskGroup.first.id : nil, 
@@ -46,7 +46,9 @@ class TasksGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :name,                     :text => "Name",                  :hidden => true),
         column_defaults.merge(:name => :html_name,                :text => "Name",                  :flex => true, :editor => {:hidden => true}, :virtual => true),
         column_defaults.merge(:name => :is_on_demand,             :text => "On demand?",            :hidden => true),
-        column_defaults.merge(:name => :match_hostname,           :text => "Match hostname",        :hidden => true),
+        column_defaults.merge(:name => :is_singleton,             :text => "Singleton?",            :hidden => true),
+        column_defaults.merge(:name => :group_applicability,      :text => "Group applicability",   :hidden => true, :editor => {:xtype => :netzkeremotecombo, :editable => false}),
+        column_defaults.merge(:name => :match_hostname,           :text => "Match hostname",        :hidden => true, :editor => {:disabled => true}),
         column_defaults.merge(:name => :sort_order,               :text => "#",                     :width => 40, :align => :center, :renderer => "textSteelBlueRenderer", :editor => {:hidden => true}),
         column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",              :hidden => true),
         column_defaults.merge(:name => :comment,                  :text => "Comment",               :hidden => true, :editor => {:height => 100})
@@ -88,6 +90,8 @@ class TasksGrid < Netzke::Basepack::GridPanel
     case params[:column]
     when "task_group__name"
       return { :data => TaskGroup.enabled.collect {|t| [t.id, t.name]} }
+    when "group_applicability"
+      return { :data => GROUP_APPLICABILITIES.collect {|g| [g, g]} }
     end
   end
 

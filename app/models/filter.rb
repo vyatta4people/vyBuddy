@@ -1,4 +1,5 @@
 class Filter < ActiveRecord::Base
+
   has_many :task_remote_commands
   has_many :tasks,    :through => :task_remote_commands
   has_many :filters,  :through => :task_remote_commands

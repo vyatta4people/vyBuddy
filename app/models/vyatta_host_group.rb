@@ -1,6 +1,8 @@
 class VyattaHostGroup < ActiveRecord::Base
-
   has_many :vyatta_hosts
+
+  has_many :task_vyatta_host_groups, :dependent => :destroy
+  has_many :tasks, :through => :task_vyatta_host_groups
 
   validates :name, :presence => true
 
@@ -18,10 +20,23 @@ class VyattaHostGroup < ActiveRecord::Base
   before_create     :set_sort_order
   before_create     :set_defaults
   before_validation :set_color
+  before_destroy { |vyatta_host_group| return false if vyatta_host_group.id == DEFAULT_HOST_GROUP_ID }
   before_destroy { |vyatta_host_group| return false if vyatta_host_group.vyatta_hosts.count > 0 }
 
   def html_name
     "<div style=\"color:##{self.color}\">#{self.name}</div>"
+  end
+
+  def number_of_members
+    self.vyatta_hosts.count
+  end
+
+  def list_of_members
+    self.vyatta_hosts.collect{ |vyatta_host| vyatta_host.hostname }
+  end
+
+  def html_list_of_members
+    "<div style=\"color:##{self.color}\">#{self.list_of_members.join("<br/>")}</div>"
   end
 
 private

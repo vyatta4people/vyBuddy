@@ -5,6 +5,10 @@
     this.selectedVyattaHostGroupId = 0;
 
     this.on('afterrender', function(self, eOpts) {
+      // Define fellow components
+      this.tasksGrid                = Netzke.page.manageTasksWindow.getChildNetzkeComponent('tasks_grid');
+      this.taskDetailsTabPanel      = Netzke.page.manageTasksWindow.getChildNetzkeComponent('task_details_tab_panel');
+      this.taskVyattaHostGroupsGrid = this.taskDetailsTabPanel.getChildNetzkeComponent('task_vyatta_host_groups_grid');
       // Load records
       this.getStore().load();
     }, this);
@@ -14,11 +18,19 @@
         var index = self.findExact('id', this.selectedVyattaHostGroupId);
         if (index == -1) { index = 0; }
         this.getSelectionModel().select(index);
+        this.taskVyattaHostGroupsGrid.fireEvent('selecttask', this.tasksGrid.selectedTaskId, this.tasksGrid.selectedTaskName);
       }
     }, this);
 
     this.on('select', function(self, record, index, eOpts) {
       this.selectedVyattaHostGroupId = record.data.id;
+    }, this);
+
+    this.getView().on('beforedrop', function(node, data, dropRec, dropPosition) {
+      if (data.view.ownerCt.id != 'manage_tasks_window__tasks_side_tab_panel__groups_tab_panel__vyatta_host_groups_grid') {
+        this.getStore().load();
+        return(false);
+      }
     }, this);
 
     this.getView().on('drop', function(node, data, dropRec, dropPosition) {

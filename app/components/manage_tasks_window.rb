@@ -34,7 +34,11 @@ class ManageTasksWindow < Netzke::Basepack::Window
             :task_remote_commands_grid.component(
               :name       => :task_remote_commands_grid,
               :class_name => "TaskRemoteCommandsGrid",
-            )
+            ),
+            :task_vyatta_host_groups_grid.component(
+              :name       => :task_vyatta_host_groups_grid,
+              :class_name => "TaskVyattaHostGroupsGrid",
+            )            
           ]
         },
         :tasks_side_tab_panel.component(

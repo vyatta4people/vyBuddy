@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+
   has_many :ssh_key_pairs
 
   validates :username, :email, :password, :presence => true

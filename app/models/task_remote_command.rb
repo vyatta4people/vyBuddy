@@ -1,4 +1,5 @@
 class TaskRemoteCommand < ActiveRecord::Base
+
   belongs_to :task
   belongs_to :remote_command
   belongs_to :filter

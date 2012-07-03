@@ -1,4 +1,5 @@
 class Display < ActiveRecord::Base
+
   belongs_to :vyatta_host
   belongs_to :task_remote_command
 

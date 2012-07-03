@@ -28,14 +28,14 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
       :load_inline_data   => false,
       :border             => false,
       :context_menu       => [:edit_in_form.action, :del.action],
-      :tbar               => ["<div class='trc-hint'>Use drag-and-drop to add and sort remote commands</div>"],
+      :tbar               => ["<div class='task-details-hint'>Use drag-and-drop to add and sort remote commands</div>"],
       :bbar               => nil,
       :enable_pagination  => false,
       :tools              => false,
       :multi_select       => false,
       :prohibit_update    => true,
       :view_config        => {
-        :plugins => [ { :ptype => :gridviewdragdrop, :drag_group => :remote_commands_dd_group, :drop_group => :remote_commands_dd_group, :drag_text => "Drag and drop to reorganize" } ]
+        :plugins => [ { :ptype => :gridviewdragdrop, :dd_group => :remote_commands_dd_group, :drag_text => "Drag and drop to reorganize" } ]
       },
       :columns            => [
         column_defaults.merge(:name => :task_id,                   :text => "Task",     :hidden => true,  :editor => {:hidden => true}),
@@ -44,7 +44,7 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :filter__name,              :text => "Filter",   :width => 100,    :editor => {:editable => false, :empty_text => "Choose filter", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l} } }),
         column_defaults.merge(:name => :sort_order,                :text => "#",        :width => 40,     :align => :center, :renderer => "textSteelBlueRenderer", :editor => {:hidden => true})
       ],
-      :add_form_window_config   => form_window_config,
+      #:add_form_window_config   => form_window_config,
       :edit_form_window_config  => form_window_config
     )
   end

@@ -17,12 +17,14 @@ SSH_KEY_TYPES               = ['ssh-rsa', 'ssh-dss']
 SSH_TIMEOUT                 = 30
 REMOTE_COMMAND_MODES        = [:system, :operational, :configuration]
 DEFAULT_REMOTE_COMMAND_MODE = :operational
+GROUP_APPLICABILITIES       = [:global, :inclusive, :exclusive]
 INTERPRETERS                = ['/bin/bash', '/usr/bin/perl', '/usr/bin/ruby']
 EXECUTORS_LOCAL_DIR         = 'vendor/vybuddy/executors'
 EXECUTORS_REMOTE_DIR        = '/var/tmp'
 
 DEFAULT_USER_ID             = 1
 DEFAULT_FILTER_NAME         = 'AS-IS'
+DEFAULT_HOST_GROUP_ID       = 1
 
 DUMMY_DISPLAY_INFORMATION   = '<i>Not applicable to this host...</i>'
 

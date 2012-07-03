@@ -42,7 +42,7 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
       :prohibit_update    => true,
       :view_config        => { 
           :load_mask => false,
-          :plugins => [ { :ptype => :gridviewdragdrop, :drag_group => :vyatta_hosts_dd_group, :drop_group => :vyatta_hosts_dd_group, :drag_text => "Drag and drop to reorganize" } ]
+          :plugins => [ { :ptype => :gridviewdragdrop, :dd_group => :vyatta_hosts_dd_group, :drag_text => "Drag and drop to reorganize" } ]
       },
       :columns            => [
         column_defaults.merge(:name => :vyatta_host_group__name,        :text => "Host group",      :hidden => true,

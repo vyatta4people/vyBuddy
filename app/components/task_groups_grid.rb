@@ -32,7 +32,7 @@ class TaskGroupsGrid < Netzke::Basepack::GridPanel
       :multi_select     => false,
       :prohibit_update  => true,
       :view_config      => {
-        :plugins => [ { :ptype => :gridviewdragdrop, :drag_group => :task_groups_dd_group, :drop_group => :task_groups_dd_group, :drag_text => "Drag and drop to reorganize" } ]
+        :plugins => [ { :ptype => :gridviewdragdrop, :dd_group => :task_groups_dd_group, :drag_text => "Drag and drop to reorganize" } ]
       },
       :columns          => [
         column_defaults.merge(:name => :name,                     :text => "Name",            :hidden => true),
