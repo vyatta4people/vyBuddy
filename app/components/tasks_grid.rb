@@ -19,7 +19,7 @@ class TasksGrid < Netzke::Basepack::GridPanel
     form_window_config              = Hash.new
     form_window_config[:y]          = 100
     form_window_config[:width]      = 700
-    form_window_config[:height]     = 320
+    form_window_config[:height]     = 420
 
     super.merge(
       :name             => :tasks_grid,
@@ -51,7 +51,7 @@ class TasksGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :match_hostname,           :text => "Match hostname",        :hidden => true, :editor => {:disabled => true}),
         column_defaults.merge(:name => :sort_order,               :text => "#",                     :width => 40, :align => :center, :renderer => "textSteelBlueRenderer", :editor => {:hidden => true}),
         column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",              :hidden => true),
-        column_defaults.merge(:name => :comment,                  :text => "Comment",               :hidden => true, :editor => {:height => 100})
+        column_defaults.merge(:name => :comment,                  :text => "Comment",               :hidden => true, :editor => {:height => 150})
       ],
       :add_form_window_config   => form_window_config,
       :edit_form_window_config  => form_window_config
