@@ -9,7 +9,8 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
       task_group_item                     = Hash.new
       task_group_item[:id]                = task_group.html_id
       task_group_item[:name]              = task_group_item[:id]
-      task_group_item[:title]             = task_group.name + ' ' + "<span style=\"background-color:##{task_group.color};\">&nbsp;&nbsp;&nbsp;&nbsp;</span>"
+      task_group_item[:title]             = task_group.name
+      task_group_item[:title]             += " <span style=\"background-color:##{task_group.color};\">&nbsp;&nbsp;&nbsp;&nbsp;</span>" if task_group.fill_tab_with_color
       task_group_item[:class_name]        = "Netzke::Basepack::TabPanel"
       task_group_item[:xtype]             = :tabpanel # This is required to make nested TabPanel work ;)
       task_group_item[:deferred_render]   = false

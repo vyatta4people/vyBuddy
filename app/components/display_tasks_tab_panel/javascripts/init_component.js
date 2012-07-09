@@ -20,6 +20,7 @@
                 width: 132,
                 height: 42,
                 iconCls: 'task-execute-button-icon', 
+                disabled: true,
                 renderTo: taskButtonDiv,
                 handler: function(button, e) {
                   var vyattaHostsGrid       = Netzke.page.vybuddyApp.getChildNetzkeComponent('vyatta_hosts_grid');

@@ -138,4 +138,13 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
     return { :set_result => { :success => success, :message => message } }
   end
 
+  endpoint :get_applicable_tasks do |params|
+    vyatta_host         = VyattaHost.find(params[:vyatta_host_id].to_i)
+    applicable_task_ids = Array.new
+    Task.enabled.each do |task|
+      applicable_task_ids[task.id] = true if task.applicable?(vyatta_host)
+    end
+    { :set_result => { :applicable_task_ids => applicable_task_ids } }
+  end
+
 end

@@ -35,11 +35,12 @@ class TaskGroupsGrid < Netzke::Basepack::GridPanel
         :plugins => [ { :ptype => :gridviewdragdrop, :dd_group => :task_groups_dd_group, :drag_text => "Drag and drop to reorganize" } ]
       },
       :columns          => [
-        column_defaults.merge(:name => :name,                     :text => "Name",            :hidden => true),
-        column_defaults.merge(:name => :html_name,                :text => "Name",            :flex => true, :renderer => 'boldRenderer', :editor => {:hidden => true}, :virtual => true),
-        column_defaults.merge(:name => :color,                    :text => "Color",           :hidden => true),
-        column_defaults.merge(:name => :sort_order,               :text => "#",               :width => 40, :align => :center, :renderer => "textSteelBlueRenderer", :editor => {:hidden => true}),
-        column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",        :hidden => true)
+        column_defaults.merge(:name => :name,                     :text => "Name",                  :hidden => true),
+        column_defaults.merge(:name => :html_name,                :text => "Name",                  :flex => true, :renderer => 'boldRenderer', :editor => {:hidden => true}, :virtual => true),
+        column_defaults.merge(:name => :color,                    :text => "Color",                 :hidden => true),
+        column_defaults.merge(:name => :fill_tab_with_color,      :text => "Fill tab with color?",  :hidden => true),
+        column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",              :hidden => true),
+        column_defaults.merge(:name => :sort_order,               :text => "#",                     :width => 40, :align => :center, :renderer => "textSteelBlueRenderer", :editor => {:hidden => true})
       ],
       :add_form_window_config   => form_window_config,
       :edit_form_window_config  => form_window_config

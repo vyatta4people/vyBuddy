@@ -2,6 +2,7 @@
   initComponent: function(params) {
     this.superclass.initComponent.call(this);
 
+    this.previousSelectedVyattaHostId = 0;
     this.selectedVyattaHostId         = 0;
     this.selectedVyattaHostGroupId    = 0;
     this.selectedVyattaHostHostname   = 'CSS Alabama';
@@ -12,7 +13,8 @@
       var updateVyattaHostsGrid = function() { self.store.load(); }
       Ext.TaskManager.start({ run: updateVyattaHostsGrid, interval: 5000 });
       // Declare shorthand to fellow component
-      this.displayTasksTabPanel = Netzke.page.vybuddyApp.getChildNetzkeComponent('display_tasks_tab_panel');
+      this.displayTasksTabPanel       = Netzke.page.vybuddyApp.getChildNetzkeComponent('display_tasks_tab_panel');
+      this.displayTasksTabPanelMask   = new Ext.LoadMask(this.displayTasksTabPanel, { msg: "Loading tasks..." });
     }, this);
 
     this.getStore().on('load', function(self, records, successful, operation, eOpts) {
@@ -22,7 +24,9 @@
     }, this);
 
     this.on('select', function(self, record, index, eOpts) {
+      this.previousSelectedVyattaHostId = this.selectedVyattaHostId;
       this.selectedVyattaHostId         = record.data.id;
+      if (this.selectedVyattaHostId != this.previousSelectedVyattaHostId) { this.displayTasksTabPanelMask.show(); }
       this.selectedVyattaHostGroupId    = record.data.vyatta_host_group__name;
       this.selectedVyattaHostHostname   = record.data.hostname;
       this.selectedRow                  = index;
@@ -47,9 +51,16 @@
         var taskExecuteButton = Ext.getCmp(task.html_execute_button_id);
         var taskCommentButton = Ext.getCmp(task.html_comment_button_id);
         containerDiv.setStyle('background-color', containerColor);
-        taskExecuteButton.setDisabled(!this.isSelectedVyattaHostOperable);
         taskCommentButton.setDisabled(task.is_comment_empty);
       }
+      this.getApplicableTasks({vyatta_host_id: this.selectedVyattaHostId}, function (result) {
+        for (var t in this.displayTasksTabPanel.tasks) {
+          var task              = this.displayTasksTabPanel.tasks[t];
+          var taskExecuteButton = Ext.getCmp(task.html_execute_button_id);
+          taskExecuteButton.setDisabled(!this.isSelectedVyattaHostOperable || !result.applicableTaskIds[task.id]);
+        }
+       if (this.displayTasksTabPanelMask.isVisible()) { this.displayTasksTabPanelMask.hide(); }
+      }, this);
       this.displayTasksTabPanel.fireEvent('selectvyattahost', this.selectedVyattaHostId);
     }, this);
 

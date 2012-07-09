@@ -35,7 +35,8 @@ private
   end
 
   def set_defaults
-    self.is_enabled = false if !self.is_enabled
+    self.fill_tab_with_color  = false if !self.fill_tab_with_color
+    self.is_enabled           = false if !self.is_enabled
     return true
   end
 
