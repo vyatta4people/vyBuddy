@@ -64,6 +64,14 @@ class Task < ActiveRecord::Base
     "task_#{self.id.to_s}"
   end
 
+  def html_dummy_id
+    "task_#{self.id.to_s}_dummy"
+  end
+
+  def html_not_applicable_id
+    "task_#{self.id.to_s}_not_applicable"
+  end
+
   def html_container_id
     "task_#{self.id.to_s}_container"
   end

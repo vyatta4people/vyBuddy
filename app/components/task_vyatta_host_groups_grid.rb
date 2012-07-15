@@ -21,7 +21,7 @@ class TaskVyattaHostGroupsGrid < Netzke::Basepack::GridPanel
       :border             => false,
       :context_menu       => [:del.action],
       :tbar               => ["<div class='task-details-hint'>Use drag-and-drop to add Vyatta host groups</div>"],
-      :bbar               => ["Totals: TODO"],
+      :bbar               => false,
       :enable_pagination  => false,
       :tools              => false,
       :multi_select       => false,

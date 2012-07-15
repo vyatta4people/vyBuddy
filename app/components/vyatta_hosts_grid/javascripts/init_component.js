@@ -26,7 +26,19 @@
     this.on('select', function(self, record, index, eOpts) {
       this.previousSelectedVyattaHostId = this.selectedVyattaHostId;
       this.selectedVyattaHostId         = record.data.id;
-      if (this.selectedVyattaHostId != this.previousSelectedVyattaHostId) { this.displayTasksTabPanelMask.show(); }
+      if (this.selectedVyattaHostId != this.previousSelectedVyattaHostId) { 
+        for (var t in this.displayTasksTabPanel.tasks) {
+          var task                  = this.displayTasksTabPanel.tasks[t];
+          var taskDummyDiv          = Ext.get(task.html_dummy_id);
+          var taskNotApplicableDiv  = Ext.get(task.html_not_applicable_id);
+          var taskContainerDiv      = Ext.get(task.html_container_id);
+          taskDummyDiv.setVisible(true);
+          taskNotApplicableDiv.setVisibilityMode(Ext.Element.DISPLAY);
+          taskNotApplicableDiv.setVisible(false);
+          taskContainerDiv.setVisible(false);
+        }
+        this.displayTasksTabPanelMask.show(); 
+      }
       this.selectedVyattaHostGroupId    = record.data.vyatta_host_group__name;
       this.selectedVyattaHostHostname   = record.data.hostname;
       this.selectedRow                  = index;
@@ -55,9 +67,21 @@
       }
       this.getApplicableTasks({vyatta_host_id: this.selectedVyattaHostId}, function (result) {
         for (var t in this.displayTasksTabPanel.tasks) {
-          var task              = this.displayTasksTabPanel.tasks[t];
-          var taskExecuteButton = Ext.getCmp(task.html_execute_button_id);
-          taskExecuteButton.setDisabled(!this.isSelectedVyattaHostOperable || !result.applicableTaskIds[task.id]);
+          var task                  = this.displayTasksTabPanel.tasks[t];
+          var taskExecuteButton     = Ext.getCmp(task.html_execute_button_id);
+          var isTaskApplicable      = this.isSelectedVyattaHostOperable && result.applicableTaskIds[task.id];
+          var taskGroupPanel        = this.displayTasksTabPanel.getComponent(task.html_group_id);
+          var taskPanel             = taskGroupPanel.getComponent(task.html_id);
+          var taskDummyDiv          = Ext.get(task.html_dummy_id);
+          var taskNotApplicableDiv  = Ext.get(task.html_not_applicable_id);
+          var taskContainerDiv      = Ext.get(task.html_container_id);
+          taskExecuteButton.setDisabled(!isTaskApplicable);
+          taskDummyDiv.setVisibilityMode(Ext.Element.DISPLAY);
+          taskDummyDiv.setVisible(false);
+          taskNotApplicableDiv.setVisibilityMode(Ext.Element.DISPLAY);
+          taskNotApplicableDiv.setVisible(!isTaskApplicable);
+          taskContainerDiv.setVisible(isTaskApplicable);
+          taskPanel.setAutoScroll(isTaskApplicable);
         }
        if (this.displayTasksTabPanelMask.isVisible()) { this.displayTasksTabPanelMask.hide(); }
       }, this);
