@@ -28,7 +28,11 @@
 
     this.getView().on('beforedrop', function(node, data, dropRec, dropPosition) {
       if (data.view.ownerCt.id != 'manage_tasks_window__tasks_side_tab_panel__groups_tab_panel__vyatta_host_groups_grid') {
-        this.getStore().load();
+        if (data.view.ownerCt.id == 'manage_tasks_window__task_details_tab_panel__task_vyatta_host_groups_grid') {
+          this.taskVyattaHostGroupsGrid.onDel();
+        } else {
+          this.getStore().load();
+        }
         return(false);
       }
     }, this);

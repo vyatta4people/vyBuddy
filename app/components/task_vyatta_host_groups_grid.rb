@@ -33,7 +33,8 @@ class TaskVyattaHostGroupsGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :task_id,                   :text => "Task",        :hidden => true),
         column_defaults.merge(:name => :vyatta_host_group__name,   :text => "Name",        :flex => true, :getter => lambda { |tvhg| tvhg.vyatta_host_group.html_name }, :renderer => 'boldRenderer'),
         column_defaults.merge(:name => :list_of_members,           :text => "Members",     :width => 150, :getter => lambda { |tvhg| tvhg.vyatta_host_group.html_list_of_members }, :virtual => true),
-        column_defaults.merge(:name => :number_of_members,         :text => "Qty",         :width => 50,  :getter => lambda { |tvhg| tvhg.vyatta_host_group.number_of_members }, :align => :center, :virtual => true)
+        column_defaults.merge(:name => :number_of_members,         :text => "Qty",         :width => 50,  :getter => lambda { |tvhg| tvhg.vyatta_host_group.number_of_members }, :align => :center, :virtual => true),
+        column_defaults.merge(:name => :includability,             :text => "Inc?",        :width => 50,  :align => :center, :virtual => true, :renderer => 'booleanRenderer2')
       ]
     )
   end

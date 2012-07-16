@@ -5,7 +5,7 @@ function booleanRenderer(value) {
 
 function booleanRenderer2(value) {
   var cssClass;
-  switch(value) {
+  switch(Number(value)) {
     case 0:   cssClass = 'false'; break;
     case 1:   cssClass = 'true';  break;
     default:  cssClass = 'unknown';
