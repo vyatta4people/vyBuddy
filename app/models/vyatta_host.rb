@@ -105,19 +105,49 @@ class VyattaHost < ActiveRecord::Base
   #
   # Low-level SSH/SFTP stuff
   #
+  attr_accessor :ssh_username
+  attr_accessor :ssh_password
+
+  def get_ssh_username
+    if self.ssh_username
+      ssh_username = self.ssh_username
+    else
+      ssh_username = self.ssh_key_pair.login_username
+    end
+    return ssh_username
+  end
+
+  def get_ssh_connection_parameters
+    ssh_connection_parameters   = Hash.new
+    if self.ssh_password
+      ssh_connection_parameters[:password]  = self.ssh_password
+    else
+      ssh_connection_parameters[:key_data]  = self.ssh_key_pair.private_key
+    end
+    ssh_connection_parameters[:port]        = self.remote_port
+    ssh_connection_parameters[:timeout]     = SSH_TIMEOUT
+    return ssh_connection_parameters
+  end
+
   attr_accessor :ssh_error
   def execute_commands_via_ssh(commands)
-    command_result_sets = Array.new
+    command_result_sets         = Array.new
     begin
-      Net::SSH.start(self.remote_address, self.ssh_key_pair.login_username, :port => self.remote_port, :key_data => self.ssh_key_pair.private_key, :timeout => SSH_TIMEOUT) do |ssh|
+      Net::SSH.start(self.remote_address, self.get_ssh_username, self.get_ssh_connection_parameters) do |ssh|
         commands.each do |command|
           ssh.open_channel do |channel|
             command_result_set = Hash.new
-            command_result_set[:success]      = true
-            command_result_set[:stdout]       = ""
-            command_result_set[:stderr]       = ""
-            command_result_set[:data]         = ""
-            command_result_set[:exit_status]  = 0
+            command_result_set[:pty_allocated]  = false
+            command_result_set[:success]        = true
+            command_result_set[:stdout]         = ""
+            command_result_set[:stderr]         = ""
+            command_result_set[:data]           = ""
+            command_result_set[:exit_status]    = 0
+
+            channel.request_pty do |ch, success|
+              command_result_set[:pty_allocated] = success
+            end
+
             channel.exec(command) do |ch, success|
               command_result_set[:success] = false unless success
 
@@ -182,7 +212,7 @@ class VyattaHost < ActiveRecord::Base
   attr_accessor :sftp_error
   def upload_file_via_sftp!(local_path, remote_path)
     begin
-      Net::SFTP.start(self.remote_address, self.ssh_key_pair.login_username, :port => self.remote_port, :key_data => self.ssh_key_pair.private_key, :timeout => SSH_TIMEOUT) do |sftp|
+      Net::SFTP.start(self.remote_address, self.get_ssh_username, self.get_ssh_connection_parameters) do |sftp|
         sftp.upload!(local_path, remote_path)
       end
     rescue => e
@@ -247,6 +277,26 @@ class VyattaHost < ActiveRecord::Base
       return false
     end
     return true
+  end
+
+  def check_reachability
+    !self.execute_command_via_ssh!("/bin/true").nil?
+  end
+
+  def get_vyatta_version
+    self.execute_remote_command!("show version | grep 'Version' | sed 's/.*: *//'").strip
+  end
+
+  def vyatta?
+    !self.get_vyatta_version.match(/^V/).nil?
+  end
+
+  def get_load_average
+    self.execute_remote_command!({:mode => :system, :command => "uptime | sed 's/.*, //'"}).strip.to_f
+  end
+
+  def user_exists?(username)
+    !self.execute_remote_command!({:mode => :configuration, :command => "show system login user #{username}"}).match(/encrypted-password/).nil?
   end
 
   #
