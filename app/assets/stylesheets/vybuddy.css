@@ -151,3 +151,11 @@
   -moz-border-radius:   10px;
   border-radius:        10px;
 }
+
+.form-hint {
+  width:                100%;
+  padding:              10px;
+  border-style:         dashed;
+  border-width:         1px;
+  border-color:         #6ec563;
+}

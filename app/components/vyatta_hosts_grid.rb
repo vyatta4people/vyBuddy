@@ -8,6 +8,8 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
   action :edit_in_form,   :text => "Edit", :tooltip => "Edit Vyatta host", :icon => :server_edit, :disabled => false
   action :del, :icon => :server_delete, :disabled => false
 
+  action :bulk_add, :text => "Bulk add", :tooltip => "Bulk add Vyatta hosts", :icon => :server_bulk_add
+
   action :execute_all_tasks,          :text => "Execute all tasks",         :tooltip => "Execute all tasks",        :icon => :arrow_refresh
   action :execute_on_demand_tasks,    :text => "Execute on-demand tasks",   :tooltip => "Execute on-demand tasks",  :icon => :arrow_refresh
   action :execute_background_tasks,   :text => "Execute background tasks",  :tooltip => "Execute background tasks", :icon => :arrow_refresh
@@ -34,7 +36,7 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
       :width              => 550,
       :border             => true,
       :context_menu       => session[:user_is_admin] ? [:execute_all_tasks.action, :execute_on_demand_tasks.action, :execute_background_tasks.action, '-', :edit_in_form.action] : [:execute_all_tasks.action, :execute_on_demand_tasks.action, :execute_background_tasks.action],
-      :tbar               => session[:user_is_admin] ? [:add_in_form.action] : [],
+      :tbar               => session[:user_is_admin] ? [:add_in_form.action, :bulk_add.action] : [],
       :bbar               => session[:user_is_admin] ? ["<div class='vyatta-host-hint'>Use drag-and-drop to arrange Vyatta hosts</div>", '->', :del.action] : [],
       :enable_pagination  => false,
       :tools              => false,

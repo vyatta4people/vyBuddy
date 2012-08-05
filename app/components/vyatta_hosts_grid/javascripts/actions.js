@@ -1,4 +1,8 @@
 {
+  onBulkAdd: function() {
+    Netzke.page.vyattaHostsBulkAddWindow.show();
+  },
+
   onExecuteAllTasks: function() {
     this.onExecuteTasks('all');
   },
