@@ -12,7 +12,7 @@
     this.on('afterrender', function(self, eOpts) {
       var updateVyattaHostsGrid = function() { self.store.load(); }
       Ext.TaskManager.start({ run: updateVyattaHostsGrid, interval: 5000 });
-      // Declare shorthand to fellow component
+      // Define fellow components
       this.displayTasksTabPanel       = Netzke.page.vybuddyApp.getChildNetzkeComponent('display_tasks_tab_panel');
       this.displayTasksTabPanelMask   = new Ext.LoadMask(this.displayTasksTabPanel, { msg: "Loading tasks..." });
     }, this);

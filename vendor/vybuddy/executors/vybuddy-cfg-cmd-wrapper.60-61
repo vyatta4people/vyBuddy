@@ -19,6 +19,8 @@
 # All Rights Reserved.
 # **** End License ****
 
+source /etc/default/vyatta application=vybuddy
+
 if grep -q union=aufs /proc/cmdline || grep -q aufs /proc/filesystems ; then
   export UNIONFS=aufs
 else

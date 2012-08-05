@@ -39,7 +39,7 @@ while true do
   # Try to establish SSH connection to Vyatta host
   vyatta_host_state_changed = false
   begin
-    raise(vyatta_host.ssh_error) if !vyatta_host.execute_command_via_ssh!("/bin/true")
+    raise(vyatta_host.ssh_error) if !vyatta_host.check_reachability
   rescue => e
     Log.error("Could not reach Vyatta host: #{e.message}")
     vyatta_host_state_changed         = true if vyatta_host_state.is_reachable
@@ -73,8 +73,8 @@ while true do
 
   # Verify (and upload if needed) executors, check Vyatta software version and load average
   Log.error("Unable to verify #{vyatta_host.unmatched_modes.join(' and ')} mode executors") if !vyatta_host.verify_executors([:system, :operational], true)
-  vyatta_host_state.vyatta_version = vyatta_host.execute_remote_command!("show version | grep 'Version' | sed 's/.*: *//'").strip
-  vyatta_host_state.load_average   = vyatta_host.execute_remote_command!({:mode => :system, :command => "uptime | sed 's/.*, //'"}).strip.to_f
+  vyatta_host_state.vyatta_version = vyatta_host.get_vyatta_version
+  vyatta_host_state.load_average   = vyatta_host.get_load_average
   vyatta_host_state.save
   sleep(GRACE_PERIOD)
 

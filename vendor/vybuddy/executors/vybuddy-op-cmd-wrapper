@@ -1,6 +1,6 @@
 #!/bin/vbash -l
 shopt -s expand_aliases
-source /etc/default/vyatta
+source /etc/default/vyatta application=vybuddy
 
 if [ -f /etc/bash_completion.d/vyatta-op ]; then
   source /etc/bash_completion.d/vyatta-op

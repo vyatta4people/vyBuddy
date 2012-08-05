@@ -130,23 +130,24 @@ class VyattaHost < ActiveRecord::Base
   end
 
   attr_accessor :ssh_error
-  def execute_commands_via_ssh(commands)
-    command_result_sets         = Array.new
+  def execute_commands_via_ssh(commands, execute_as_one = false)
+
+    if execute_as_one
+      one_joint_command = commands.join(";")
+      commands          = [one_joint_command]
+    end
+
+    command_result_sets = Array.new    
     begin
       Net::SSH.start(self.remote_address, self.get_ssh_username, self.get_ssh_connection_parameters) do |ssh|
         commands.each do |command|
           ssh.open_channel do |channel|
             command_result_set = Hash.new
-            command_result_set[:pty_allocated]  = false
             command_result_set[:success]        = true
             command_result_set[:stdout]         = ""
             command_result_set[:stderr]         = ""
             command_result_set[:data]           = ""
             command_result_set[:exit_status]    = 0
-
-            channel.request_pty do |ch, success|
-              command_result_set[:pty_allocated] = success
-            end
 
             channel.exec(command) do |ch, success|
               command_result_set[:success] = false unless success
@@ -225,7 +226,7 @@ class VyattaHost < ActiveRecord::Base
   #
   # Inline and stored Vyatta remote commands
   #
-  def execute_remote_commands(remote_commands)
+  def execute_remote_commands(remote_commands, execute_as_one = false)
     full_remote_commands = Array.new
     remote_commands.each do |remote_command|
       full_remote_command = case remote_command.class.to_s
@@ -235,7 +236,7 @@ class VyattaHost < ActiveRecord::Base
       end
       full_remote_commands << full_remote_command
     end
-    return self.execute_commands_via_ssh(full_remote_commands)
+    return self.execute_commands_via_ssh(full_remote_commands, execute_as_one)
   end
 
   def execute_remote_command!(remote_command)
@@ -293,6 +294,10 @@ class VyattaHost < ActiveRecord::Base
 
   def get_load_average
     self.execute_remote_command!({:mode => :system, :command => "uptime | sed 's/.*, //'"}).strip.to_f
+  end
+
+  def get_hostname
+    self.execute_remote_command!({:mode => :system, :command => "hostname"}).strip
   end
 
   def user_exists?(username)
