@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.4'
+gem 'rails'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
@@ -35,8 +35,8 @@ gem 'execjs'
 gem 'therubyracer'
 
 # Netzke framework
-gem 'netzke-core', :git => 'git://github.com/nomadcoder/netzke-core.git'
-gem 'netzke-basepack', :git => 'git://github.com/nomadcoder/netzke-basepack.git'
+gem 'netzke-core'
+gem 'netzke-basepack'
 #gem 'netzke-communitypack', :git => 'git://github.com/nomadcoder/netzke-communitypack.git'
 
 # Pure-Ruby implementation of the SSH2/SFTP client protocol
