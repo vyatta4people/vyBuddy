@@ -6,16 +6,26 @@ class TaskRemoteCommand < ActiveRecord::Base
 
   has_many :displays, :dependent => :destroy
 
+  validate :validate_safety
+
   default_scope select("`task_remote_commands`.*").joins(:remote_command).order(["`task_remote_commands`.`sort_order` ASC", "`remote_commands`.`command` ASC"])
 
   before_create :set_sort_order
+  
+  before_save :set_defaults
+
+  before_save { |trc| trc.command_extension = trc.command_extension.strip }
 
   def mode
     self.remote_command.mode
   end
 
   def command
-    self.remote_command.command
+    [self.remote_command.command, self.command_extension].join(" ").strip
+  end
+
+  def full_command
+    [self.remote_command.full_command, self.command_extension].join(" ").strip
   end
 
   def html_id
@@ -30,6 +40,21 @@ private
 
   def set_sort_order
     self.sort_order = TaskRemoteCommand.get_next_sort_order(:task_id, self.task_id)
+  end
+
+  def set_defaults
+    self.command_extension = "" if !self.command_extension
+    return true
+  end
+
+  def validate_safety
+    if !self.task.writer?
+      if self.remote_command.configuration? and !self.remote_command.command.match(/^show/)
+        self.errors[:task_id] << "\'#{self.task.name}\' must be writer to accept command \'#{self.command}\'"
+        return false
+      end
+    end
+    return true
   end
 
 end

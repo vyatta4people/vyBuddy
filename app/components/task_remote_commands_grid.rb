@@ -38,11 +38,12 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
         :plugins => [ { :ptype => :gridviewdragdrop, :dd_group => :remote_commands_dd_group, :drag_text => "Drag and drop to reorganize" } ]
       },
       :columns            => [
-        column_defaults.merge(:name => :task_id,                   :text => "Task",     :hidden => true,  :editor => {:hidden => true}),
-        column_defaults.merge(:name => :mode,    :virtual => true, :text => "Mode",     :width => 100,    :editor => {:hidden => true}),
-        column_defaults.merge(:name => :command, :virtual => true, :text => "Command",  :flex => true,    :editor => {:hidden => true}),
-        column_defaults.merge(:name => :filter__name,              :text => "Filter",   :width => 100,    :editor => {:editable => false, :empty_text => "Choose filter", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l} } }),
-        column_defaults.merge(:name => :sort_order,                :text => "#",        :width => 40,     :align => :center, :renderer => "textSteelBlueRenderer", :editor => {:hidden => true})
+        column_defaults.merge(:name => :task_id,                   :text => "Task",                 :hidden => true,  :editor => {:hidden => true}),
+        column_defaults.merge(:name => :mode,    :virtual => true, :text => "Mode",                 :width => 100,    :editor => {:hidden => true}),
+        column_defaults.merge(:name => :command, :virtual => true, :text => "Command",              :flex => true,    :editor => {:hidden => true}),
+        column_defaults.merge(:name => :command_extension,         :text => "Command extension",    :hidden => true,  :editor => {:field_label => "Command extension", :empty_text => "Extend parent command"}),
+        column_defaults.merge(:name => :filter__name,              :text => "Filter",               :width => 100,    :editor => {:field_label => "Filter (to pipe output)", :editable => false, :empty_text => "Choose filter", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l} } }),
+        column_defaults.merge(:name => :sort_order,                :text => "#",                    :width => 40,     :align => :center, :renderer => "textSteelBlueRenderer", :editor => {:hidden => true})
       ],
       #:add_form_window_config   => form_window_config,
       :edit_form_window_config  => form_window_config
@@ -62,18 +63,16 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
       return { :set_result => { :success => TaskRemoteCommand.reorganize_with_persistent_order(moved_task_remote_command, replaced_task_remote_command, position, :task_id), :local => true, :message => TaskRemoteCommand.reorganize_with_persistent_order_message } }
     else
       # It's a drag-and-drop from remote commands grid
-      moved_task_remote_command     = TaskRemoteCommand.where(:task_id => params[:selected_task_id].to_i, :remote_command_id => params[:moved_record_id].to_i).first
-      if moved_task_remote_command
-        return { :set_result => { :success => false, :local => false, :message => "Already added: #{moved_task_remote_command.remote_command.mode}=>#{moved_task_remote_command.remote_command.command}" } }
-      else
-        moved_task_remote_command = TaskRemoteCommand.create(:task_id => params[:selected_task_id].to_i, :remote_command_id => params[:moved_record_id].to_i, :filter_id => Filter.first.id)
-        if params[:replaced_record_id].to_i == 0
-          replaced_task_remote_command = TaskRemoteCommand.where(:task_id => params[:selected_task_id].to_i).last
-        else
-          replaced_task_remote_command = TaskRemoteCommand.find(params[:replaced_record_id].to_i)
-        end
-        return { :set_result => { :success => TaskRemoteCommand.reorganize_with_persistent_order(moved_task_remote_command, replaced_task_remote_command, position, :task_id), :local => false, :message => TaskRemoteCommand.reorganize_with_persistent_order_message } }
+      moved_task_remote_command = TaskRemoteCommand.create(:task_id => params[:selected_task_id].to_i, :remote_command_id => params[:moved_record_id].to_i, :filter_id => Filter.first.id)
+      if moved_task_remote_command.new_record?
+        return { :set_result => { :success => false, :local => false, :message => "#{moved_task_remote_command.errors.full_messages.join(', ')}" } }
       end
+      if params[:replaced_record_id].to_i == 0
+        replaced_task_remote_command = TaskRemoteCommand.where(:task_id => params[:selected_task_id].to_i).last
+      else
+        replaced_task_remote_command = TaskRemoteCommand.find(params[:replaced_record_id].to_i)
+      end
+      return { :set_result => { :success => TaskRemoteCommand.reorganize_with_persistent_order(moved_task_remote_command, replaced_task_remote_command, position, :task_id), :local => false, :message => TaskRemoteCommand.reorganize_with_persistent_order_message, :created_record_id => moved_task_remote_command.id } }
     end
   end
 

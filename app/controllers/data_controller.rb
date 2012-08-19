@@ -20,12 +20,14 @@ class DataController < ApplicationController
     end
     vyatta_host.displays.each do |display|
       item = Hash.new
-      item[:html_display_id]      = display.html_display_id
-      item[:information]          = display.information
-      item[:remote_command_mode]  = display.task_remote_command.remote_command.mode
-      item[:remote_command]       = display.task_remote_command.remote_command.command
-      item[:filter]               = display.task_remote_command.filter.name
-      item[:updated_at]           = display.updated_at.localtime.strftime("%Y-%m-%d %H:%M:%S %Z")
+      item[:html_display_id]                  = display.html_display_id
+      item[:information]                      = display.information
+      item[:remote_command_mode]              = display.task_remote_command.mode
+      item[:remote_command]                   = display.task_remote_command.command
+      item[:filter]                           = display.task_remote_command.filter.name
+      item[:show_as_one]                      = display.task_remote_command.task.writer?
+      item[:html_united_information_id]       = display.task_remote_command.task.html_united_information_id
+      item[:updated_at]                       = display.updated_at.localtime.strftime("%Y-%m-%d %H:%M:%S %Z")
       data << item
     end
     render(:json => data)

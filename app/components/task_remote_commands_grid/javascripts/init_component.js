@@ -2,6 +2,8 @@
   initComponent: function(params) {
     this.superclass.initComponent.call(this);
 
+    this.createdRecordId = 0;
+
     this.on('afterrender', function(self, eOpts) {
       // Define fellow components
       this.tasksGrid            = Netzke.page.manageTasksWindow.getChildNetzkeComponent('tasks_grid');
@@ -21,8 +23,15 @@
     }, this);
 
     this.getStore().on('load', function(self, records, successful, operation, eOpts) {
-      if ((records) && (records.length > 0)) {
-        this.getSelectionModel().select(0);
+      if (this.createdRecordId == 0) { 
+        if ((records) && (records.length > 0)) {
+          this.getSelectionModel().select(0);
+        }
+      } else {
+        // Edit just created record
+        this.getSelectionModel().select(this.getStore().findExact('id', this.createdRecordId));
+        this.onEditInForm();
+        this.createdRecordId = 0;
       }
     }, this);
 
@@ -43,6 +52,8 @@
         if (!result.success) {
           if (result.local) { var title = 'Remote command re-order failed'; } else { var title = 'Failed to add remote command'; }
           Ext.Msg.show({ title: title, msg: result.message, buttons: Ext.Msg.OK, icon: Ext.Msg.ERROR });
+        } else {
+          if (!result.local) { this.createdRecordId = result.createdRecordId; }
         }
       });
     }, this);

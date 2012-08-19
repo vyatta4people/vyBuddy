@@ -93,6 +93,10 @@ class VyattaHostsBulkAddWindow < Netzke::Basepack::Window
   end
 
   endpoint :bulk_add_vyatta_hosts do |params|
+    Log.application     = :bulk_add
+    Log.event_source    = "localhost"
+    Log.info("Bulk add started")
+
     ssh_username        = params[:ssh_connection_username]
     ssh_password        = params[:ssh_connection_password]
     ssh_key_pair        = SshKeyPair.find(:first, :conditions => {:identifier => params[:ssh_key_pair]})
@@ -102,6 +106,9 @@ class VyattaHostsBulkAddWindow < Netzke::Basepack::Window
 
     results = Array.new
     hosts.each do |remote_address|
+      hostname                    = remote_address
+      Log.event_source            = hostname
+
       success                     = false
       message                     = ""
       vyatta_host                 = VyattaHost.new
@@ -112,6 +119,7 @@ class VyattaHostsBulkAddWindow < Netzke::Basepack::Window
         if vyatta_host.vyatta?
           if probe_hostname
             vyatta_host.hostname          = vyatta_host.get_hostname
+            hostname                      = hostname + " (#{vyatta_host.hostname})"
           else
             vyatta_host.hostname          = remote_address
           end
@@ -156,12 +164,23 @@ class VyattaHostsBulkAddWindow < Netzke::Basepack::Window
       else
         message = vyatta_host.ssh_error
       end
+
       result      = Array.new
-      result[0]   = vyatta_host.hostname
+      result[0]   = hostname
       result[1]   = success
       result[2]   = HTMLEntities.new.encode(message)
       results << result
+
+      if success
+        Log.info(message)
+      else
+        Log.error(message)
+      end
     end
+
+    Log.event_source = "localhost"
+    Log.info("Bulk add finished")
+
     return { :set_result => results }
   end
 

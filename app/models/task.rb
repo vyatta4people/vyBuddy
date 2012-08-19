@@ -29,15 +29,23 @@ class Task < ActiveRecord::Base
   before_create :set_sort_order
   before_create :set_defaults
 
+  before_save :set_writer_task_attributes
+
   def title
     title = self.name
-    if self.is_on_demand
+    if self.is_on_demand and !self.is_writer
       title += " (OD)"
+    elsif self.is_writer
+      title += " (WR)"
     else
       title += " (BG)"
     end
     title += " *" if self.is_singleton
     return title
+  end
+
+  def writer?
+    self.is_writer
   end
 
   def group_applicability
@@ -92,6 +100,10 @@ class Task < ActiveRecord::Base
     "task_#{self.id.to_s}_comment_container"
   end
 
+  def html_united_information_id
+    "task_#{self.id.to_s}_united_information"
+  end
+
 private
 
   def set_sort_order
@@ -101,8 +113,17 @@ private
   def set_defaults
     self.is_on_demand = false if !self.is_on_demand
     self.is_singleton = false if !self.is_singleton
+    self.is_writer    = false if !self.is_writer
     self.is_enabled   = false if !self.is_enabled
     self.comment      = ""    if !self.comment
+    return true
+  end
+
+  def set_writer_task_attributes
+    if self.writer?
+      self.is_on_demand = true
+      self.is_singleton = true
+    end
     return true
   end
 

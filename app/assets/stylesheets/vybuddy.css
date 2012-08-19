@@ -45,6 +45,18 @@
   margin:                 10px;
 }
 
+.display-united-top-container {
+  background-color:       #dfe8f6;
+  border-style:           solid;
+  border-width:           1px;
+  border-color:           #99bce8;
+  margin:                 10px;
+}
+
+.display-united-container {
+  margin:                 5px;
+}
+
 .display-header {
   background-color:       #f5f5f5;
   border-style:           solid;
@@ -55,6 +67,19 @@
   font-size:              small;
   font-weight:            bold;
   white-space:            pre-wrap;
+}
+
+.display-united {
+  background-color:       #f5f5f5;
+  border-style:           solid;
+  border-width:           1px;
+  border-color:           #99bce8;
+  padding:                5px;
+  font-size:              small;
+  font-weight:            bold;
+  white-space:            pre-wrap;
+  overflow-x:             hidden;
+  word-wrap:              break-word;
 }
 
 .display-information {

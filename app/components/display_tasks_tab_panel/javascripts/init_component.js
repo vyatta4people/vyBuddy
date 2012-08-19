@@ -73,15 +73,34 @@
       Ext.Ajax.request({
         url: '/data/get_displays/' + vyattaHostId.toString(),
         success: function(response) {
-          var displays = Ext.decode(response.responseText);
+          var displays                    = Ext.decode(response.responseText);
+          var unitedInformationData       = '';
+          var previousUnitedInformationId = '';
           for (var d in displays) {
             var display       = displays[d];
-            var displayData   = '<div class="display-header">' + 
-            display.remote_command_mode + ' :: '+ display.remote_command + ' | ' + display.filter +
-              '</div><pre><div class="display-information">' + display.information + 
-              '</div></pre><div class="display-footer">Changed at: ' + display.updated_at + '</div>';
+            if (!display.show_as_one) {
+              var displayData = '<div class="display-header">' +
+                display.remote_command_mode + ' :: ' + display.remote_command + ' | ' + display.filter +
+                '</div><pre><div class="display-information">' + display.information +
+                '</div></pre><div class="display-footer">Changed at: ' + display.updated_at + '</div>';
+            } else {
+              var displayData = '<div class="display-united">' + 
+                display.remote_command_mode + ' :: ' + display.remote_command + '</div>';
+            }
             var displayDiv    = Ext.get(display.html_display_id);
             if (displayDiv) { displayDiv.update(displayData); }
+            if (display.show_as_one) {
+              var unitedInformationDiv = Ext.get(display.html_united_information_id);
+              if (unitedInformationDiv) {
+                if (display.html_united_information_id == previousUnitedInformationId) {
+                  unitedInformationData = unitedInformationDiv.dom.innerHTML + display.information;
+                } else {
+                  unitedInformationData = display.information;
+                }
+                unitedInformationDiv.update(unitedInformationData);
+              }
+              previousUnitedInformationId = display.html_united_information_id;
+            }
           }
         }
       });

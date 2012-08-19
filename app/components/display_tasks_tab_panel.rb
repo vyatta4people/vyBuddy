@@ -2,6 +2,15 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
 
   js_mixin :init_component
 
+  def get_display_containers(task)
+    if !task.writer?
+      return task.task_remote_commands.collect{ |trc| "<div id='#{trc.html_display_id}' class='display-container'></div>" }.join
+    else
+      return "<div class='display-united-top-container'>" + task.task_remote_commands.collect{ |trc| "<div id='#{trc.html_display_id}' class='display-united-container'></div>" }.join + "</div>" +
+        "<div class='display-container'><pre><div id='#{task.html_united_information_id}' class='display-information'></div></pre></div>"
+    end
+  end
+
   def items
     task_groups       = TaskGroup.enabled
     task_group_items  = Array.new
@@ -30,7 +39,7 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
         task_item[:html]                += button_template.result(:html_button_container_id => task.html_button_container_id)
         comment_template                = DirectoryTemplate::ErbTemplate.new(File.read(ActionController::Base.view_paths[0].to_s + '/data/task_comment_container.html.erb'))
         task_item[:html]                += comment_template.result(:html_comment_container_id => task.html_comment_container_id)
-        task_item[:html]                += task.task_remote_commands.collect{ |trc| "<div id='#{trc.html_display_id}' class='display-container'></div>" }.join
+        task_item[:html]                += get_display_containers(task)
         task_item[:html]                += "<div>&nbsp;</div>"
         task_item[:html]                += "</div>"
         task_group_item[:items] << task_item
@@ -51,8 +60,8 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
   end
 
   endpoint :execute_task do |params|
-    vyatta_host = VyattaHost.find(params[:vyatta_host_id])
-    task        = Task.find(params[:task_id])
+    vyatta_host = VyattaHost.find(params[:vyatta_host_id].to_i)
+    task        = Task.find(params[:task_id].to_i)
     if vyatta_host.execute_task(task)
       success = true
       message = "Task \"#{task.name}\" executed successfully."
@@ -60,7 +69,7 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
       success = false
       message = "Failed to execute task \"#{task.name}\"! Please examine logs."
     end
-    return { :set_result => { :success => success, :message => message, :verbose => true } }
+    return { :set_result => { :success => success, :message => message, :verbose => false } }
   end 
 
   endpoint :get_task_comment do |params|

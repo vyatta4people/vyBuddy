@@ -1,9 +1,12 @@
 {
   onBulkAdd: function() {
-    if (this.bulkAddForm.isValid()) {      
-      this.bulkAddMask = new Ext.LoadMask(Ext.getBody(), { msg: "Adding hosts... Please wait!" });
+    if (this.bulkAddForm.isValid()) {
+      Netzke.directProvider.timeout = bulkAddDirectTimeout; // Default Netzke timeout is too short for bulk operations
+      this.bulkAddMask              = new Ext.LoadMask(Ext.getBody(), { msg: "Adding hosts... Please wait!" });
       this.bulkAddMask.show();
       this.bulkAddVyattaHosts(this.bulkAddForm.getFieldValues(), function(results) {
+        // Bulk operation finished, put back default Netzke timeout
+        Netzke.directProvider.timeout = defaultDirectTimeout;
         // Create store for result data coming from server and load it
         var resultStore = Ext.create('Ext.data.ArrayStore', {
           fields: [
@@ -44,7 +47,7 @@
           layout: 'fit',
           items: [resultGrid]
         }).show();
-      }, this)
+      }, this);
     } else {
       Ext.Msg.show({ 
         title: 'Form fields not filled', 

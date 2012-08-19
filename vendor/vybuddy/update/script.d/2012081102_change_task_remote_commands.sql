@@ -1,0 +1,1 @@
+ALTER TABLE `task_remote_commands` DROP INDEX `unique_task_remote_command_id`;

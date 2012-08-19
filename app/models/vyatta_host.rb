@@ -230,8 +230,8 @@ class VyattaHost < ActiveRecord::Base
     full_remote_commands = Array.new
     remote_commands.each do |remote_command|
       full_remote_command = case remote_command.class.to_s
-        when "RemoteCommand" then remote_command.full_command
-        when "Hash"          then RemoteCommand.full_command(remote_command[:mode], remote_command[:command])
+        when "TaskRemoteCommand"  then remote_command.full_command
+        when "Hash"               then RemoteCommand.full_command(remote_command[:mode], remote_command[:command])
         else RemoteCommand.full_command(DEFAULT_REMOTE_COMMAND_MODE, remote_command.to_s)
       end
       full_remote_commands << full_remote_command
@@ -309,16 +309,19 @@ class VyattaHost < ActiveRecord::Base
   #
   def execute_task(task)
     task_remote_commands  = task.task_remote_commands(true)
-    command_result_sets   = self.execute_remote_commands(task_remote_commands.collect{ |trc| trc.remote_command })
+    command_result_sets   = self.execute_remote_commands(task_remote_commands, task.writer?)
     ci                    = 0
     task_remote_commands.each do |trc|
-      remote_command  = trc.remote_command
       filter          = trc.filter
       display         = Display.find(:first, :conditions => { :vyatta_host_id => self.id, :task_remote_command_id => trc.id })
       if !display
         display       = Display.create(:vyatta_host_id => self.id, :task_remote_command_id => trc.id)
       end
-      display.information = filter.apply(command_result_sets[ci][:stdout])
+      if !task.writer? or ci == 0
+        display.information = filter.apply(command_result_sets[ci][:stdout])
+      else
+        display.information = ""
+      end
       display.save
       ci += 1
     end
