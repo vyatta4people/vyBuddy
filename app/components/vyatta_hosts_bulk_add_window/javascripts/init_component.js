@@ -9,10 +9,11 @@
       this.bulkAddFormFields            = this.bulkAddForm.getFields();
       this.sshConnectionUsernameField   = this.bulkAddFormFields.get(0);
       this.sshConnectionPasswordField   = this.bulkAddFormFields.get(1);
-      this.sshKeyPairField              = this.bulkAddFormFields.get(3);
-      this.probeHostnameField           = this.bulkAddFormFields.get(4);
-      this.vyattaHostGroupField         = this.bulkAddFormFields.get(5);
-      this.hostsField                   = this.bulkAddFormFields.get(6);
+      this.sshConnectionPortField       = this.bulkAddFormFields.get(2);
+      this.sshKeyPairField              = this.bulkAddFormFields.get(4);
+      this.probeHostnameField           = this.bulkAddFormFields.get(5);
+      this.vyattaHostGroupField         = this.bulkAddFormFields.get(6);
+      this.hostsField                   = this.bulkAddFormFields.get(7);
     }, this);
 
     this.on('beforeshow', function(self, eOpts) {

@@ -11,7 +11,7 @@ class VyattaHostsBulkAddWindow < Netzke::Basepack::Window
       :title            => "::Bulk add Vyatta hosts::",
       :border           => true,
       :width            => 450,
-      :height           => 550,
+      :height           => 580,
       :y                => 50,
       :modal            => true,
       :close_action     => :hide,
@@ -34,18 +34,27 @@ class VyattaHostsBulkAddWindow < Netzke::Basepack::Window
           :defaults       => { :anchor => "100%", :label_width => 110, :label_align => :left, :label_pad => 10, :allow_blank => false, :margin => 10 },
           :style          => { :background_color => "#f7f7f7" },
           :items => [ {
-            :name         => :ssh_connection_username,
-            :field_label  => "SSH username"
+            :name             => :ssh_connection_username,
+            :field_label      => "SSH username"
           }, {
-            :name         => :ssh_connection_password,
-            :field_label  => "SSH password",
-            :input_type   => :password
+            :name             => :ssh_connection_password,
+            :field_label      => "SSH password",
+            :input_type       => :password
           }, {
-            :name         => :ssh_connection_hint,
-            :xtype        => :displayfield,
-            :field_width  => 0,
-            :label_pad    => 0,
-            :value => "<div class=\"form-hint\">Entered settings are used to establish SSH connection for public key installation and will be forgotten after execution!</div>"
+            :name             => :ssh_connection_port,
+            :field_label      => "SSH port",
+            :xtype            => :numberfield,
+            :allow_decimals   => false,
+            :auto_strip_chars => true,
+            :value            => 22,
+            :min_value        => 1,
+            :max_value        => 65535
+          }, {
+            :name             => :ssh_connection_hint,
+            :xtype            => :displayfield,
+            :field_width      => 0,
+            :label_pad        => 0,
+            :value            => "<div class=\"form-hint\">Entered settings are used to establish SSH connection for public key installation and will be forgotten after execution!</div>"
           } ]
         }, {
           :name           => :vyatta_host_installation_settings,
@@ -99,6 +108,7 @@ class VyattaHostsBulkAddWindow < Netzke::Basepack::Window
 
     ssh_username        = params[:ssh_connection_username]
     ssh_password        = params[:ssh_connection_password]
+    ssh_port            = params[:ssh_connection_port]
     ssh_key_pair        = SshKeyPair.find(:first, :conditions => {:identifier => params[:ssh_key_pair]})
     probe_hostname      = params[:probe_hostname]
     vyatta_host_group   = VyattaHostGroup.find(:first, :conditions => {:name => params[:vyatta_host_group]})
@@ -113,6 +123,7 @@ class VyattaHostsBulkAddWindow < Netzke::Basepack::Window
       message                     = ""
       vyatta_host                 = VyattaHost.new
       vyatta_host.remote_address  = remote_address
+      vyatta_host.remote_port     = ssh_port
       vyatta_host.ssh_username    = ssh_username
       vyatta_host.ssh_password    = ssh_password
       if vyatta_host.check_reachability and vyatta_host.verify_executors([:system, :operational], true)
