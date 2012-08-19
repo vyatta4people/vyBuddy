@@ -79,6 +79,7 @@
           taskDummyDiv.setVisibilityMode(Ext.Element.DISPLAY);
           taskDummyDiv.setVisible(false);
           taskNotApplicableDiv.setVisibilityMode(Ext.Element.DISPLAY);
+          taskNotApplicableDiv.setStyle('background-color', containerColor);
           taskNotApplicableDiv.setVisible(!isTaskApplicable);
           taskContainerDiv.setVisible(isTaskApplicable);
           taskPanel.setAutoScroll(isTaskApplicable);

@@ -32,8 +32,8 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
         task_item[:title]               = task.title
         task_item[:class_name]          = "Netzke::Basepack::Panel"
         task_item[:auto_scroll]         = true
-        task_item[:html]                = "<div id='#{task.html_dummy_id}' class='task-dummy'>&nbsp;</div>"        
-        task_item[:html]                += "<div id='#{task.html_not_applicable_id}' class='task-not-applicable'>Not applicable to this host...</div>"        
+        task_item[:html]                = "<div id='#{task.html_dummy_id}' class='task-dummy'>&nbsp;</div>"
+        task_item[:html]                += "<div id='#{task.html_not_applicable_id}' class='task-not-applicable'><div class='task-not-applicable-content'>Not applicable to this host...</div></div>"
         task_item[:html]                += "<div id='#{task.html_container_id}' class='task-container'>"
         button_template                 = DirectoryTemplate::ErbTemplate.new(File.read(ActionController::Base.view_paths[0].to_s + '/data/task_button_container.html.erb'))
         task_item[:html]                += button_template.result(:html_button_container_id => task.html_button_container_id)
