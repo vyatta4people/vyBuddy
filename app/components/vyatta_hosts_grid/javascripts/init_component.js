@@ -69,7 +69,7 @@
         for (var t in this.displayTasksTabPanel.tasks) {
           var task                  = this.displayTasksTabPanel.tasks[t];
           var taskExecuteButton     = Ext.getCmp(task.html_execute_button_id);
-          var isTaskApplicable      = this.isSelectedVyattaHostOperable && result.applicableTaskIds[task.id];
+          var isTaskApplicable      = result.applicableTaskIds[task.id];
           var taskGroupPanel        = this.displayTasksTabPanel.getComponent(task.html_group_id);
           var taskPanel             = taskGroupPanel.getComponent(task.html_id);
           var taskDummyDiv          = Ext.get(task.html_dummy_id);
