@@ -266,7 +266,8 @@ class VyattaHost < ActiveRecord::Base
       end
       if !self.compare_files_via_ssh!(local_executor, remote_executor)
         if upload_unmatched
-          if !self.execute_command_via_ssh!("sudo rm #{remote_executor}") or !self.upload_file_via_sftp!(local_executor, remote_executor) or !self.execute_command_via_ssh!("chmod +x #{remote_executor}")
+          self.execute_command_via_ssh!("sudo rm -f #{remote_executor}") # Clean up anyway...
+          if !self.upload_file_via_sftp!(local_executor, remote_executor) or !self.execute_command_via_ssh!("chmod +x #{remote_executor}")
             self.unmatched_modes << mode
           end
         else

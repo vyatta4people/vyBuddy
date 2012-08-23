@@ -174,7 +174,8 @@ class VyattaHostsBulkAddWindow < Netzke::Basepack::Window
         end
       else
         message_parts = Array.new
-        message_parts << vyatta_host.ssh_error if vyatta_host.ssh_error
+        message_parts << vyatta_host.ssh_error  if vyatta_host.ssh_error
+        message_parts << vyatta_host.sftp_error if vyatta_host.sftp_error
         message_parts << "Executors not loaded: #{vyatta_host.unmatched_modes.join(", ")}" if vyatta_host.unmatched_modes and !vyatta_host.unmatched_modes.empty?
         message = message_parts.join("; ")
       end

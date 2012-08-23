@@ -66,7 +66,7 @@ class RemoteCommand < ActiveRecord::Base
     def local_executor(mode)
       executor = self.executor(mode)
       if executor
-        return "#{ENV['VYBUDDY_RAILS_APP_DIR']}/#{EXECUTORS_LOCAL_DIR}/#{executor}"
+        return "./#{EXECUTORS_LOCAL_DIR}/#{executor}"
       end
       return nil
     end
