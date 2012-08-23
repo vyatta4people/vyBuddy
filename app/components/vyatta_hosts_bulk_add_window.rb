@@ -167,13 +167,16 @@ class VyattaHostsBulkAddWindow < Netzke::Basepack::Window
               message = "Unable to verify configuration mode executor"
             end
           else
-            message = vyatta_host.errors.full_messages.join(', ')
+            message = vyatta_host.errors.full_messages.join(", ")
           end
         else
           message = "Not a Vyatta system"
         end
       else
-        message = vyatta_host.ssh_error
+        message_parts = Array.new
+        message_parts << vyatta_host.ssh_error if vyatta_host.ssh_error
+        message_parts << "Executors not loaded: #{vyatta_host.unmatched_modes.join(", ")}" if vyatta_host.unmatched_modes and !vyatta_host.unmatched_modes.empty?
+        message = message_parts.join("; ")
       end
 
       result      = Array.new

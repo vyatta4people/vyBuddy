@@ -265,8 +265,8 @@ class VyattaHost < ActiveRecord::Base
         local_executor = local_executor + '.' + self.executor_label # Configuration mode executor hook
       end
       if !self.compare_files_via_ssh!(local_executor, remote_executor)
-        if upload_unmatched 
-          if !self.upload_file_via_sftp!(local_executor, remote_executor) or !self.execute_command_via_ssh!("chmod +x #{remote_executor}")
+        if upload_unmatched
+          if !self.execute_command_via_ssh!("sudo rm #{remote_executor}") or !self.upload_file_via_sftp!(local_executor, remote_executor) or !self.execute_command_via_ssh!("chmod +x #{remote_executor}")
             self.unmatched_modes << mode
           end
         else
