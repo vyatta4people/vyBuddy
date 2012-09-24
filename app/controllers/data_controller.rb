@@ -38,6 +38,8 @@ class DataController < ApplicationController
     Task.all.each do |task|
       item = Hash.new
       item[:id]                         = task.id
+      item[:contains_variables]         = task.contains_variables?
+      item[:variables]                  = task.variables
       item[:html_group_id]              = task.task_group.html_id
       item[:html_id]                    = task.html_id
       item[:html_dummy_id]              = task.html_dummy_id

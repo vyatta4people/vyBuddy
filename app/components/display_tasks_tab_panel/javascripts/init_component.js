@@ -2,7 +2,11 @@
   initComponent: function(params) {
     this.superclass.initComponent.call(this);
 
+    this.taskExecutionIsCancelled = false;
+    this.taskVariableParameters   = {};
+
     this.on('afterrender', function(self, eOpts) {
+      this.loadingMask = new Ext.LoadMask(Ext.getBody(), { msg: "Please wait for task execution..." });
       Ext.Ajax.request({
         url: '/data/get_tasks',
         success: function(response) {
@@ -15,6 +19,9 @@
               Ext.create('Ext.Button', {
                 id: task.html_execute_button_id,
                 taskId: task.id,
+                taskIsWriter: task.is_writer,
+                taskContainsVariables: task.contains_variables,
+                taskVariables: task.variables,
                 text: 'Execute now',
                 tooltip: 'Just do it!',
                 width: 132,
@@ -23,14 +30,12 @@
                 disabled: true,
                 renderTo: taskButtonDiv,
                 handler: function(button, e) {
-                  var vyattaHostsGrid       = Netzke.page.vybuddyApp.getChildNetzkeComponent('vyatta_hosts_grid');
-                  var mask                  = new Ext.LoadMask(Ext.getBody(), { msg: "Please wait for task execution..." });
-                  mask.show();
-                  displayTasksTabPanel.executeTask({ vyatta_host_id: vyattaHostsGrid.selectedVyattaHostId, task_id: button.taskId }, function(result) {
-                    displayTasksTabPanel.fireEvent('selectvyattahost', vyattaHostsGrid.selectedVyattaHostId);
-                    mask.hide();
-                    netzkeEndpointHandler(result);
-                  }, this);
+                  var vyattaHostsGrid = Netzke.page.vybuddyApp.getChildNetzkeComponent('vyatta_hosts_grid');
+                  if (button.taskContainsVariables) {
+                    displayTasksTabPanel.setTaskVariablesAndExecuteTask(vyattaHostsGrid.selectedVyattaHostId, button.taskId, button.taskVariables);
+                  } else {
+                    displayTasksTabPanel.simplyExecuteTask(vyattaHostsGrid.selectedVyattaHostId, button.taskId);
+                  }
                 }
               });
               Ext.create('Ext.Button', {
@@ -66,6 +71,14 @@
           }
         }
       });      
+    }, this);
+
+    this.on('executetask', function(vyattaHostId, taskId, taskVariableParameters) {
+      this.executeTask({ vyatta_host_id: vyattaHostId, task_id: taskId, task_variable_parameters: taskVariableParameters }, function(result) {
+        this.fireEvent('selectvyattahost', vyattaHostId);
+        this.loadingMask.hide();
+        netzkeEndpointHandler(result);
+      }, this);
     }, this);
 
     this.on('selectvyattahost', function(vyattaHostId) {

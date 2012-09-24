@@ -226,11 +226,12 @@ class VyattaHost < ActiveRecord::Base
   #
   # Inline and stored Vyatta remote commands
   #
+  attr_accessor :task_variable_parameters
   def execute_remote_commands(remote_commands, execute_as_one = false)
     full_remote_commands = Array.new
     remote_commands.each do |remote_command|
       full_remote_command = case remote_command.class.to_s
-        when "TaskRemoteCommand"  then remote_command.full_command
+        when "TaskRemoteCommand"  then remote_command.full_command(self.task_variable_parameters)
         when "Hash"               then RemoteCommand.full_command(remote_command[:mode], remote_command[:command])
         else RemoteCommand.full_command(DEFAULT_REMOTE_COMMAND_MODE, remote_command.to_s)
       end
@@ -318,11 +319,13 @@ class VyattaHost < ActiveRecord::Base
       if !display
         display       = Display.create(:vyatta_host_id => self.id, :task_remote_command_id => trc.id)
       end
-      if !task.writer? or ci == 0
+      if command_result_sets[ci] and command_result_sets[ci][:stdout]
         display.information = filter.apply(command_result_sets[ci][:stdout])
+        display.information += "\n" + command_result_sets[ci][:stderr].gsub(/.*readonly variable.*/, "") if command_result_sets[ci][:stderr]
       else
         display.information = ""
       end
+      display.information = display.information.strip
       display.save
       ci += 1
     end

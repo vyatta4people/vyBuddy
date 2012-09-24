@@ -18,7 +18,7 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
 
     form_window_config              = Hash.new
     form_window_config[:y]          = 100
-    form_window_config[:width]      = 500
+    form_window_config[:width]      = 1000
 
     super.merge(
       :name               => :task_remote_commands_grid,

@@ -1,13 +1,14 @@
 class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
 
   js_mixin :init_component
+  js_mixin :methods
 
   def get_display_containers(task)
     if !task.writer?
       return task.task_remote_commands.collect{ |trc| "<div id='#{trc.html_display_id}' class='display-container'></div>" }.join
     else
       return "<div class='display-united-top-container'>" + task.task_remote_commands.collect{ |trc| "<div id='#{trc.html_display_id}' class='display-united-container'></div>" }.join + "</div>" +
-        "<div class='display-container'><pre><div id='#{task.html_united_information_id}' class='display-information'></div></pre></div>"
+        "<div class='display-container'><pre><div id='#{task.html_united_information_id}' class='display-united-information'></div></pre></div>"
     end
   end
 
@@ -60,8 +61,9 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
   end
 
   endpoint :execute_task do |params|
-    vyatta_host = VyattaHost.find(params[:vyatta_host_id].to_i)
-    task        = Task.find(params[:task_id].to_i)
+    vyatta_host                          = VyattaHost.find(params[:vyatta_host_id].to_i)
+    task                                 = Task.find(params[:task_id].to_i)
+    vyatta_host.task_variable_parameters = params[:task_variable_parameters]
     if vyatta_host.execute_task(task)
       success = true
       message = "Task \"#{task.name}\" executed successfully."
@@ -69,6 +71,7 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
       success = false
       message = "Failed to execute task \"#{task.name}\"! Please examine logs."
     end
+    sleep(1) # I will be doomed for this!
     return { :set_result => { :success => success, :message => message, :verbose => false } }
   end 
 

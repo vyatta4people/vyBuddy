@@ -24,8 +24,16 @@ class TaskRemoteCommand < ActiveRecord::Base
     [self.remote_command.command, self.command_extension].join(" ").strip
   end
 
-  def full_command
-    [self.remote_command.full_command, self.command_extension].join(" ").strip
+  def full_command(variable_parameters = nil)
+    if !variable_parameters
+      [self.remote_command.full_command, self.command_extension].join(" ").strip
+    else
+      command_extension = self.command_extension
+      variable_parameters.keys.each do |k|
+        command_extension = command_extension.gsub(/#{VARIABLE_BEGIN_STRING}#{k}#{VARIABLE_END_STRING}/, variable_parameters[k].strip)
+      end
+      [self.remote_command.full_command, command_extension].join(" ").strip
+    end
   end
 
   def html_id

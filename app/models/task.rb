@@ -64,6 +64,28 @@ class Task < ActiveRecord::Base
     return true
   end
 
+  def contains_variables?
+    self.task_remote_commands.each do |trc|
+      return true if trc.command.match(VARIABLE_REGEX)
+    end
+    return false
+  end
+
+  def variables
+    if self.contains_variables?
+      variables = Array.new
+      self.task_remote_commands.each do |trc|
+        if trc.command.match(VARIABLE_REGEX)
+          trc.command.gsub(VARIABLE_GSUB_REGEX, "").split(VARIABLE_SPLIT_REGEX).each do |v|
+            variables << v
+          end
+        end
+      end
+      return variables.uniq
+    end
+    return nil
+  end
+
   def html_name
     "<div style=\"color:##{self.task_group.color}\">#{self.name}</div>"
   end
