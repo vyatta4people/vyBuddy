@@ -8,6 +8,7 @@
     }, this);
 
     this.on('afterrender', function(self, eOpts) {
+      Netzke.directProvider.timeout = defaultDirectTimeout;
       self.setHeight(window.innerHeight);
     }, this);
   }

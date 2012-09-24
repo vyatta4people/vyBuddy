@@ -2,7 +2,7 @@
  * System settings
  */
 
-const defaultDirectTimeout       = 30000;
+const defaultDirectTimeout       = 300000;
 const bulkAddDirectTimeout       = 600000;
 
 
