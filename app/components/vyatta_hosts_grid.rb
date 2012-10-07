@@ -104,6 +104,8 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
     case params[:action]
     when "edit_in_form"
       return { :set_result => session[:user_is_admin] }
+    when "execute_task"
+      return { :set_result => session[:user_is_admin] }
     end
     return { :set_result => false }
   end

@@ -7,7 +7,8 @@
     this.selectedVyattaHostGroupId    = 0;
     this.selectedVyattaHostHostname   = 'CSS Alabama';
     this.selectedRow                  = 0;
-    this.isSelectedVyattaHostOperable = false
+    this.isSelectedVyattaHostOperable = false;
+    this.userCanExecuteTasks          = false;
 
     this.on('afterrender', function(self, eOpts) {
       var updateVyattaHostsGrid = function() { self.store.load(); }
@@ -15,6 +16,10 @@
       // Define fellow components
       this.displayTasksTabPanel       = Netzke.page.vybuddyApp.getChildNetzkeComponent('display_tasks_tab_panel');
       this.displayTasksTabPanelMask   = new Ext.LoadMask(this.displayTasksTabPanel, { msg: "Loading tasks..." });
+      // Set security defaults
+      this.getUserRights({ action: 'execute_task' }, function(userCanExecuteTasks) {
+        this.userCanExecuteTasks = userCanExecuteTasks;
+      });
     }, this);
 
     this.getStore().on('load', function(self, records, successful, operation, eOpts) {
@@ -75,7 +80,7 @@
           var taskDummyDiv          = Ext.get(task.html_dummy_id);
           var taskNotApplicableDiv  = Ext.get(task.html_not_applicable_id);
           var taskContainerDiv      = Ext.get(task.html_container_id);
-          taskExecuteButton.setDisabled(!isTaskApplicable);
+          taskExecuteButton.setDisabled(!isTaskApplicable || !this.userCanExecuteTasks);
           taskDummyDiv.setVisibilityMode(Ext.Element.DISPLAY);
           taskDummyDiv.setVisible(false);
           taskNotApplicableDiv.setVisibilityMode(Ext.Element.DISPLAY);

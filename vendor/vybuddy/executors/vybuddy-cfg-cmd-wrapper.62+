@@ -22,9 +22,6 @@
 # note: this script MUST be running as the vyattacfg group, e.g., with "sg".
 # otherwise there WILL be permission problems with the files created.
 
-# This is crap!
-# source /etc/default/vyatta application=vybuddy
-
 # some env variables are needed
 export vyatta_sysconfdir=/opt/vyatta/etc
 export vyatta_sbindir=/opt/vyatta/sbin
