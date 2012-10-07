@@ -32,7 +32,7 @@ LOG_SEVERITIES              = [:DEBUG, :ERROR, :FATAL, :INFO, :WARN, :CUSTOM]
 KEEP_LOG_RECORDS            = 10000
 
 VARIABLE_REGEX              = /%\([a-zA-Z0-9_ \-]+\)/
-VARIABLE_GSUB_REGEX         = /[^\)]*%\(/
+VARIABLE_GSUB_REGEX         = /[^\)]*(%\(|[^\)]+$)/
 VARIABLE_SPLIT_REGEX        = /\)/
 VARIABLE_BEGIN_STRING       = '%\('
 VARIABLE_END_STRING         = '\)'
