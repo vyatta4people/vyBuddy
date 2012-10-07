@@ -134,7 +134,7 @@ class VyattaHost < ActiveRecord::Base
 
     if execute_as_one
       one_joint_command = commands.join(";")
-      commands          = [one_joint_command]
+      commands          = ["source /etc/default/vyatta application=vybuddy;" + one_joint_command]
     end
 
     command_result_sets = Array.new    
