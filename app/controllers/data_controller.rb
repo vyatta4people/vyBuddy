@@ -35,22 +35,24 @@ class DataController < ApplicationController
 
   def get_tasks
     data = Array.new
-    Task.all.each do |task|
-      item = Hash.new
-      item[:id]                         = task.id
-      item[:contains_variables]         = task.contains_variables?
-      item[:variables]                  = task.variables
-      item[:html_group_id]              = task.task_group.html_id
-      item[:html_id]                    = task.html_id
-      item[:html_dummy_id]              = task.html_dummy_id
-      item[:html_not_applicable_id]     = task.html_not_applicable_id
-      item[:html_container_id]          = task.html_container_id
-      item[:html_button_container_id]   = task.html_button_container_id
-      item[:html_execute_button_id]     = task.html_execute_button_id
-      item[:html_comment_button_id]     = task.html_comment_button_id
-      item[:html_comment_container_id]  = task.html_comment_container_id
-      item[:is_comment_empty]           = task.comment.empty?
-      data << item
+    TaskGroup.enabled.each do |task_group|
+      task_group.tasks.enabled.each do |task|
+        item = Hash.new
+        item[:id]                         = task.id
+        item[:contains_variables]         = task.contains_variables?
+        item[:variables]                  = task.variables
+        item[:html_group_id]              = task.task_group.html_id
+        item[:html_id]                    = task.html_id
+        item[:html_dummy_id]              = task.html_dummy_id
+        item[:html_not_applicable_id]     = task.html_not_applicable_id
+        item[:html_container_id]          = task.html_container_id
+        item[:html_button_container_id]   = task.html_button_container_id
+        item[:html_execute_button_id]     = task.html_execute_button_id
+        item[:html_comment_button_id]     = task.html_comment_button_id
+        item[:html_comment_container_id]  = task.html_comment_container_id
+        item[:is_comment_empty]           = task.comment.empty?
+        data << item
+      end
     end
     render(:json => data)
   end
