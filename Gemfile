@@ -3,6 +3,8 @@ source 'http://rubygems.org'
 # Easy and robust Ruby web application deployment
 gem 'passenger'
 
+gem 'rvm'
+gem 'i18n'
 gem 'rails'
 
 # Bundle edge Rails instead:
