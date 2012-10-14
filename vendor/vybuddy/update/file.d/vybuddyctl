@@ -5,6 +5,22 @@
 source /etc/profile.d/rvm.sh
 source /etc/profile.d/vybuddy.sh
 
+# These lines will be removed after vyBuddy support script ecosystem update ########################
+DATABASE_YML="${VYBUDDY_RAILS_CAP_CONFIG_DIR}/database.yml"
+SQL_HOST="$(grep host: "${DATABASE_YML}" | awk '{print $NF}')"
+SQL_USER="$(grep username: "${DATABASE_YML}" | awk '{print $NF}')"
+SQL_PASS="$(grep password: "${DATABASE_YML}" | awk '{print $NF}')"
+SQL_DB="$(grep database: "${DATABASE_YML}" | awk '{print $NF}')"
+SQL_OPTS="-h${SQL_HOST} -u${SQL_USER} -p${SQL_PASS} ${SQL_DB}"
+SQL_EXEC="/usr/bin/mysql ${SQL_OPTS}"
+SQL_BCKP="/usr/bin/mysqldump ${SQL_OPTS}"
+
+CACHE_DIR="${VYBUDDY_ROOT}/cache"
+CACHE_SQL_BCKP_DIR="${CACHE_DIR}/sql-backups"
+####################################################################################################
+
+SQL_BCKP_FILE="${CACHE_SQL_BCKP_DIR}/$(date +%Y%m%d%H%M%S)-${RANDOM}-vybuddyctl.sql.gz"
+
 function start_daemon() {
   if [ -f "${VYBUDDY_DAEMON_PID_FILE}" ]; then
     echo "Not starting ${VYBUDDY_DAEMON} (PID file already exists: ${VYBUDDY_DAEMON_PID_FILE})"
@@ -56,6 +72,25 @@ function rails_console() {
   rails console
 }
 
+function sql_console() {
+  ${SQL_EXEC}
+}
+
+function export_database() {
+  ${SQL_BCKP}
+}
+
+function import_database() {
+  if [ ! -t 0 ]; then
+    echo "Saving database backup: ${SQL_BCKP_FILE}"
+    export_database | gzip > "${SQL_BCKP_FILE}"
+    ${SQL_EXEC}
+  else
+    echo "No data can be read from STDIN!"
+    exit 1
+  fi
+}
+
 function list_scripts() {
   cd "${VYBUDDY_SCRIPTS_DIR}"
   ls -1 *.rb | sed 's/\.rb$//'
@@ -79,7 +114,10 @@ case ${1} in
   "restart")restart_daemon;;
   "status")daemon_status;;
   "rails-console")rails_console;;
+  "sql-console")sql_console;;
+  "export-database")export_database;;
+  "import-database")import_database;;
   "list-scripts")list_scripts;;
   "run-script")shift; run_script ${@};;
-  *)echo "Usage: vybuddyctl start|stop|restart|status|rails-console|list-scripts|run-script <script> [<args>]"; exit 1;;
+  *)echo "Usage: vybuddyctl start|stop|restart|status|rails-console|sql-console|export-database|import-database|list-scripts|run-script <script> [<args>]"; exit 1;;
 esac
