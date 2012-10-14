@@ -20,7 +20,7 @@ SQL_DB="$(grep database: "${DATABASE_YML}" | awk '{print $NF}')"
 SQL_OPTS="-h${SQL_HOST} -u${SQL_USER} -p${SQL_PASS} ${SQL_DB}"
 SQL_EXEC="/usr/bin/mysql ${SQL_OPTS}"
 SQL_BCKP="/usr/bin/mysqldump ${SQL_OPTS}"
-SQL_BCKP_FILE="${CACHE_SQL_BCKP_DIR}/$(date +%Y%m%d%H%M%S)-${RANDOM}.sql.gz"
+SQL_BCKP_FILE="${CACHE_SQL_BCKP_DIR}/$(date +%Y%m%d%H%M%S)-${RANDOM}-update.sql.gz"
 
 if [ ! -d "${CACHE_SCRIPT_DIR}" ]; then
   mkdir "${CACHE_SCRIPT_DIR}"
