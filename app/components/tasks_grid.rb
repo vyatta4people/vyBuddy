@@ -27,7 +27,7 @@ class TasksGrid < Netzke::Basepack::GridPanel
       :prevent_header   => true,
       :model            => "Task",
       :load_inline_data => false,
-      :width            => 350,
+      :width            => 300,
       :border           => false,
       :context_menu     => [:edit_in_form.action, :del.action],
       :tbar             => [:add_in_form.action],

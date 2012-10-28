@@ -5,7 +5,7 @@ class TasksSideTabPanel < Netzke::Basepack::TabPanel
       :name             => :tasks_side_tab_panel,
       :title            => "Toolbox",
       :prevent_header   => false,
-      :width            => 300,
+      :width            => 250,
       :border           => true,
       :frame            => false,
       :active_tab       => 0,
