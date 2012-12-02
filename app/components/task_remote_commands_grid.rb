@@ -35,7 +35,8 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
       :multi_select       => false,
       :prohibit_update    => true,
       :view_config        => {
-        :plugins => [ { :ptype => :gridviewdragdrop, :dd_group => :remote_commands_dd_group, :drag_text => "Drag and drop to reorganize" } ]
+        :plugins => [ { :ptype => :gridviewdragdrop, :drop_group => :remote_commands_dd_group, },
+                      { :ptype => :gridviewdragdrop, :dd_group => :trc_dd_group, :drag_text => "Drag and drop to reorganize" } ]
       },
       :columns            => [
         column_defaults.merge(:name => :task_id,                   :text => "Task",                 :hidden => true,  :editor => {:hidden => true}),
@@ -45,7 +46,6 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
         column_defaults.merge(:name => :filter__name,              :text => "Filter",               :width => 100,    :editor => {:field_label => "Filter (to pipe output)", :editable => false, :empty_text => "Choose filter", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l} } }),
         column_defaults.merge(:name => :sort_order,                :text => "#",                    :width => 40,     :align => :center, :renderer => "textSteelBlueRenderer", :editor => {:hidden => true})
       ],
-      #:add_form_window_config   => form_window_config,
       :edit_form_window_config  => form_window_config
     )
   end

@@ -27,7 +27,7 @@ class TaskVyattaHostGroupsGrid < Netzke::Basepack::GridPanel
       :multi_select       => false,
       :prohibit_update    => true,
       :view_config        => {
-        :plugins => [ { :ptype => :gridviewdragdrop, :dd_group => :vyatta_host_groups_dd_group, :drag_text => "You can't escape from the heroine!" } ]
+        :plugins => [ { :ptype => :gridviewdragdrop, :drop_group => :vyatta_host_groups_dd_group, :drag_text => "Wazzup dude? Relax!" } ]
       },
       :columns            => [
         column_defaults.merge(:name => :task_id,                   :text => "Task",        :hidden => true),

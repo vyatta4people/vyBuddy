@@ -32,7 +32,7 @@ class RemoteCommandsGrid < Netzke::Basepack::GridPanel
       :multi_select     => false,
       :prohibit_update  => true,
       :view_config      => {
-        :plugins => [ { :ptype => :gridviewdragdrop, :drag_group => :remote_commands_dd_group, :drag_text => "Drag remote command to task area" } ]
+        :plugins => [ { :ptype => :gridviewdragdrop, :drag_group => :remote_commands_dd_group, :drag_text => "Drag and drop remote command to task details area" } ]
       },
       :columns          => [
         column_defaults.merge(:name => :mode,       :text => "Mode",    :editor => {:xtype => :netzkeremotecombo, :editable => false}),
