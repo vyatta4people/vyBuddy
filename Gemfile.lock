@@ -64,7 +64,7 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.19)
-    multi_json (1.4.0)
+    multi_json (1.5.0)
     mysql2 (0.3.11)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
@@ -147,12 +147,12 @@ DEPENDENCIES
   mysql2
   net-sftp
   net-ssh
-  netzke-basepack
-  netzke-core
+  netzke-basepack (= 0.7.7)
+  netzke-core (= 0.7.7)
   passenger
   rails
   rinku
   rvm
   sass-rails
-  therubyracer
+  therubyracer (= 0.10.2)
   uglifier

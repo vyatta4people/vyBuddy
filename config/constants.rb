@@ -1,10 +1,10 @@
 #
 # vyBuddy projects constants
 #
-DAEMONS_DIR                 = Rails.root.join('lib/daemons')
+DAEMONS_DIR                 = File.expand_path('../../lib/daemons', __FILE__)
 HOST_DAEMON_NAME            = :vyhostd
 HOST_DAEMON_FILE            = HOST_DAEMON_NAME.to_s + '.rb'
-HOST_DAEMON_PATH            = DAEMONS_DIR.join(HOST_DAEMON_FILE)
+HOST_DAEMON_PATH            = DAEMONS_DIR + '/' + HOST_DAEMON_FILE
 GRACE_PERIOD                = 1
 RETRY_PERIOD                = 5
 

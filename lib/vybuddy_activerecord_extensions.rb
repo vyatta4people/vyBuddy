@@ -128,9 +128,7 @@ module VyBuddyActiveRecordExtensions
 
       begin
         self.transaction do
-          all_reorganized_records.each do |record|
-            record.save
-          end
+          all_reorganized_records.each { |r| r.save }
         end
       rescue => e
         self.reorganize_with_persistent_order_message = e.message

@@ -3,13 +3,32 @@
 # vyBuddy host daemon - monitors and queries host with specified <id>
 #
 
-require File.expand_path('../../../config/environment', __FILE__)
+# We load only needed stuff here, cause we care about memory consumption
+require 'rubygems'
+require 'active_record'
+require 'tempfile'
+require File.expand_path('../../../config/constants.rb', __FILE__)
+require File.expand_path('../../../app/models/vyatta_host.rb', __FILE__)
+require File.expand_path('../../../app/models/vyatta_host_state.rb', __FILE__)
+require File.expand_path('../../../app/models/vyatta_host_group.rb', __FILE__)
+require File.expand_path('../../../app/models/user.rb', __FILE__)
+require File.expand_path('../../../app/models/ssh_key_pair.rb', __FILE__)
+require File.expand_path('../../../app/models/task.rb', __FILE__)
+require File.expand_path('../../../app/models/task_remote_command.rb', __FILE__)
+require File.expand_path('../../../app/models/task_group.rb', __FILE__)
+require File.expand_path('../../../app/models/task_vyatta_host_group.rb', __FILE__)
+require File.expand_path('../../../app/models/remote_command.rb', __FILE__)
+require File.expand_path('../../../app/models/filter.rb', __FILE__)
+require File.expand_path('../../../app/models/display.rb', __FILE__)
+require File.expand_path('../../../app/models/log.rb', __FILE__)
 
 if ARGV.length != 1 or !ARGV[0].match(/^[0-9]+$/) or ARGV[0].to_i <= 0
   warn "Usage: #{File.basename(__FILE__, '.rb')} <id>"
   warn "       <id> = 1..N"
   exit 1
 end
+
+ActiveRecord::Base.establish_connection(YAML.load_file(File.expand_path('../../../config/database.yml', __FILE__))[ENV['RAILS_ENV']])
 
 vyatta_host_id = ARGV[0].to_i
 begin
