@@ -28,6 +28,7 @@ if ARGV.length != 1 or !ARGV[0].match(/^[0-9]+$/) or ARGV[0].to_i <= 0
   exit 1
 end
 
+ActiveRecord::Base.default_timezone = :utc
 ActiveRecord::Base.establish_connection(YAML.load_file(File.expand_path('../../../config/database.yml', __FILE__))[ENV['RAILS_ENV']])
 
 vyatta_host_id = ARGV[0].to_i
