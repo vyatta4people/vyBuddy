@@ -152,21 +152,21 @@ class VyattaHost < ActiveRecord::Base
             channel.exec(command) do |ch, success|
               command_result_set[:success] = false unless success
 
-              channel.on_data do |ch, data|
+              channel.on_data do |c, data|
                 command_result_set[:stdout] += data
                 command_result_set[:data]   += data
               end
 
-              channel.on_extended_data do |ch, type, data|
+              channel.on_extended_data do |c, type, data|
                 command_result_set[:stderr] += data
                 command_result_set[:data]   += data
               end
 
-              channel.on_request("exit-status") do |ch, data|
+              channel.on_request("exit-status") do |c, data|
                 command_result_set[:exit_status]  = data.read_long
               end
 
-              channel.on_request("exit-signal") do |ch, data|
+              channel.on_request("exit-signal") do |c, data|
                 command_result_set[:exit_signal]  = data.read_long
               end
             end
