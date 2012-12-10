@@ -99,7 +99,7 @@ class VyattaHost < ActiveRecord::Base
   end
 
   def os_version
-    self.vyatta_version.sub(/^VC/, "").sub(/-.*/, "").to_f
+    self.vyatta_version.sub(/^VC/, "").sub(/[a-zA-Z_-].*/, "").to_f
   end
 
   #
