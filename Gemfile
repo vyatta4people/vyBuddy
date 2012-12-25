@@ -10,6 +10,8 @@ gem 'rails'
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
+gem 'bundler'
+
 gem 'mysql2'
 
 gem 'json'
