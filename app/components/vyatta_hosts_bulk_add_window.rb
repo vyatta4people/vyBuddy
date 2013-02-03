@@ -11,7 +11,7 @@ class VyattaHostsBulkAddWindow < Netzke::Basepack::Window
       :title            => "::Bulk add Vyatta hosts::",
       :border           => true,
       :width            => 450,
-      :height           => 580,
+      :height           => 620,
       :y                => 50,
       :modal            => true,
       :close_action     => :hide,
@@ -120,7 +120,6 @@ class VyattaHostsBulkAddWindow < Netzke::Basepack::Window
       Log.event_source            = hostname
 
       success                     = false
-      message                     = ""
       vyatta_host                 = VyattaHost.new
       vyatta_host.remote_address  = remote_address
       vyatta_host.remote_port     = ssh_port

@@ -1,4 +1,8 @@
 {
+  onManageTasks: function() {
+    Netzke.page.manageTasksWindow.show();
+  },
+
   onManageUsers: function() {
     Netzke.page.manageUsersWindow.show();
   },
@@ -7,8 +11,8 @@
     Netzke.page.manageSshKeyPairsWindow.show();
   },
 
-  onManageTasks: function() {
-    Netzke.page.manageTasksWindow.show();
+  onImportExport: function() {
+    Netzke.page.importExportWindow.show();
   },
 
   onViewLogs: function() {

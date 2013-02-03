@@ -8,4 +8,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def user_authenticated_as_admin?
+    if !session[:user_is_admin]
+      redirect_to(:controller => :auth, :action => :login)
+      return false
+    end
+  end
+
 end

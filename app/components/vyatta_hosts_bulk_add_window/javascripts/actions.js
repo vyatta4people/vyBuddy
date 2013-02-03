@@ -35,7 +35,7 @@
             ]
          },
           store: resultStore
-        }
+        };
         // Hide form window and show cool result grid in a new window
         this.bulkAddMask.hide();
         this.hide();

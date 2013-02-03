@@ -24,6 +24,10 @@ class TaskRemoteCommand < ActiveRecord::Base
     [self.remote_command.command, self.command_extension].join(" ").strip
   end
 
+  def name
+    self.command
+  end
+
   def full_command(variable_parameters = nil)
     if !variable_parameters
       [self.remote_command.full_command, self.command_extension].join(" ").strip

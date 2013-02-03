@@ -44,6 +44,10 @@ class VyattaHost < ActiveRecord::Base
   after_create   { |vyatta_host| ActiveRecord::Base.connection.execute("INSERT INTO `vyatta_host_states`(`id`,`is_reachable`,`created_at`,`updated_at`) VALUES(#{vyatta_host.id.to_s},1,NOW(),NOW());") }
   before_destroy { |vyatta_host| vyatta_host.kill_all_daemons; return true }
 
+  def name
+    self.hostname
+  end
+
   def label
     "#{self.hostname} (#{self.id.to_s})"
   end

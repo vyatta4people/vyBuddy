@@ -65,4 +65,9 @@ VyBuddy::Application.routes.draw do
   match 'data/get_displays/:id'   => 'data#get_displays_for_vyatta_host'
   match 'data/get_tasks'          => 'data#get_tasks'
   match 'data/export_logs'        => 'data#export_logs'
+
+  match 'data/prepare_portable_objects'   => 'data#prepare_portable_objects'
+  match 'data/import_objects'             => 'data#import_objects'
+  match 'data/export_objects'             => 'data#export_objects'
+
 end

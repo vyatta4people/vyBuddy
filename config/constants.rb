@@ -1,6 +1,9 @@
 #
 # vyBuddy projects constants
 #
+VYBUDDY_VERSION             = 0.1
+PORTABLE_CLASSES            = [:vyatta_host, :task, :remote_command, :filter, :task_remote_command]
+
 DAEMONS_DIR                 = File.expand_path('../../lib/daemons', __FILE__)
 HOST_DAEMON_NAME            = :vyhostd
 HOST_DAEMON_FILE            = HOST_DAEMON_NAME.to_s + '.rb'

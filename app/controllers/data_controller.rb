@@ -1,6 +1,7 @@
 class DataController < ApplicationController
 
   before_filter :user_authenticated?
+  before_filter :user_authenticated_as_admin?, :only => [:import_objects, :export_objects]
 
   def get_global_summary
     global_summary = Hash.new
@@ -75,6 +76,66 @@ class DataController < ApplicationController
       data << log.as_text
     end
     send_data(data.join("\n"), :filename => "logs_#{Time.now.strftime("%Y%m%d%H%M%S")}.txt")
+  end
+
+  def prepare_portable_objects
+    success = true
+    message = "OK"
+    data = params.select { |k, v| ![:controller, :action, :authenticity_token].include?(k.to_sym) }
+    if data["action_type"].to_sym == :import
+      begin
+        data[:import_file_json] = JSON.parse(data["import_file"].tempfile.read)
+      rescue => e
+        success = false
+        message = e.inspect
+      end
+    end
+    Rails.cache.write('import_file_json', data[:import_file_json])
+    render :json => { :success => success, :message => HTMLEntities.new.encode(message), :data => data }
+  end
+
+  def import_objects
+    importable_objects = Rails.cache.read('import_file_json')["data"].select { |k, v| PORTABLE_CLASSES.include?(k.underscore.to_sym) && params.keys.include?(k) }
+
+    importable_objects.keys.each do |object_type|
+      importable_objects[object_type].each do |o|
+
+        next if !params[object_type].split(/,/).collect{|a| a.to_i}.include?(o["id"])
+
+        attributes = o.select { |k, v| k != "id" && k != "created_at" && k != "updated_at" && k != "sort_order" }
+        if object_type == "VyattaHost"
+          attributes["vyatta_host_group_id"]  = VyattaHostGroup.first.id
+          attributes["ssh_key_pair_id"]       = SshKeyPair.first.id
+        end
+        if object_type == "Task"
+          attributes["task_group_id"] = TaskGroup.first.id
+        end
+
+        Log.application   = :data_controller
+        Log.event_source  = :import_objects
+        begin
+          object = eval(object_type).new(attributes)
+          raise(object.errors.full_messages.join(", ")) if !object.save
+        rescue => e
+          Log.error("Unable to create #{object_type}: #{e.inspect} (#{attributes.inspect})")
+        else
+          Log.info("Created #{object_type} (#{attributes.inspect})")
+        end
+
+      end
+    end
+
+    redirect_to "/"
+  end
+
+  def export_objects
+    exported_objects = Hash.new
+    params.select { |k, v| PORTABLE_CLASSES.include?(k.underscore.to_sym) }.each do |object_type, object_id_filter|
+      exported_objects[object_type] = eval(object_type).where("#{object_type.underscore.pluralize}.id IN (?)", object_id_filter.split(/,/).collect{ | o | o.to_i })
+    end
+    timestamp = Time.now
+    json = { :vybuddy_version => VYBUDDY_VERSION, :exported_at => timestamp, :data => exported_objects }.to_json
+    send_data(json, :filename => "vybuddy-export-#{timestamp.strftime("%Y%m%d%H%M%S")}.json", :type => "application/octet-stream")
   end
 
 end

@@ -17,6 +17,10 @@ class RemoteCommand < ActiveRecord::Base
 
   before_destroy { |remote_command| return false if remote_command.task_remote_commands.count > 0 }
 
+  def name
+    self.command
+  end
+
   def mode
     super.to_sym
   end
