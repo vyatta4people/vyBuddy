@@ -21,6 +21,8 @@ require File.expand_path('../../../app/models/remote_command.rb', __FILE__)
 require File.expand_path('../../../app/models/filter.rb', __FILE__)
 require File.expand_path('../../../app/models/display.rb', __FILE__)
 require File.expand_path('../../../app/models/log.rb', __FILE__)
+require File.expand_path('../../../app/models/setting.rb', __FILE__)
+require File.expand_path('../../../app/mailers/user_mailer.rb', __FILE__)
 
 if ARGV.length != 1 or !ARGV[0].match(/^[0-9]+$/) or ARGV[0].to_i <= 0
   warn "Usage: #{File.basename(__FILE__, '.rb')} <id>"
