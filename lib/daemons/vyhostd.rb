@@ -6,6 +6,7 @@
 # We load only needed stuff here, cause we care about memory consumption
 require 'rubygems'
 require 'active_record'
+require 'action_mailer'
 require 'tempfile'
 require File.expand_path('../../../config/constants.rb', __FILE__)
 require File.expand_path('../../../app/models/vyatta_host.rb', __FILE__)
