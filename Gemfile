@@ -33,11 +33,11 @@ gem 'capistrano'
 # gem 'ruby-debug'
 
 gem 'execjs'
-gem 'therubyracer', '0.10.2'
+gem 'therubyracer'
 
 # Netzke framework
-gem 'netzke-core', '0.7.7'
-gem 'netzke-basepack', '0.7.7'
+gem 'netzke-core'
+gem 'netzke-basepack'
 
 # Pure-Ruby implementation of the SSH2/SFTP client protocol
 gem 'net-ssh'
