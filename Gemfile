@@ -36,8 +36,8 @@ gem 'execjs'
 gem 'therubyracer'
 
 # Netzke framework
-gem 'netzke-core'
-gem 'netzke-basepack'
+gem 'netzke-core', '0.7.7'
+gem 'netzke-basepack', '0.7.7'
 
 # Pure-Ruby implementation of the SSH2/SFTP client protocol
 gem 'net-ssh'
