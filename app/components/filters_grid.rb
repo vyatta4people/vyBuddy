@@ -6,7 +6,7 @@ class FiltersGrid < Netzke::Basepack::GridPanel
   action :edit_in_form, :text => "Edit", :tooltip => "Edit filter", :icon => :script_edit, :disabled => false
   action :del, :icon => :script_delete
 
-  def configuration
+  def configure(c)
     column_defaults                 = Hash.new
     column_defaults[:editable]      = false
     column_defaults[:sortable]      = false
@@ -20,7 +20,7 @@ class FiltersGrid < Netzke::Basepack::GridPanel
     form_window_config[:width]      = 700
     form_window_config[:height]     = 500
 
-    super.merge(
+    super
       :name             => :filters_grid,
       :title            => "Filters",
       :model            => "Filter",

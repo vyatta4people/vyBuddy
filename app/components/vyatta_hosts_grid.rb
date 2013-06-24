@@ -14,7 +14,7 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
   action :execute_on_demand_tasks,    :text => "Execute on-demand tasks",   :tooltip => "Execute on-demand tasks",  :icon => :arrow_refresh
   action :execute_background_tasks,   :text => "Execute background tasks",  :tooltip => "Execute background tasks", :icon => :arrow_refresh
 
-  def configuration
+  def configure(c)
     column_defaults                 = Hash.new
     column_defaults[:editable]      = false
     column_defaults[:sortable]      = false
@@ -28,7 +28,7 @@ class VyattaHostsGrid < Netzke::Basepack::GridPanel
     form_window_config[:y]          = 100
     form_window_config[:width]      = 500
 
-    super.merge(
+    super
       :name               => :vyatta_hosts_grid,
       :title              => "Vyatta hosts",
       :model              => "VyattaHost",

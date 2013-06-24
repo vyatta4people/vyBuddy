@@ -6,7 +6,7 @@ class UsersGrid < Netzke::Basepack::GridPanel
   action :edit_in_form, :text => "Edit", :tooltip => "Edit user", :icon => :user_edit, :disabled => false
   action :del, :icon => :user_delete
 
-  def configuration
+  def configure(c)
     column_defaults                 = Hash.new
     column_defaults[:editable]      = false
     column_defaults[:sortable]      = false
@@ -19,7 +19,7 @@ class UsersGrid < Netzke::Basepack::GridPanel
     form_window_config[:y]          = 100
     form_window_config[:width]      = 500
 
-    super.merge(
+    super
       :name             => :users_grid,
       :title            => "Users",
       :prevent_header   => true,

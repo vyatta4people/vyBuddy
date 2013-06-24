@@ -6,7 +6,7 @@ class RemoteCommandsGrid < Netzke::Basepack::GridPanel
   action :edit_in_form, :text => "Edit", :tooltip => "Edit remote command", :icon => :brick_edit, :disabled => false
   action :del, :icon => :brick_delete
 
-  def configuration
+  def configure(c)
     column_defaults                 = Hash.new
     column_defaults[:editable]      = false
     column_defaults[:sortable]      = false
@@ -19,7 +19,7 @@ class RemoteCommandsGrid < Netzke::Basepack::GridPanel
     form_window_config[:y]          = 100
     form_window_config[:width]      = 500
 
-    super.merge(
+    super
       :name             => :remote_commands_grid,
       :title            => "Remote commands",
       :model            => "RemoteCommand",

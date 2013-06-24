@@ -2,8 +2,8 @@ class BottomPanel < Netzke::Basepack::Panel
 
   js_mixin :init_component
 
-  def configuration
-    super.merge(
+  def configure(c)
+    super
       :name           => :bottom_panel,
       :title          => "Bottom",
       :prevent_header => true,

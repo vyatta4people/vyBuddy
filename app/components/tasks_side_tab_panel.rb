@@ -1,7 +1,7 @@
 class TasksSideTabPanel < Netzke::Basepack::TabPanel
 
-  def configuration
-    super.merge(
+  def configure(c)
+    super
       :name             => :tasks_side_tab_panel,
       :title            => "Toolbox",
       :prevent_header   => false,

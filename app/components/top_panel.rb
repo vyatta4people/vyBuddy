@@ -18,8 +18,8 @@ class TopPanel < Netzke::Basepack::Panel
     end
   end
 
-  def configuration
-    super.merge(
+  def configure(c)
+    super
       :name           => :top_panel,
       :title          => "Top",
       :prevent_header => true,

@@ -6,7 +6,7 @@ class LogsGrid < Netzke::Basepack::GridPanel
   js_mixin :init_component
   js_mixin :actions
 
-  def configuration
+  def configure(c)
     column_defaults                 = Hash.new
     column_defaults[:editable]      = false
     column_defaults[:sortable]      = false
@@ -15,7 +15,7 @@ class LogsGrid < Netzke::Basepack::GridPanel
     column_defaults[:draggable]     = false
     column_defaults[:fixed]         = true
 
-    super.merge(
+    super
       :name               => :logs_grid,
       :title              => "Logs",
       :prevent_header     => true,

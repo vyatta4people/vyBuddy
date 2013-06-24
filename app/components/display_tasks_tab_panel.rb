@@ -50,8 +50,8 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
     return task_group_items
   end
 
-  def configuration
-    super.merge(
+  def configure(c)
+    super
       :name             => :display_tasks_tab_panel,
       :title            => "Tasks to display",
       :border           => true,

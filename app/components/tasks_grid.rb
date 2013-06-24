@@ -7,7 +7,7 @@ class TasksGrid < Netzke::Basepack::GridPanel
   action :edit_in_form, :text => "Edit", :tooltip => "Edit task", :icon => :pencil, :disabled => false
   action :del, :icon => :delete
 
-  def configuration
+  def configure(c)
     column_defaults                 = Hash.new
     column_defaults[:editable]      = false
     column_defaults[:sortable]      = false
@@ -21,7 +21,7 @@ class TasksGrid < Netzke::Basepack::GridPanel
     form_window_config[:width]      = 700
     form_window_config[:height]     = 450
 
-    super.merge(
+    super
       :name             => :tasks_grid,
       :title            => "Tasks",
       :prevent_header   => true,

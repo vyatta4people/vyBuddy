@@ -1,5 +1,9 @@
 class LoginWindow < Netzke::Basepack::Window
 
+  js_configure do |c|
+    c.mixin :main, :actions
+  end
+
   action :login do |a|
     a.icon = :tick
     a.text = "Login"
@@ -43,10 +47,6 @@ class LoginWindow < Netzke::Basepack::Window
         :hidden       => true
       } ]
     } ]
-  end
-
-  js_configure do |c|
-    c.mixin :main, :actions
   end
 
   endpoint :login do |params, this|

@@ -1,9 +1,14 @@
 class ImportExportWindow < Netzke::Basepack::Window
 
-  js_mixin :init_component
-  js_mixin :actions
+  js_configure do |c|
+    c.mixin :main, :actions
+  end
 
-  action :import_export, :text => "Import!", :tooltip => "Import/Export"
+  action :import_export do |a|
+    a.icon    = :import_export
+    a.text    = "Import!"
+    a.tooltip = "Import/Export"
+  end
 
   def get_form_items
     form_items          = Array.new
@@ -53,28 +58,28 @@ class ImportExportWindow < Netzke::Basepack::Window
     return form_items
   end
 
-  def configuration
-    super.merge(
-      :item_id          => :import_export_window,
-      :title            => "::Import/Export::",
-      :width            => 300,
-      :height           => 430,
-      :y                => 50,
-      :modal            => true,
-      :close_action     => :hide,
-      :resizable        => false,
-      :items            => [ {
-        :xtype            => :form,
-        :item_id          => :import_export_form,
-        :prevent_header   => true,
-        :border           => true,
-        :margin           => 5,
-        :frame            => false,
-        :buttons          => [ :import_export.action ],
-        :defaults         => { :anchor => "100%", :margin => 10 },
-        :items            => get_form_items
-      } ]
-    )
+  def configure(c)
+    super
+    c.item_id          = :import_export_window
+    c.title            = "::Import/Export::"
+    c.width            = 300
+    c.height           = 430
+    c.y                = 50
+    c.modal            = true
+    c.close_action     = :hide
+    c.resizable        = false
+    c.items            = [ {
+                             :xtype            => :form,
+                             :item_id          => :import_export_form,
+                             :prevent_header   => true,
+                             :border           => true,
+                             :margin           => 5,
+                             :frame            => false,
+                             :buttons          => [ :import_export ],
+                             :defaults         => { :anchor => "100%", :margin => 10 },
+                             :items            => get_form_items
+                           } ]
+
   end
 
   endpoint :load_object_selection do |params|
@@ -109,7 +114,8 @@ class ImportExportWindow < Netzke::Basepack::Window
         data += object_type.all.collect{ |o| [ object_type.name, object_type.name.underscore.humanize, o.id, o.name, true ] }
       end
     end
-    { :set_result => { :success => success, :action_type => action_type, :data => data, :task_remote_command => task_remote_command, :import_file_json => params[:import_file_json].to_s } }
+
+    this.netzke_set_result({ :success => success, :action_type => action_type, :data => data, :task_remote_command => task_remote_command, :import_file_json => params[:import_file_json].to_s })
   end
 
 end

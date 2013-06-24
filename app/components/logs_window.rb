@@ -1,20 +1,21 @@
 class LogsWindow < Netzke::Basepack::Window
 
-  js_mixin :init_component
+  js_configure do |c|
+    c.mixin :main
+  end
 
-  def configuration
-    super.merge(
-      :name             => :logs_window,
-      :title            => "::Logs::",
-      :width            => 1000,
-      :height           => 600,
-      :y                => 100,
-      :border           => false,
-      :modal            => true,
-      :close_action     => :hide,
-      :resizable        => false,
-      :items            => [ { :name => :logs_grid, :class_name => "LogsGrid" } ]
-    )
+  def configure(c)
+    super
+    c.name             = :logs_window
+    c.title            = "::Logs::"
+    c.width            = 1000
+    c.height           = 600
+    c.y                = 100
+    c.border           = false
+    c.modal            = true
+    c.close_action     = :hide
+    c.resizable        = false
+    c.items            = [ { :name => :logs_grid, :class_name => "LogsGrid" } ]
   end
 
 end

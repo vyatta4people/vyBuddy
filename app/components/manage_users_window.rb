@@ -1,24 +1,23 @@
 class ManageUsersWindow < Netzke::Basepack::Window
 
-  def configuration
-    super.merge(
-      :name             => :manage_users_window,
-      :title            => "::Users::",
-      :layout           => :border,
-      :width            => 500,
-      :height           => 500,
-      :y                => 50,
-      :modal            => true,
-      :close_action     => :hide,
-      :resizable        => false,
-      :items            => [
-        :users_grid.component(
-          :name       => :users_grid,
-          :region     => :center,
-          :class_name => "UsersGrid"
-        )
-      ]
-    )
+  def configure(c)
+    super
+    c.name             = :manage_users_window
+    c.title            = "::Users::"
+    c.layout           = :border
+    c.width            = 500
+    c.height           = 500
+    c.y                = 50
+    c.modal            = true
+    c.close_action     = :hide
+    c.resizable        = false
+    c.items            = [
+      {
+        :name       => :users_grid,
+        :region     => :center,
+        :class_name => "UsersGrid"
+      }
+    ]
   end
 
 end

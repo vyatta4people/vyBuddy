@@ -7,7 +7,7 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
   action :edit_in_form, :text => "Edit",    :tooltip => "Edit task's remote command",           :icon => :brick_edit, :disabled => false
   action :del, :icon => :brick_delete
 
-  def configuration
+  def configure(c)
     column_defaults                 = Hash.new
     column_defaults[:editable]      = false
     column_defaults[:sortable]      = false
@@ -20,7 +20,7 @@ class TaskRemoteCommandsGrid < Netzke::Basepack::GridPanel
     form_window_config[:y]          = 100
     form_window_config[:width]      = 1000
 
-    super.merge(
+    super
       :name               => :task_remote_commands_grid,
       :title              => "Remote commands",
       :prevent_header     => true,
