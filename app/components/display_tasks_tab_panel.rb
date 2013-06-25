@@ -1,7 +1,8 @@
 class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
 
-  js_mixin :init_component
-  js_mixin :methods
+  js_configure do |c|
+    c.mixin :main, :methods
+  end
 
   def get_display_containers(task)
     if !task.writer?
@@ -52,15 +53,14 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
 
   def configure(c)
     super
-      :name             => :display_tasks_tab_panel,
-      :title            => "Tasks to display",
-      :border           => true,
-      :frame            => false,
-      :deferred_render  => false
-    )
+    c.name             = :display_tasks_tab_panel
+    c.title            = "Tasks to display"
+    c.border           = true
+    c.frame            = false
+    c.deferred_render  = false
   end
 
-  endpoint :execute_task do |params|
+  endpoint :execute_task do |params, this|
     vyatta_host                          = VyattaHost.find(params[:vyatta_host_id].to_i)
     task                                 = Task.find(params[:task_id].to_i)
     vyatta_host.task_variable_parameters = params[:task_variable_parameters]
@@ -72,13 +72,13 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
       message = "Failed to execute task \"#{task.name}\"! Please examine logs."
     end
     sleep(1) # I will be doomed for this!
-    return { :set_result => { :success => success, :message => message, :verbose => false } }
-  end 
+    this.netzke_set_result({ :success => success, :message => message, :verbose => false })
+  end
 
-  endpoint :get_task_comment do |params|
+  endpoint :get_task_comment do |params, this|
     comment = Rinku.auto_link(Task.find(params[:task_id].to_i).comment)
     comment = '<i style="color:#777777;">No comment</i>' if comment.empty?
-    return { :set_result => { :comment => comment } }
+    this.netzke_set_result({ :comment => comment })
   end
 
 end

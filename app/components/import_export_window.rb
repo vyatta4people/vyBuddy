@@ -82,7 +82,7 @@ class ImportExportWindow < Netzke::Basepack::Window
 
   end
 
-  endpoint :load_object_selection do |params|
+  endpoint :load_object_selection do |params, this|
     success           = false
     action_type       = params.delete(:action_type).to_sym
 
