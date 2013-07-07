@@ -5,7 +5,7 @@ gem 'passenger'
 
 gem 'rvm'
 gem 'i18n'
-gem 'rails'
+gem 'rails', '3.2.13'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
@@ -36,8 +36,8 @@ gem 'execjs'
 gem 'therubyracer'
 
 # Netzke framework
-gem 'netzke-core'
-gem 'netzke-basepack'
+gem 'netzke-core',      :git => 'https://github.com/netzke/netzke-core.git'
+gem 'netzke-basepack',  :git => 'https://github.com/netzke/netzke-basepack.git'
 
 # Pure-Ruby implementation of the SSH2/SFTP client protocol
 gem 'net-ssh'

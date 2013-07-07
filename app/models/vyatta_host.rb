@@ -17,11 +17,11 @@ class VyattaHost < ActiveRecord::Base
 
   validates :hostname,
     :length     => { :minimum => 2 }, 
-    :format     => { :with => /^[a-zA-Z0-9\-]+$/, :message => "must contain only letters, numbers and hyphens" },
-    :format     => { :with => /^[a-zA-Z0-9]/,     :message => "must start from letter or number" }
+    :format     => { :with => /[a-zA-Z0-9\-]+/, :message => "must contain only letters, numbers and hyphens" },
+    :format     => { :with => /[a-zA-Z0-9]/,     :message => "must start from letter or number" }
 
   validates :remote_address,
-    :format     => { :with => /^(([1-2]?[0-9]{1,2}\.){3}[1-2]?[0-9]{1,2}|[a-z0-9][a-z0-9\.\-]+[a-z])$/, :message => "must be valid DNS name or IPv4 address" }
+    :format     => { :with => /(([1-2]?[0-9]{1,2}\.){3}[1-2]?[0-9]{1,2}|[a-z0-9][a-z0-9\.\-]+[a-z])/, :message => "must be valid DNS name or IPv4 address" }
 
   validates :remote_port,
     :numericality => { :only_integer => true, :greater_than_or_equal_to => 1, :less_than_or_equal_to => 65535 }

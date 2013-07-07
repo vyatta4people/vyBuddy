@@ -4,7 +4,7 @@ class Log < ActiveRecord::Base
 
   validates :application,
     :length     => { :minimum => 2 }, 
-    :format     => { :with => /^[a-z_]+$/, :message => "must contain only lowercase letters and underscores" }
+    :format     => { :with => /[a-z_]+/, :message => "must contain only lowercase letters and underscores" }
 
   validates :severity,
     :inclusion  => { :in => LOG_SEVERITIES, :message => "\'%{value}\' is not a valid log severity" }

@@ -1,4 +1,4 @@
-class BottomPanel < Netzke::Basepack::Panel
+class BottomPanel < Netzke::Base
 
   js_configure do |c|
     c.mixin :main

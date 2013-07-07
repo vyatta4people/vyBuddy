@@ -11,9 +11,9 @@ HOST_DAEMON_PATH            = DAEMONS_DIR + '/' + HOST_DAEMON_FILE
 GRACE_PERIOD                = 1
 RETRY_PERIOD                = 5
 
-EMAIL_REGEX                 = /^([a-z0-9_\-\.\+]+)\@((([a-z0-9\-]+\.)+)([a-z]{2,4})|[a-z0-9][a-z0-9\-]+)$/
+EMAIL_REGEX                 = /([a-z0-9_\-\.\+]+)\@((([a-z0-9\-]+\.)+)([a-z]{2,4})|[a-z0-9][a-z0-9\-]+)/
 EMAIL_REASON                = 'must be in email format'
-USERNAME_REGEX              = /^[a-z][a-z0-9\-]+$/
+USERNAME_REGEX              = /[a-z][a-z0-9\-]+/
 USERNAME_REASON             = 'must start from lowercase letter and contain only lowercase letters, numbers and hyphens'
 
 SSH_KEY_TYPES               = ['ssh-rsa', 'ssh-dss']

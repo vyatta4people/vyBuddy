@@ -2,6 +2,7 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
 
   js_configure do |c|
     c.mixin :main, :methods
+    c.layout = :absolute
   end
 
   def get_display_containers(task)
@@ -55,6 +56,7 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
     super
     c.name             = :display_tasks_tab_panel
     c.title            = "Tasks to display"
+    c.layout           = :absolute
     c.border           = true
     c.frame            = false
     c.deferred_render  = false
