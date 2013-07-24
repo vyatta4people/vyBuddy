@@ -64,18 +64,18 @@ class VyattaHostsGrid < Netzke::Basepack::Grid
     c.name               = :vyatta_hosts_grid
     c.title              = "Vyatta hosts"
     c.model              = "VyattaHost"
-    #c.load_inline_data   = false
-    #c.width              = 550
-    #c.border             = true
-    #c.context_menu       = session[:user_is_admin] ? [:execute_all_tasks, :execute_on_demand_tasks, :execute_background_tasks, '-', :edit_in_form] : [:execute_all_tasks, :execute_on_demand_tasks, :execute_background_tasks]
-    #c.tbar               = session[:user_is_admin] ? [:add_in_form, :bulk_add] : []
-    #c.bbar               = session[:user_is_admin] ? ["<div class='vyatta-host-hint'>Use drag-and-drop to arrange Vyatta hosts</div>", '->', :del] : []
-    #c.enable_pagination  = false
-    #c.tools              = false
-    #c.multi_select       = false
+    c.load_inline_data   = false
+    c.width              = 550
+    c.border             = true
+    c.context_menu       = session[:user_is_admin] ? [:execute_all_tasks, :execute_on_demand_tasks, :execute_background_tasks, '-', :edit_in_form] : [:execute_all_tasks, :execute_on_demand_tasks, :execute_background_tasks]
+    c.tbar               = session[:user_is_admin] ? [:add_in_form, :bulk_add] : []
+    c.bbar               = session[:user_is_admin] ? ["<div class='vyatta-host-hint'>Use drag-and-drop to arrange Vyatta hosts</div>", '->', :del] : []
+    c.enable_pagination  = false
+    c.tools              = false
+    c.multi_select       = false
     #c.prohibit_update    = true
-    #c.view_config        = { :load_mask => false, :plugins => [ { :ptype => :gridviewdragdrop, :dd_group => :vyatta_hosts_dd_group, :drag_text => "Drag and drop to reorganize" } ] }
-=begin
+    c.view_config        = { :load_mask => false, :plugins => [ { :ptype => :gridviewdragdrop, :dd_group => :vyatta_hosts_dd_group, :drag_text => "Drag and drop to reorganize" } ] }
+begin
 
       c.columns            = [
         column_defaults.merge(:name => :vyatta_host_group__name,        :text => "Host group",      :hidden => true,
@@ -100,7 +100,7 @@ class VyattaHostsGrid < Netzke::Basepack::Grid
       ]
       #c.add_form_window_config   = form_window_config
       #c.edit_form_window_config  = form_window_config
-=end
+end
   end
 
   endpoint :reorganize_with_persistent_order do |params, this|
