@@ -1,7 +1,7 @@
 class VyattaHostsGrid < Netzke::Basepack::Grid
 
   js_configure do |c|
-    #c.mixin :main, :actions, :methods
+    c.mixin :main, :actions, :methods
   end
 
   action :add_in_form do |a|
@@ -56,10 +56,6 @@ class VyattaHostsGrid < Netzke::Basepack::Grid
     column_defaults[:fixed]         = true
     column_defaults[:editor]        = {:allow_blank => false}
 
-    form_window_config              = Hash.new
-    form_window_config[:y]          = 100
-    form_window_config[:width]      = 500
-
     super
     c.name               = :vyatta_hosts_grid
     c.title              = "Vyatta hosts"
@@ -75,14 +71,12 @@ class VyattaHostsGrid < Netzke::Basepack::Grid
     c.multi_select       = false
     #c.prohibit_update    = true
     c.view_config        = { :load_mask => false, :plugins => [ { :ptype => :gridviewdragdrop, :dd_group => :vyatta_hosts_dd_group, :drag_text => "Drag and drop to reorganize" } ] }
-begin
-
       c.columns            = [
         column_defaults.merge(:name => :vyatta_host_group__name,        :text => "Host group",      :hidden => true,
-                              :editor => {:editable => false, :empty_text => "Choose group", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}"}} } ),
+                              :editor => {:editable => false, :empty_text => "Choose group" }),
         column_defaults.merge(:name => :vyatta_host_group__html_name,   :text => "Host group",      :width => 110, :renderer => 'boldRenderer', :editor => {:xtype => :textfield, :hidden => true}, :virtual => true),
         column_defaults.merge(:name => :ssh_key_pair__identifier, :text => "SSH key pair",          :hidden => true,
-                              :editor => {:editable => false, :empty_text => "Choose key pair", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}"}} } ),
+                              :editor => {:editable => false, :empty_text => "Choose key pair" } ),
         column_defaults.merge(:name => :hostname,                 :text => "Hostname",              :hidden => true),
         column_defaults.merge(:name => :html_hostname,            :text => "Hostname",              :flex => true, :editor => {:hidden => true}, :virtual => true),
         column_defaults.merge(:name => :remote_address,           :text => "Remote address",        :hidden => true),
@@ -98,9 +92,16 @@ begin
         column_defaults.merge(:name => :load_average,             :text => "Load avg",              :width => 70,  :format => '0.00', :xtype => :numbercolumn, :align => :center, :virtual => true),
         column_defaults.merge(:name => :sort_order,               :text => "#",                     :width => 40,  :align => :center, :renderer => "textSteelBlueRenderer", :editor => {:hidden => true})
       ]
-      #c.add_form_window_config   = form_window_config
-      #c.edit_form_window_config  = form_window_config
-end
+  end
+
+  component :add_window do |c|
+    super(c)
+    c.form_config.items = [:hostname, :remote_address, :remote_port, :polling_interval, :is_passive, :is_monitored, :is_enabled]
+  end
+
+  component :edit_window do |c|
+    super(c)
+    c.form_config.items = [:hostname, :remote_address, :remote_port, :polling_interval, :is_passive, :is_monitored, :is_enabled]
   end
 
   endpoint :reorganize_with_persistent_order do |params, this|

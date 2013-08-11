@@ -4,14 +4,14 @@
 
     this.on('afterrender', function(self, eOpts) {
       // Define fellow components
-      this.tasksGrid            = Netzke.page.manageTasksWindow.getChildNetzkeComponent('tasks_grid');
-      this.vyattaHostGroupsGrid = Netzke.page.manageTasksWindow.getChildNetzkeComponent('tasks_side_tab_panel').getChildNetzkeComponent('groups_tab_panel').getChildNetzkeComponent('vyatta_host_groups_grid');
+      this.tasksGrid            = Netzke.page.manageTasksWindow.netzkeGetComponent('tasks_grid');
+      this.vyattaHostGroupsGrid = Netzke.page.manageTasksWindow.netzkeGetComponent('tasks_side_tab_panel').netzkeGetComponent('groups_tab_panel').netzkeGetComponent('vyatta_host_groups_grid');
       // Setup drop target for Vyatta host groups
       var dropTargetEl   = this.body.dom;
       var dropTarget     = Ext.create('Ext.dd.DropTarget', dropTargetEl, {
         ddGroup: 'vyatta_host_groups_dd_group',
         notifyEnter: function(ddSource, e, data) {
-          var targetGrid = Netzke.page.manageTasksWindow.getChildNetzkeComponent('task_details_tab_panel').getChildNetzkeComponent('task_vyatta_host_groups_grid'); // Yes, we need to find ourselves here :)
+          var targetGrid = Netzke.page.manageTasksWindow.netzkeGetComponent('task_details_tab_panel').netzkeGetComponent('task_vyatta_host_groups_grid'); // Yes, we need to find ourselves here :)
           if (ddSource.id == 'manage_tasks_window__tasks_side_tab_panel__groups_tab_panel__vyatta_host_groups_grid-body') {
             targetGrid.body.stopAnimation();
             targetGrid.body.highlight();

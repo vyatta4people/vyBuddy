@@ -1,8 +1,8 @@
-class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
+class DisplayTasksTabPanel < Netzke::Base
 
   js_configure do |c|
     c.mixin :main, :methods
-    c.layout = :absolute
+    c.extend = "Ext.tab.Panel"
   end
 
   def get_display_containers(task)
@@ -20,21 +20,23 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
     task_groups.each do |task_group|
       task_group_item                     = Hash.new
       task_group_item[:id]                = task_group.html_id
-      task_group_item[:name]              = task_group_item[:id]
+      task_group_item[:item_id]           = task_group.html_id
+      task_group_item[:name]              = task_group.html_id
+
       task_group_item[:title]             = task_group.name
       task_group_item[:title]             += " <span style=\"background-color:##{task_group.color};\">&nbsp;&nbsp;&nbsp;&nbsp;</span>" if task_group.fill_tab_with_color
-      task_group_item[:class_name]        = "Netzke::Basepack::TabPanel"
       task_group_item[:xtype]             = :tabpanel # This is required to make nested TabPanel work ;)
+      task_group_item[:auto_scroll]         = false
       task_group_item[:deferred_render]   = false
 
       task_group_item[:items]             = Array.new
       task_group.tasks.enabled.each do |task|
         task_item                       = Hash.new
         task_item[:id]                  = task.html_id
-        task_item[:name]                = task_item[:id]
+        task_item[:name]                = 'Ext.panel.Panel'
         task_item[:title]               = task.title
-        task_item[:class_name]          = "Netzke::Basepack::Panel"
-        task_item[:auto_scroll]         = true
+        task_item[:xtype]               = :panel
+        task_item[:auto_scroll]         = false
         task_item[:html]                = "<div id='#{task.html_dummy_id}' class='task-dummy'>&nbsp;</div>"
         task_item[:html]                += "<div id='#{task.html_not_applicable_id}' class='task-not-applicable'><div class='task-not-applicable-content'>Not applicable to this host...</div></div>"
         task_item[:html]                += "<div id='#{task.html_container_id}' class='task-container'>"
@@ -60,6 +62,7 @@ class DisplayTasksTabPanel < Netzke::Basepack::TabPanel
     c.border           = true
     c.frame            = false
     c.deferred_render  = false
+    c.items            = items
   end
 
   endpoint :execute_task do |params, this|

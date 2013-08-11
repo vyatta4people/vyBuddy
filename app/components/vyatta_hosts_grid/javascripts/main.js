@@ -14,7 +14,7 @@
       var updateVyattaHostsGrid = function() { self.store.load(); }
       Ext.TaskManager.start({ run: updateVyattaHostsGrid, interval: 5000 });
       // Define fellow components
-      this.displayTasksTabPanel       = Netzke.page.vybuddyApp.getChildNetzkeComponent('display_tasks_tab_panel');
+      this.displayTasksTabPanel       = this.netzkeGetParentComponent().netzkeGetComponent('display_tasks_tab_panel');
       this.displayTasksTabPanelMask   = new Ext.LoadMask(this.displayTasksTabPanel, { msg: "Loading tasks..." });
       // Set security defaults
       this.getUserRights({ action: 'execute_task' }, function(userCanExecuteTasks) {
@@ -75,8 +75,8 @@
           var task                  = this.displayTasksTabPanel.tasks[t];
           var taskExecuteButton     = Ext.getCmp(task.html_execute_button_id);
           var isTaskApplicable      = this.isSelectedVyattaHostOperable && result.applicableTaskIds[task.id];
-          var taskGroupPanel        = this.displayTasksTabPanel.getComponent(task.html_group_id);
-          var taskPanel             = taskGroupPanel.getComponent(task.html_id);
+          var taskGroupPanel        = Ext.get(task.html_group_id);
+          var taskPanel             = Ext.get(task.html_id);
           var taskDummyDiv          = Ext.get(task.html_dummy_id);
           var taskNotApplicableDiv  = Ext.get(task.html_not_applicable_id);
           var taskContainerDiv      = Ext.get(task.html_container_id);
@@ -87,7 +87,7 @@
           taskNotApplicableDiv.setStyle('background-color', containerColor);
           taskNotApplicableDiv.setVisible(!isTaskApplicable);
           taskContainerDiv.setVisible(isTaskApplicable);
-          taskPanel.setAutoScroll(isTaskApplicable);
+          //FIXME: taskPanel.setAutoScroll(isTaskApplicable);
         }
        if (this.displayTasksTabPanelMask.isVisible()) { this.displayTasksTabPanelMask.hide(); }
       }, this);

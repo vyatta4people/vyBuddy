@@ -6,7 +6,7 @@
 
     this.on('afterrender', function(self, eOpts) {
       // Define fellow components
-      this.tasksGrid = Netzke.page.manageTasksWindow.getChildNetzkeComponent('tasks_grid');
+      this.tasksGrid = Netzke.page.manageTasksWindow.netzkeGetComponent('tasks_grid');
       // Load records
       this.getStore().load();
     }, this);

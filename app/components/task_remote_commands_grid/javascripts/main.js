@@ -6,14 +6,14 @@
 
     this.on('afterrender', function(self, eOpts) {
       // Define fellow components
-      this.tasksGrid            = Netzke.page.manageTasksWindow.getChildNetzkeComponent('tasks_grid');
-      this.remoteCommandsGrid   = Netzke.page.manageTasksWindow.getChildNetzkeComponent('tasks_side_tab_panel').getChildNetzkeComponent('commands_tab_panel').getChildNetzkeComponent('remote_commands_grid');
+      this.tasksGrid            = Netzke.page.manageTasksWindow.netzkeGetComponent('tasks_grid');
+      this.remoteCommandsGrid   = Netzke.page.manageTasksWindow.netzkeGetComponent('tasks_side_tab_panel').netzkeGetComponent('commands_tab_panel').netzkeGetComponent('remote_commands_grid');
       // Setup drop target for remote commands
       var dropTargetEl   = this.body.dom;
       var dropTarget     = Ext.create('Ext.dd.DropTarget', dropTargetEl, {
         ddGroup: 'remote_commands_dd_group',
         notifyEnter: function(ddSource, e, data) {
-          var targetGrid = Netzke.page.manageTasksWindow.getChildNetzkeComponent('task_details_tab_panel').getChildNetzkeComponent('task_remote_commands_grid'); // Yes, we need to find ourselves here :)
+          var targetGrid = Netzke.page.manageTasksWindow.netzkeGetComponent('task_details_tab_panel').netzkeGetComponent('task_remote_commands_grid'); // Yes, we need to find ourselves here :)
           if (ddSource.id == 'manage_tasks_window__tasks_side_tab_panel__commands_tab_panel__remote_commands_grid-body') {
             targetGrid.body.stopAnimation();
             targetGrid.body.highlight();

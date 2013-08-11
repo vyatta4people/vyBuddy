@@ -4,7 +4,7 @@
 
     this.on('afterrender', function(self, eOpts) {
       // Define fellow components
-      //this.tasksGrid = Netzke.page.manageTasksWindow.getChildNetzkeComponent('tasks_grid');
+      //this.tasksGrid = Netzke.page.manageTasksWindow.netzkeGetComponent('tasks_grid');
     }, this);
 
     //this.getStore().on('remove', function(self, eOpts) {
