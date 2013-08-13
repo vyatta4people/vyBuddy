@@ -6,7 +6,7 @@ class VyattaHostGroupsGrid < Netzke::Basepack::GridPanel
   action :add_in_form,  :text => "Add",  :tooltip => "Add host group"
   action :edit_in_form, :text => "Edit", :tooltip => "Edit host group", :disabled => false
 
-  def configuration
+  def configure(c)
     column_defaults                 = Hash.new
     column_defaults[:editable]      = false
     column_defaults[:sortable]      = false
@@ -19,7 +19,7 @@ class VyattaHostGroupsGrid < Netzke::Basepack::GridPanel
     form_window_config[:y]          = 100
     form_window_config[:width]      = 500
 
-    super.merge(
+    super
       :name             => :vyatta_host_groups_grid,
       :title            => "Host groups",
       :model            => "VyattaHostGroup",

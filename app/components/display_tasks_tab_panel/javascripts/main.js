@@ -10,7 +10,7 @@
       Ext.Ajax.request({
         url: '/data/get_tasks',
         success: function(response) {
-          var displayTasksTabPanel    = Netzke.page.vybuddyApp.getChildNetzkeComponent('display_tasks_tab_panel');
+          var displayTasksTabPanel    = Netzke.page.vybuddyApp.netzkeGetComponent('display_tasks_tab_panel');
           displayTasksTabPanel.tasks  = Ext.decode(response.responseText);
           for (var t in displayTasksTabPanel.tasks) {
             var task              = displayTasksTabPanel.tasks[t];
@@ -30,7 +30,7 @@
                 disabled: true,
                 renderTo: taskButtonDiv,
                 handler: function(button, e) {
-                  var vyattaHostsGrid = Netzke.page.vybuddyApp.getChildNetzkeComponent('vyatta_hosts_grid');
+                  var vyattaHostsGrid = Netzke.page.vybuddyApp.netzkeGetComponent('vyatta_hosts_grid');
                   if (button.taskContainsVariables) {
                     displayTasksTabPanel.setTaskVariablesAndExecuteTask(vyattaHostsGrid.selectedVyattaHostId, button.taskId, button.taskVariables);
                   } else {

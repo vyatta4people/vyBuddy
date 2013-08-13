@@ -23,7 +23,7 @@
           var taskVariableParameters = this.up('form').getForm().getFieldValues();
           this.up('window').hide();
           this.up('form').getForm().reset();
-          var displayTasksTabPanel = Netzke.page.vybuddyApp.getChildNetzkeComponent('display_tasks_tab_panel');
+          var displayTasksTabPanel = Netzke.page.vybuddyApp.netzkeGetComponent('display_tasks_tab_panel');
           displayTasksTabPanel.loadingMask.show();
           displayTasksTabPanel.fireEvent('executetask', vyattaHostId, taskId, taskVariableParameters);
         }

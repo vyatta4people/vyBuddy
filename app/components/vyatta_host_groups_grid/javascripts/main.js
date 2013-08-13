@@ -6,9 +6,9 @@
 
     this.on('afterrender', function(self, eOpts) {
       // Define fellow components
-      this.tasksGrid                = Netzke.page.manageTasksWindow.getChildNetzkeComponent('tasks_grid');
-      this.taskDetailsTabPanel      = Netzke.page.manageTasksWindow.getChildNetzkeComponent('task_details_tab_panel');
-      this.taskVyattaHostGroupsGrid = this.taskDetailsTabPanel.getChildNetzkeComponent('task_vyatta_host_groups_grid');
+      this.tasksGrid                = Netzke.page.manageTasksWindow.netzkeGetComponent('tasks_grid');
+      this.taskDetailsTabPanel      = Netzke.page.manageTasksWindow.netzkeGetComponent('task_details_tab_panel');
+      this.taskVyattaHostGroupsGrid = this.taskDetailsTabPanel.netzkeGetComponent('task_vyatta_host_groups_grid');
       // Load records
       this.getStore().load();
     }, this);

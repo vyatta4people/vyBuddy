@@ -10,7 +10,7 @@ class VyattaHostGroup < ActiveRecord::Base
 
   validates :color, :presence => true
 
-  validates :color, :format => { :with => /^[0-9a-f]{6}$/, :message => "must be valid RGB color" }
+  validates :color, :format => { :with => /[0-9a-f]{6}/, :message => "must be valid RGB color" }
 
   default_scope order(["`sort_order` ASC", "`name` ASC"])
 

@@ -1,42 +1,51 @@
-class VybuddyApp < Netzke::Basepack::BorderLayoutPanel
+class VybuddyApp < Netzke::Basepack::Viewport
 
-  js_mixin :init_component
+  js_configure do |c|
+    c.mixin :main
+    c.layout = :border
+  end
 
-  def configuration
-    super.merge(
-      :name           => :vybuddy_app,
-      :title          => "vyBuddy",
-      :prevent_header => true,
-      :layout         => :border,
-      :body_style     => {"background-color" => "#e4ebef"},
-      :items          => [
-        :toolbox_panel.component(
-          :name       => :top_panel,
-          :region     => :north,
-          :class_name => "TopPanel",
-          :margin     => "5 5 5 5"
-        ),
-        :vyatta_hosts_grid.component(
-          :name       => :vyatta_hosts_grid,
-          :region     => :west,
-          :class_name => "VyattaHostsGrid",
-          :margin     => "0 0 0 5",
-          :split      => true
-        ),
-        :display_tasks_tab_panel.component(
-          :name       => :display_tasks_tab_panel,
-          :region     => :center,
-          :class_name => "DisplayTasksTabPanel",
-          :margin     => "0 5 0 0"
-        ),
-        :bottom_panel.component(
-          :name       => :bottom_panel,
-          :region     => :south,
-          :class_name => "BottomPanel",
-          :margin     => "4 4 4 4"
-        )
-      ]
-    )
+  def configure(c)
+    super
+    c.name           = :vybuddy_app
+    c.title          = "vyBuddy"
+    c.prevent_header = true
+    c.body_style     = {"background-color" => "#e4ebef"}
+    c.items          = [ {
+      netzke_component: :top_panel,
+      region:           :north,
+      margin:            "5 5 5 5"
+    }, {
+      netzke_component: :vyatta_hosts_grid,
+      region:           :west,
+      margin:           "0 5 0 5",
+      split:            true
+    }, {
+      netzke_component: :display_tasks_tab_panel,
+      region:           :center,
+      margin:           "0 5 0 0",
+      split:            true
+    }, {
+      netzke_component: :bottom_panel,
+      region:           :south,
+      margin:           "5 5 5 5"
+    } ]
+  end
+
+  component :top_panel do |c|
+    c.klass = TopPanel
+  end
+
+  component :vyatta_hosts_grid do |c|
+    c.klass = VyattaHostsGrid
+  end
+
+  component :display_tasks_tab_panel do |c|
+    c.klass = DisplayTasksTabPanel
+  end
+
+  component :bottom_panel do |c|
+    c.klass = BottomPanel
   end
 
 end

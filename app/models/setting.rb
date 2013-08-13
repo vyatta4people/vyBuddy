@@ -2,7 +2,7 @@ class Setting < ActiveRecord::Base
 
   validates :name,
     :length     => { :minimum => 2 },
-    :format     => { :with => /^[a-z_]+$/, :message => "must contain only lowercase letters and underscores" },
+    :format     => { :with => /[a-z_]+/, :message => "must contain only lowercase letters and underscores" },
     :uniqueness => true
 
   validate :validate_regex

@@ -2,7 +2,7 @@
   onLogin: function() {
     var loginForm = Ext.ComponentManager.get('login_form').getForm();
     if (loginForm.isValid()) {
-      this.login(loginForm.getFieldValues(), function(success) { 
+      this.login(loginForm.getFieldValues(), function(success) {
         if (success) {
           window.location = '/';
         } else {

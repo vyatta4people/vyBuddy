@@ -1,6 +1,6 @@
 class SettingsGrid < Netzke::Basepack::GridPanel
 
-  def configuration
+  def configure(c)
     column_defaults                 = Hash.new
     column_defaults[:editable]      = false
     column_defaults[:sortable]      = false
@@ -9,7 +9,7 @@ class SettingsGrid < Netzke::Basepack::GridPanel
     column_defaults[:draggable]     = false
     column_defaults[:fixed]         = true
 
-    super.merge(
+    super
       :name               => :settings_grid,
       :title              => "Settings",
       :prevent_header     => true,

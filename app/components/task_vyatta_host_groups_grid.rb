@@ -3,7 +3,7 @@ class TaskVyattaHostGroupsGrid < Netzke::Basepack::GridPanel
   js_mixin :init_component
   js_mixin :methods
 
-  def configuration
+  def configure(c)
     column_defaults                 = Hash.new
     column_defaults[:editable]      = false
     column_defaults[:sortable]      = false
@@ -12,7 +12,7 @@ class TaskVyattaHostGroupsGrid < Netzke::Basepack::GridPanel
     column_defaults[:draggable]     = false
     column_defaults[:fixed]         = true
 
-    super.merge(
+    super
       :name               => :task_vyatta_host_groups_grid,
       :title              => "Host groups",
       :prevent_header     => true,

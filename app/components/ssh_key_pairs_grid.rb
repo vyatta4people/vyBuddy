@@ -6,7 +6,7 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
   action :edit_in_form, :text => "Examine", :tooltip => "Edit SSH public/private key pair",  :icon => :key, :disabled => false
   action :del, :icon => :key_delete
 
-  def configuration
+  def configure(c)
     column_defaults                 = Hash.new
     column_defaults[:editable]      = false
     column_defaults[:sortable]      = false
@@ -20,7 +20,7 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
     form_window_config[:width]      = 800
     form_window_config[:height]     = 525
 
-    super.merge(
+    super
       :name             => :ssh_key_pairs_grid,
       :title            => "SSH public/private key pairs",
       :prevent_header   => true,

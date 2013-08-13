@@ -1,3 +1,18 @@
+GIT
+  remote: https://github.com/netzke/netzke-basepack.git
+  revision: e368b1f50ac43d6cdb7a3dff76778541c0c8d38e
+  specs:
+    netzke-basepack (0.9.0)
+      netzke-core (~> 0.9.0)
+
+GIT
+  remote: https://github.com/netzke/netzke-core.git
+  revision: 61555869fb4d96083d10329573386b207cf1bfd1
+  specs:
+    netzke-core (0.9.0)
+      execjs
+      uglifier
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -49,11 +64,11 @@ GEM
     execjs (1.4.0)
       multi_json (~> 1.0)
     highline (1.6.19)
-    hike (1.2.2)
+    hike (1.2.3)
     htmlentities (4.3.1)
     i18n (0.6.1)
     journey (1.0.4)
-    jquery-rails (2.2.1)
+    jquery-rails (3.0.1)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
     json (1.8.0)
@@ -62,7 +77,7 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.23)
-    multi_json (1.7.3)
+    multi_json (1.7.7)
     mysql2 (0.3.11)
     net-scp (1.1.1)
       net-ssh (>= 2.6.5)
@@ -71,12 +86,7 @@ GEM
     net-ssh (2.6.7)
     net-ssh-gateway (1.2.0)
       net-ssh (>= 2.6.5)
-    netzke-basepack (0.8.4)
-      netzke-core (~> 0.8.2)
-    netzke-core (0.8.4)
-      execjs
-      uglifier
-    passenger (4.0.3)
+    passenger (4.0.5)
       daemon_controller (>= 1.1.0)
       rack
       rake (>= 0.8.1)
@@ -103,12 +113,12 @@ GEM
       rake (>= 0.8.7)
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
-    rake (10.0.4)
+    rake (10.1.0)
     rdoc (3.12.2)
       json (~> 1.4)
     ref (1.0.5)
     rinku (1.7.3)
-    rvm (1.11.3.7)
+    rvm (1.11.3.8)
     sass (3.2.9)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -124,7 +134,7 @@ GEM
       ref
     thor (0.18.1)
     tilt (1.4.1)
-    treetop (1.4.12)
+    treetop (1.4.14)
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.37)
@@ -148,10 +158,10 @@ DEPENDENCIES
   mysql2
   net-sftp
   net-ssh
-  netzke-basepack
-  netzke-core
+  netzke-basepack!
+  netzke-core!
   passenger
-  rails
+  rails (= 3.2.13)
   rinku
   rvm
   sass-rails
