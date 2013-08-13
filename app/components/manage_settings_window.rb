@@ -13,11 +13,14 @@ class ManageSettingsWindow < Netzke::Basepack::Window
     c.resizable        = false
     c.items            = [
       {
-        :name       => :settings_grid,
-        :region     => :center,
-        :class_name => "SettingsGrid"
+        netzke_component: :settings_grid,
+        region:           :center
       }
     ]
+  end
+
+  component :settings_grid do |c|
+    c.klass = SettingsGrid
   end
 
 end

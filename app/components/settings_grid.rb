@@ -1,4 +1,4 @@
-class SettingsGrid < Netzke::Basepack::GridPanel
+class SettingsGrid < Netzke::Basepack::Grid
 
   def configure(c)
     column_defaults                 = Hash.new
@@ -10,22 +10,21 @@ class SettingsGrid < Netzke::Basepack::GridPanel
     column_defaults[:fixed]         = true
 
     super
-      :name               => :settings_grid,
-      :title              => "Settings",
-      :prevent_header     => true,
-      :model              => "Setting",
-      :border             => false,
-      :context_menu       => [],
-      :tbar               => false,
-      :bbar               => ['HINT: Double-click on value cell to start editing.', '->', :apply.action],
-      :enable_pagination  => false,
-      :tools              => false,
-      :multi_select       => false,
-      :columns            => [
-        column_defaults.merge(:name => :name,       :text => "Name",  :width => 150, :renderer => "boldRenderer"),
-        column_defaults.merge(:name => :value,      :text => "Value", :flex => true, :editable => true, :getter => lambda { |v| v.grid_value } )
+    c.name               = :settings_grid,
+    c.title              = "Settings",
+    c.prevent_header     = true,
+    c.model              = "Setting",
+    c.border             = false,
+    c.context_menu       = [],
+    c.tbar               = false,
+    c.bbar               = ['HINT: Double-click on value cell to start editing.', '->', :apply],
+    c.enable_pagination  = false,
+    c.tools              = false,
+    c.multi_select       = false,
+    c.columns            = [
+      column_defaults.merge(:name => :name,       :text => "Name",  :width => 150, :renderer => "boldRenderer"),
+      column_defaults.merge(:name => :value,      :text => "Value", :flex => true, :editable => true, :getter => lambda { |v| v.grid_value } )
       ]
-    )
   end
 
 end
