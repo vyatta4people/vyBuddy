@@ -1,4 +1,4 @@
-class LogsGrid < Netzke::Basepack::GridPanel
+class LogsGrid < Netzke::Basepack::Grid
 
   js_configure do |c|
     c.mixin :main, :actions
@@ -34,6 +34,7 @@ class LogsGrid < Netzke::Basepack::GridPanel
     c.title              = "Logs"
     c.prevent_header     = true
     c.model              = "Log"
+    c.scope              = lambda { |r| r.where(get_scope_where_clause) }
     c.load_inline_data   = false
     c.border             = true
     c.context_menu       = false
@@ -46,14 +47,11 @@ class LogsGrid < Netzke::Basepack::GridPanel
       { :item_id => :silent_log,     :xtype => :checkboxfield },
       "->", { :xtype => :displayfield, :field_label => "Search", :label_width => :auto },
       { :item_id => :search_message, :xtype => :textfield,     :width => 300, :empty_text => "Search log message..." },
-      " ",
-      :search_logs, :clear_search_filter, :download_logs,
-      " "
-    ],
-    c.bbar               = []
+      " ", :search_logs, :clear_search_filter, :download_logs, " "
+    ]
+    c.bbar               = [ ]
     c.tools              = false
     c.multi_select       = true
-    c.load_inline_data   = false
     c.rows_per_page      = 20
     c.prohibit_update    = true
     c.columns            = [
@@ -65,6 +63,23 @@ class LogsGrid < Netzke::Basepack::GridPanel
       column_defaults.merge(:name => :severity,           :text => "Severity",      :width => 75,  :align => :center, :getter => lambda {|r| r.html_severity }),
       column_defaults.merge(:name => :message,            :text => "Message",       :flex => true, :getter => lambda {|r| r.html_message })
     ]
+  end
+
+  def get_scope_where_clause
+    conditions = Array.new
+    conditions << "created_date >= \"#{component_session[:from_date]}\""      if component_session[:from_date]
+    conditions << "created_date <= \"#{component_session[:to_date]}\""        if component_session[:to_date]
+    conditions << "NOT is_verbose"                                            if component_session[:silent_log]
+    conditions << "message LIKE \"%#{component_session[:search_message]}%\""  if component_session[:search_message] and !component_session[:search_message].empty?
+
+    return conditions.join(" AND ")
+  end
+
+  endpoint :search_logs do |params, this|
+    component_session[:from_date]         = params[:from_date].to_date
+    component_session[:to_date]           = params[:to_date].to_date
+    component_session[:silent_log]        = params[:silent_log]
+    component_session[:search_message]    = params[:search_message]
   end
 
 end
