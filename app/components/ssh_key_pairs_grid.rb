@@ -1,10 +1,25 @@
-class SshKeyPairsGrid < Netzke::Basepack::GridPanel
+class SshKeyPairsGrid < Netzke::Basepack::Grid
 
-  js_mixin :init_component
+  js_configure do |c|
+    c.mixin :main
+  end
 
-  action :add_in_form,  :text => "Add",     :tooltip => "Add SSH public/private key pair",   :icon => :key_add
-  action :edit_in_form, :text => "Examine", :tooltip => "Edit SSH public/private key pair",  :icon => :key, :disabled => false
-  action :del, :icon => :key_delete
+  action :add_in_form do |a|
+    a.text      = "Add"
+    a.tooltip   = "Add SSH public/private key pair"
+    a.icon      = :key_add
+  end
+
+  action :edit_in_form do |a|
+    a.text      = "Examine"
+    a.tooltip   = "Edit SSH public/private key pair"
+    a.icon      = :key
+    a.disabled  = false
+  end
+
+  action :del do |a|
+    a.icon      = :key_delete
+  end
 
   def configure(c)
     column_defaults                 = Hash.new
@@ -21,37 +36,34 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
     form_window_config[:height]     = 525
 
     super
-      :name             => :ssh_key_pairs_grid,
-      :title            => "SSH public/private key pairs",
-      :prevent_header   => true,
-      :model            => "SshKeyPair",
-      :border           => true,
-      :context_menu     => [:edit_in_form.action, :del.action],
-      :tbar             => [:add_in_form.action],
-      :bbar             => [],
-      :tools            => false,
-      :multi_select     => false,
-      :prohibit_update  => true,
-      :columns          => [
-        column_defaults.merge(:name => :user__username,     :text => "Owner",         :hidden => true, 
-          :editor => {:editable => false, :empty_text => "Choose user", :listeners => {:change => {:fn => "function(e){e.expand();e.collapse();}".l} } }),
-        column_defaults.merge(:name => :identifier,         :text => "ID",            :flex => true),
-        column_defaults.merge(:name => :key_type,           :text => "Type",          :width => 80, 
-          :editor => {:xtype => :netzkeremotecombo, :editable => false, :empty_text => "Choose SSH key type" }, :align => :center),
-        column_defaults.merge(:name => :login_username,     :text => "Login as",      :width => 100, :default_value => Setting.get(:default_ssh_username)),
-        column_defaults.merge(:name => :public_key,         :text => "Public key",    :hidden => true, 
-          :editor => {
-            :height       => 100, 
-            :disabled     => true, 
-            :disabled_cls  => "x-form-empty-field", 
-            :empty_text   => "NB! Do not enter public key manually, it will be generated from your private key!"
-          }
-        ),
-        column_defaults.merge(:name => :private_key,        :text => "Private key",   :hidden => true, :editor => {:height => 225})
-      ],
-      :add_form_window_config   => form_window_config.merge(:title => "Add SSH public/private key pair"),
-      :edit_form_window_config  => form_window_config.merge(:title => "Edit SSH public/private key pair")
-    )
+    c.name             = :ssh_key_pairs_grid,
+    c.title            = "SSH public/private key pairs",
+    c.prevent_header   = true,
+    c.model            = "SshKeyPair",
+    c.border           = true,
+    c.context_menu     = [:edit_in_form, :del],
+    c.tbar             = [:add_in_form],
+    c.bbar             = [],
+    c.tools            = false,
+    c.multi_select     = false,
+    c.prohibit_update  = true,
+    c.columns          = [
+      column_defaults.merge(:name => :user__username,     :text => "Owner",         :hidden => true,
+        :editor => {:editable => false, :empty_text => "Choose user"}),
+      column_defaults.merge(:name => :identifier,         :text => "ID",            :flex => true),
+      column_defaults.merge(:name => :key_type,           :text => "Type",          :width => 80,
+        :editor => {:xtype => :netzkeremotecombo, :editable => false, :empty_text => "Choose SSH key type" }, :align => :center),
+      column_defaults.merge(:name => :login_username,     :text => "Login as",      :width => 100, :default_value => Setting.get(:default_ssh_username)),
+      column_defaults.merge(:name => :public_key,         :text => "Public key",    :hidden => true,
+        :editor => {
+          :height         => 100,
+          :disabled       => true,
+          :disabled_cls   => "x-form-empty-field",
+          :empty_text     => "NB! Do not enter public key manually, it will be generated from your private key!"
+         }
+      ),
+      column_defaults.merge(:name => :private_key,        :text => "Private key",   :hidden => true, :editor => {:height => 225})
+    ]
   end
 
   def get_combobox_options(params)
@@ -63,12 +75,12 @@ class SshKeyPairsGrid < Netzke::Basepack::GridPanel
     end
   end
 
-  endpoint :add_form__netzke_0__get_combobox_options do |params|
-    get_combobox_options(params)
+  endpoint :add_form__netzke_0__get_combobox_options do |params, this|
+    this.netzke_set_result(get_combobox_options(params))
   end
 
-  endpoint :edit_form__netzke_0__get_combobox_options do |params|
-    get_combobox_options(params)
+  endpoint :edit_form__netzke_0__get_combobox_options do |params, this|
+    this.netzke_set_result(get_combobox_options(params))
   end
 
 end

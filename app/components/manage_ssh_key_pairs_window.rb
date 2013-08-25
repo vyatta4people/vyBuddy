@@ -13,11 +13,14 @@ class ManageSshKeyPairsWindow < Netzke::Basepack::Window
     c.resizable        = false
     c.items            = [
       {
-        :name       => :ssh_key_pairs_grid,
-        :region     => :center,
-        :class_name => "SshKeyPairsGrid"
+        netzke_component: :ssh_key_pairs_grid,
+        region:           :center
       }
     ]
+  end
+
+  component :ssh_key_pairs_grid do |c|
+    c.klass = SshKeyPairsGrid
   end
 
 end

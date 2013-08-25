@@ -13,11 +13,14 @@ class ManageUsersWindow < Netzke::Basepack::Window
     c.resizable        = false
     c.items            = [
       {
-        :name       => :users_grid,
-        :region     => :center,
-        :class_name => "UsersGrid"
+        netzke_component: :users_grid,
+        region:           :center
       }
     ]
+  end
+
+  component :users_grid do |c|
+    c.klass = UsersGrid
   end
 
 end

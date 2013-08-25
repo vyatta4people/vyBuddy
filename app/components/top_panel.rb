@@ -60,7 +60,8 @@ class TopPanel < Netzke::Base
 
   def navigation_bar
     if session[:user_is_admin]
-      return [:manage_tasks, '->', :manage_users, :manage_ssh_key_pairs, "-", :import_export, "-", :view_logs, :manage_settings, '-', :show_about, '-', :logout]
+      # return [:manage_tasks, '->', :manage_users, :manage_ssh_key_pairs, "-", :import_export, "-", :view_logs, :manage_settings, '-', :show_about, '-', :logout]
+      return [:manage_tasks, '->', :manage_users, :manage_ssh_key_pairs, "-", :view_logs, :manage_settings, '-', :show_about, '-', :logout]
     else
       return ['->', :show_about, '-', :logout]
     end

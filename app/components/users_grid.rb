@@ -1,10 +1,25 @@
-class UsersGrid < Netzke::Basepack::GridPanel
+class UsersGrid < Netzke::Basepack::Grid
 
-  js_mixin :init_component
+  js_configure do |c|
+    c.mixin :main
+  end
 
-  action :add_in_form,  :text => "Add",  :tooltip => "Add user",  :icon => :user_add
-  action :edit_in_form, :text => "Edit", :tooltip => "Edit user", :icon => :user_edit, :disabled => false
-  action :del, :icon => :user_delete
+  action :add_in_form do |a|
+    a.text      = "Add"
+    a.tooltip   = "Add user"
+    a.icon      = :user_add
+  end
+
+  action :edit_in_form do |a|
+    a.text      = "Edit"
+    a.tooltip   = "Edit user"
+    a.icon      = :user_edit
+    a.disabled  = false
+  end
+
+  action :del do |a|
+    a.icon      = :user_delete
+  end
 
   def configure(c)
     column_defaults                 = Hash.new
@@ -15,33 +30,26 @@ class UsersGrid < Netzke::Basepack::GridPanel
     column_defaults[:draggable]     = false
     column_defaults[:fixed]         = true
 
-    form_window_config              = Hash.new
-    form_window_config[:y]          = 100
-    form_window_config[:width]      = 500
-
     super
-      :name             => :users_grid,
-      :title            => "Users",
-      :prevent_header   => true,
-      :model            => "User",
-      :border           => true,
-      :context_menu     => [:edit_in_form.action, :del.action],
-      :tbar             => [:add_in_form.action],
-      :bbar             => [],
-      :tools            => false,
-      :multi_select     => false,
-      :prohibit_update  => true,
-      :columns          => [
-        column_defaults.merge(:name => :username,                 :text => "Username",                  :width => 120),
-        column_defaults.merge(:name => :email,                    :text => "Email",                     :flex => true),
-        column_defaults.merge(:name => :password,                 :text => "Password",                  :hidden => true,  :editor => {:input_type => :password}),
-        column_defaults.merge(:name => :receives_notifications,   :text => "Receives notifications?",   :width => 80,     :hidden => true),
-        column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",                  :width => 80,     :align => :center),
-        column_defaults.merge(:name => :is_admin,                 :text => "Admin?",                    :width => 80,     :align => :center)
-      ],
-      :add_form_window_config   => form_window_config,
-      :edit_form_window_config  => form_window_config
-    )
+    c.name             = :users_grid
+    c.title            = "Users"
+    c.prevent_header   = true
+    c.model            = "User"
+    c.border           = true
+    c.context_menu     = [:edit_in_form, :del]
+    c.tbar             = [:add_in_form]
+    c.bbar             = []
+    c.tools            = false
+    c.multi_select     = false
+    c.prohibit_update  = true
+    c.columns          = [
+      column_defaults.merge(:name => :username,                 :text => "Username",                  :width => 120),
+      column_defaults.merge(:name => :email,                    :text => "Email",                     :flex => true),
+      column_defaults.merge(:name => :password,                 :text => "Password",                  :hidden => true,  :editor => {:input_type => :password}),
+      column_defaults.merge(:name => :receives_notifications,   :text => "Receives notifications?",   :width => 80,     :hidden => true),
+      column_defaults.merge(:name => :is_enabled,               :text => "Enabled?",                  :width => 80,     :align => :center),
+      column_defaults.merge(:name => :is_admin,                 :text => "Admin?",                    :width => 80,     :align => :center)
+    ]
   end
 
 end

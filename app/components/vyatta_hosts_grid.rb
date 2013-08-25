@@ -64,7 +64,8 @@ class VyattaHostsGrid < Netzke::Basepack::Grid
     c.width              = 550
     c.border             = true
     c.context_menu       = session[:user_is_admin] ? [:execute_all_tasks, :execute_on_demand_tasks, :execute_background_tasks, '-', :edit_in_form] : [:execute_all_tasks, :execute_on_demand_tasks, :execute_background_tasks]
-    c.tbar               = session[:user_is_admin] ? [:add_in_form, :bulk_add] : []
+    #c.tbar               = session[:user_is_admin] ? [:add_in_form, :bulk_add] : []
+    c.tbar               = session[:user_is_admin] ? [:add_in_form] : []
     c.bbar               = session[:user_is_admin] ? ["<div class='vyatta-host-hint'>Use drag-and-drop to arrange Vyatta hosts</div>", '->', :del] : []
     c.enable_pagination  = false
     c.tools              = false

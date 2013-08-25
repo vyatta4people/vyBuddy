@@ -2,7 +2,6 @@ class VybuddyApp < Netzke::Basepack::Viewport
 
   js_configure do |c|
     c.mixin :main
-    c.layout = :border
   end
 
   def configure(c)
@@ -10,6 +9,7 @@ class VybuddyApp < Netzke::Basepack::Viewport
     c.name           = :vybuddy_app
     c.title          = "vyBuddy"
     c.prevent_header = true
+    c.layout         = :border
     c.body_style     = {"background-color" => "#e4ebef"}
     c.items          = [ {
       netzke_component: :top_panel,
