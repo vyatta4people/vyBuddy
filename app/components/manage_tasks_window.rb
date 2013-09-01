@@ -17,48 +17,31 @@ class ManageTasksWindow < Netzke::Basepack::Window
     c.resizable        = false
     c.items            = [
       {
-        :netzke_component => :tasks_grid,
-        :region     => :center,
-        :klass => "TasksGrid",
-
-    :style      => { :border_right => CSS_BORDER_STYLE },
-        :margin     => "0 2 0 0"
-      },
-=begin
-      {
-        :name             => :task_details_tab_panel,
-        :region           => :center,
-        :title            => "Task details",
-        :prevent_header   => false,
-        :border           => true,
-        :margin           => "2 0 2 0",
-        :class_name       => "Netzke::Basepack::TabPanel",
-        :active_tab       => 0,
-        :items => [
+        :netzke_component   => :tasks_grid,
+        :region             => :west,
+        :style              => { :border_right => CSS_BORDER_STYLE },
+        :margin             => "0 2 0 0"
+      }, {
+        :netzke_component   => :task_details_tab_panel,
+        :region             => :center,
+        :title              => "Task details",
+        :items              => [
           {
-            :name       => :task_remote_commands_grid,
-            :class_name => "TaskRemoteCommandsGrid",
+            :netzke_component   => :task_remote_commands_grid
           }, {
-            :name       => :task_vyatta_host_groups_grid,
-            :class_name => "TaskVyattaHostGroupsGrid",
+            :netzke_component   => :task_vyatta_host_groups_grid,
           }
         ]
-      },
-      {
-        :name       => :tasks_side_tab_panel,
-        :region     => :east,
-        :class_name => "TasksSideTabPanel",
-        :margin     => "2 2 2 2"
+      }, {
+        :netzke_component => :tasks_side_tab_panel,
+        :region           => :east
       }
-=end
     ]
   end
 
   component :tasks_grid do |c|
     c.klass = TasksGrid
   end
-
-=begin
 
   component :task_details_tab_panel do |c|
     c.klass = TaskDetailsTabPanel
@@ -75,6 +58,5 @@ class ManageTasksWindow < Netzke::Basepack::Window
   component :tasks_side_tab_panel do |c|
     c.klass = TasksSideTabPanel
   end
-=end
 
 end

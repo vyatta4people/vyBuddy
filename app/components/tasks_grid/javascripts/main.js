@@ -10,6 +10,7 @@
       // Define fellow components
       this.taskDetailsTabPanel      = Netzke.page.manageTasksWindow.netzkeGetComponent('task_details_tab_panel');
       this.initTaskDetailsTabPanel();
+
       this.taskRemoteCommandsGrid   = this.taskDetailsTabPanel.netzkeGetComponent('task_remote_commands_grid');
       this.taskVyattaHostGroupsGrid = this.taskDetailsTabPanel.netzkeGetComponent('task_vyatta_host_groups_grid');
       this.tasksSideTabPanel        = Netzke.page.manageTasksWindow.netzkeGetComponent('tasks_side_tab_panel');

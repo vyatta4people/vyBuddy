@@ -1,8 +1,8 @@
 class TasksGrid < Netzke::Basepack::Grid
 
-  #js_configure do |c|
-  #  c.mixin :main, :methods
-  #end
+  js_configure do |c|
+    c.mixin :main, :methods
+  end
 
   action :add_in_form do |a|
     a.text      = "Add"
