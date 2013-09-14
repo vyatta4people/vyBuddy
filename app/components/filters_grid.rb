@@ -1,4 +1,4 @@
-class FiltersGrid < Netzke::Basepack::GridPanel
+class FiltersGrid < Netzke::Basepack::Grid
 
   js_configure do |c|
     c.mixin :main
@@ -30,18 +30,13 @@ class FiltersGrid < Netzke::Basepack::GridPanel
     column_defaults[:draggable]     = false
     column_defaults[:fixed]         = true
 
-    form_window_config              = Hash.new
-    form_window_config[:y]          = 100
-    form_window_config[:width]      = 700
-    form_window_config[:height]     = 500
-
     super
     c.name             = :filters_grid
     c.title            = "Filters"
     c.model            = "Filter"
     c.border           = false
-    c.context_menu     = [:edit_in_form.action, :del.action]
-    c.tbar             = [:add_in_form.action]
+    c.context_menu     = [:edit_in_form, :del]
+    c.tbar             = [:add_in_form]
     c.bbar             = []
     c.tools            = false
     c.multi_select     = false
@@ -50,9 +45,7 @@ class FiltersGrid < Netzke::Basepack::GridPanel
       column_defaults.merge(:name => :name,               :text => "Name",          :flex => true),
       column_defaults.merge(:name => :interpreter,        :text => "Interpreter",   :editor => {:xtype => :netzkeremotecombo, :editable => false}),
       column_defaults.merge(:name => :code,               :text => "Code",          :hidden => true, :editor => {:height => 350, :field_cls => 'code-editor'})
-    ],
-      :add_form_window_config   => form_window_config.merge(:title => "Add scriptable filter"),
-      :edit_form_window_config  => form_window_config.merge(:title => "Edit scriptable filter")
+    ]
   end
 
   def get_combobox_options(params)

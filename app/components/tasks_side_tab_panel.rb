@@ -1,48 +1,67 @@
-class TasksSideTabPanel < Netzke::Basepack::TabPanel
+class TasksSideTabPanel < Netzke::Base
+
+  js_configure do |c|
+    c.extend = "Ext.tab.Panel"
+  end
 
   def configure(c)
     super
-      :name             => :tasks_side_tab_panel,
-      :title            => "Toolbox",
-      :prevent_header   => false,
-      :width            => 250,
-      :border           => true,
-      :frame            => false,
-      :active_tab       => 0,
-      :items            => [
+    c.name = :tasks_side_tab_panel
+    c.title = "Toolbox"
+    c.prevent_header = false
+    c.width = 250
+    c.border = true
+    c.frame = false
+    c.active_tab = 0
+    c.items = [
         {
-          :name       => :groups_tab_panel, 
+          :name       => :groups_tab_panel,
           :title      => "Groups",
           :class_name => "Netzke::Basepack::TabPanel",
           :active_tab => 0,
           :items      => [
-            :vyatta_host_groups_grid.component(
-              :name       => :vyatta_host_groups_grid,
+            {
+              :netzke_component       => :vyatta_host_groups_grid,
               :class_name => "VyattaHostGroupsGrid"
-            ),
-            :task_groups_grid.component(
-              :name       => :task_groups_grid,
+            },
+            {
+              :netzke_component       => :task_groups_grid,
               :class_name => "TaskGroupsGrid"
-            )            
+            }
           ]
         }, {
-          :name       => :commands_tab_panel, 
+          :name       => :commands_tab_panel,
           :title      => "Commands",
           :class_name => "Netzke::Basepack::TabPanel",
           :active_tab => 0,
           :items      => [
-            :remote_commands_grid.component(
-              :name       => :remote_commands_grid,
+            {
+              :netzke_component       => :remote_commands_grid,
               :class_name => "RemoteCommandsGrid"
-            ),
-            :filters_grid.component(
-              :name       => :filters_grid,
+            },
+            {
+              :netzke_component       => :filters_grid,
               :class_name => "FiltersGrid"
-            )
+            }
           ]
         }
       ]
-    )
+  end
+
+  component :vyatta_host_groups_grid do |c|
+    c.klass = VyattaHostGroupsGrid
+  end
+
+  component :task_groups_grid do |c|
+    c.klass = TaskGroupsGrid
+  end
+
+  component :remote_commands_grid do |c|
+    c.klass = RemoteCommandsGrid
+  end
+
+  component :filters_grid do |c|
+    c.klass = FiltersGrid
   end
 
 end
